@@ -1,3 +1,21 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,400;0,600;1,700&display=swap');
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  margin: 0;
+  padding: 0;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1rem;
+}
+
 .navbar {
   position: fixed;
   top: 0;
@@ -8,6 +26,7 @@
   background-color: #3D1766;
   z-index: 100;
   padding: 1rem;
+  font-family: 'Poppins', sans-serif;
 }
 
 .navbar__logo {
@@ -72,3 +91,16 @@
     display: block;
   }
 }
+
+footer {
+  background-color: #3D1766;
+  color: #fff;
+  padding: 1em;
+}
+
+.container {
+  max-width: 980px;
+  margin: 0 auto;
+  text-align: center;
+}
+
