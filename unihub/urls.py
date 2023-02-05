@@ -24,3 +24,8 @@ urlpatterns = [
     path("admin/", admin.site.urls),
     path('', home),
 ]
+
+HANDLER404 = 'unihub.views.custom_handler404'
+HANDLER500 = 'unihub.views.custom_handler500'
+HANDLER403 = 'unihub.views.custom_handler403'
+HANDLER400 = 'unihub.views.custom_handler400'

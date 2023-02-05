@@ -1,15 +1,12 @@
-import os
-
 from django.shortcuts import render
-from django.http import Http404
 
 
 def home(request):
-    return render(request, "unihub/home.html")
+    return render(request, "home.html")
 
 
 def custom_handler404(request, exception):
-    return render(request, "unihub/404.html", status=404)  # not found
+    return render(request, "unihub/404.html")  # not found
 
 
 def custom_handler500(request):
