@@ -23,12 +23,14 @@
                 <a href="#" class="navbar__link">{{ m.title }}</a>
               </li>
             </ul>
+            {% endfor %}
+            {% for m in menu %}
               <ul class="navbar__login">
                 <li class="navbar__item">
-                    {% if m.tile == 'Login' %}
-                        <a href="{% url 'logout' %}" class="navbar__link">{{ m.title }}</a>
-                    {% else if m.title == 'Register' %}
+                    {% if m.title == 'Login' %}
                         <a href="{% url 'login' %}" class="navbar__link">{{ m.title }}</a>
+                    {% elif m.title == 'Register' %}
+                        <a href="{% url 'register' %}" class="navbar__link">{{ m.title }}</a>
                     {% endif %}
                 </li>
               </ul>

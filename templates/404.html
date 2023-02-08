@@ -1,15 +1,14 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html>
+{% block title %}Home{% endblock %}
+
+{% block content %}
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="{% static 'css/404.css' %}">
     <title>{{ title }}</title>
-    <style>
-
-    </style>
   </head>
     <style>
         body {
@@ -58,4 +57,4 @@
         <a href="{% url 'home' %}" class="btn">Back to Home</a>
     </button>
   </body>
-</html>
+{% endblock %}
