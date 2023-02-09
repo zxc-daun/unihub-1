@@ -1,67 +1,31 @@
+{% extends 'base.html' %}
 {% load static %}
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <title>Home</title>
-</head>
-<body>
-    <header>
-        <nav class="navbar">
-          <div class="navbar__logo">
-            <a href="#">uniHub</a>
-          </div>
-          <div class="navbar__menu">
-            <ul class="navbar__list">
-              <li class="navbar__item">
-                <a href="#" class="navbar__link">Home</a>
-              </li>
-              <li class="navbar__item">
-                <a href="#" class="navbar__link">About</a>
-              </li>
-              <li class="navbar__item">
-                <a href="#" class="navbar__link">Contact</a>
-              </li>
-            </ul>
-          </div>
-          <div class="navbar__toggle">
-            <span class="navbar__icon"></span>
-          </div>
-        </nav>
-    </header>
+{% block title %}Home{% endblock %}
 
-    <main>
-        <section>
-            <div class="container">
-                <div class="row">
-                    <div class="col-6">
-                        <div class="home__content">
-                            <div class="home__content__title">
-                                <h1>uniHub</h1>
-                            </div>
-                            <div class="home__content__text">
-                                <p>uniHub is a platform for students to connect with each other and share their experiences.</p>
-                            </div>
-                            <div class="home__content__btn">
-                                <a href="#" class="btn">Get Started</a>
-                            </div>
-                        </div>
+{% block content %}
+<main>
+    <section>
+        <div class="container">
+            <div class="home">
+                <div class="home__content">
+                    <div class="home__content__title">
+                        <h1>uniHub</h1>
                     </div>
-                    <div class="col-6">
-                        <div class="home__img">
-{#                            <img src="{% static 'images/home.png' %}" alt="home">#}
-                        </div>
+                    <div class="home__content__text">
+                        <p>uniHub is a platform for students to connect with each other and share their experiences.</p>
+                    </div>
+                    <div class="home__content__btn">
+                        <a href="#" class="btn">Get Started</a>
                     </div>
                 </div>
             </div>
-        </section>
-    </main>
+            <div class="col-6">
+                <div class="home__img">
 
-    <script src="{% static 'js/scripts.js' %}">
-    </script>
-</body>
-</html>
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
