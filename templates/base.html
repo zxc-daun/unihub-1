@@ -1,0 +1,48 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <title>{% block title %}Home{% endblock %}</title>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+          <div class="navbar__logo">
+            <a href="{% url 'home' %}" class="navbar__link">uniHub</a>
+          </div>
+            {% block mainmenu %}
+          <div class="navbar__menu" style="display: flex">
+          {% for m in menu %}
+            <ul class="navbar__list">
+              <li class="navbar__item">
+                <a href="#" class="navbar__link">{{ m.title }}</a>
+              </li>
+            </ul>
+            {% endfor %}
+            {% for m in menu %}
+              <ul class="navbar__login">
+                <li class="navbar__item">
+                    {% if m.title == 'Login' %}
+                        <a href="{% url 'login' %}" class="navbar__link">{{ m.title }}</a>
+                    {% elif m.title == 'Register' %}
+                        <a href="{% url 'register' %}" class="navbar__link">{{ m.title }}</a>
+                    {% endif %}
+                </li>
+              </ul>
+            {% endfor %}
+          </div>
+            {% endblock %}
+          <div class="navbar__toggle">
+            <span class="navbar__icon"></span>
+          </div>
+        </nav>
+    </header>
+    {% block content %}{% endblock %}
+    <script src="{% static 'js/scripts.js' %}"></script>
+</body>
+</html>
