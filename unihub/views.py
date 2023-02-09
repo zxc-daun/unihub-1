@@ -1,5 +1,6 @@
 from django.shortcuts import render
 
+
 # menu = [
 #     {"title": "Home", "url_name": "home"},
 #     {"title": "About", "url_name": "about"},
@@ -12,7 +13,8 @@ def home(request):
             {'title': 'About'},
             {'title': 'Contact'},
             {'title': 'Login'},
-            {'title': 'Register'}
+            {'title': 'Register'},
+            {'title': 'Add'}
             ]
     context = {
         'menu': menu,
@@ -33,4 +35,58 @@ def custom_handler403(request, exception):
 
 
 def custom_handler400(request, exception):
-    return render(request, "unihub/400.html", {"title": "Bad Request", "menu": menu})  # bad request
+    return render(request, "unihub/400.html", {"title": "Bad Request"})  # bad request
+
+
+def login(request):
+    menu = [{'title': 'Home'},
+            {'title': 'About'},
+            {'title': 'Contact'},
+            {'title': 'Login'},
+            {'title': 'Register'},
+            {'title': 'Add'},
+            {'title': 'Logout'}
+            ]
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'unihub/login.html', context)
+
+
+def register(request):
+    menu = [{'title': 'Home'},
+            {'title': 'About'},
+            {'title': 'Contact'},
+            {'title': 'Login'},
+            {'title': 'Register'}
+            ]
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'unihub/register.html', context)
+
+def logout(request):
+    menu = [{'title': 'Home'},
+            {'title': 'About'},
+            {'title': 'Contact'},
+            {'title': 'Login'},
+            {'title': 'Register'},
+            {'title': 'Add'}
+            ]
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'unihub/logout.html', context)
+
+def add(request):
+    menu = [{'title': 'Home'},
+            {'title': 'About'},
+            {'title': 'Contact'},
+            {'title': 'Login'},
+            {'title': 'Register'},
+            {'title': 'Add'}
+            ]
+    context = {
+        'menu': menu,
+    }
+    return render(request, 'unihub/add.html', context)

@@ -11,8 +11,10 @@ urlpatterns = [
     path('', home, name='home'),
     # path('about/', about, name='about'),
     # path('contact/', contact, name='contact'),
-    # path('login/', login, name='login'),
-    # path('register/', register, name='register'),
+    path('login/', login, name='login'),
+    path('register/', register, name='register'),
+    path('add/', add, name='add'),
+    path('logout/', logout, name='logout'),
 ]
 
 HANDLER404 = 'unihub.views.custom_handler404'
