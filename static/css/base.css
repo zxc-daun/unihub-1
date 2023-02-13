@@ -1,0 +1,25 @@
+/* Variables */
+
+:root {
+  --color-primary: #3D1766;
+    --color-secondary: #6F1AB6;
+    --color-tertiary: #c28eee;
+    --color-quaternary: #b0a9b6;
+    --text-color: rgba(1, 29, 61, 0.26);
+    --text-color-light: rgba(1, 29, 61, 0.5);
+    --text-color-dark: rgba(1, 29, 61, 0.8);
+    --text-color-darker: rgba(1, 29, 61, 1);
+    --text-color-lighter: rgba(1, 29, 61, 0.1);
+    --title-color: rgba(6, 248, 228, 0.8);
+    --title-color-light: rgba(6, 248, 228, 0.5);
+    --title-color-dark: rgba(6, 248, 228, 1);
+    --title-color-darker: rgba(6, 248, 228, 0.8);
+    --title-color-lighter: rgba(6, 248, 228, 0.1);
+  --primary-red: #FF0032;
+    --secondary-red: #CD0404;
+    --tertiary-red: #FFC107;
+    --quaternary-red: #FFC107;
+
+    --font-family: 'Poppins', sans-serif;
+}
+

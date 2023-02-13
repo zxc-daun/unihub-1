@@ -3,6 +3,167 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+
+    <head>
+        <style>
+            .hero {
+                background-size: cover;
+                background-position: center;
+                background-repeat: no-repeat;
+                height: 100vh;
+                width: 100%;
+                position: relative;
+            }
+
+.hero__content {
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+.hero__img {
+    width: 100%;
+    height: 100vh;
+    position: relative;
+    filter: brightness(40%);
+}
+
+.hero__text-box {
+    width: 50%;
+    padding: 2rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.hero__title {
+    font-size: 3rem;
+    color: #fff;
+    animation: heroTitle 1s ease-out;
+}
+
+.hero__text {
+    font-size: 1.2rem;
+    color: #fff;
+    text-shadow: 1px 1px #333;
+    animation: heroText 1s ease-out;
+    margin-top: 1rem;
+}
+
+.hero__form {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2rem;
+}
+
+.hero__input {
+    width: 60%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border: none;
+    border-bottom: 2px solid #333;
+    animation: heroInput 1s ease-out;
+}
+
+.hero__btn {
+    width: 20%;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    background-color: #333;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    animation: heroBtn 1s ease-out;
+    margin-left: 1rem;
+}
+
+@keyframes heroImg {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes heroTitle {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+@keyframes heroText {
+    from {
+        transform: translateX(-100%);
+    }
+    to {
+        transform: translateX(0);
+    }
+}
+
+/* Mobile */
+
+@media (max-width: 992px) {
+    .hero__content {
+        flex-direction: column;
+    }
+
+    .hero__img {
+        width: 100%;
+        margin-bottom: 2rem;
+    }
+
+    .hero__text-box {
+        width: 100%;
+    }
+}
+
+@media (max-width: 768px) {
+    .hero__title {
+        font-size: 2.5rem;
+    }
+
+    .hero__input {
+        width: 80%;
+    }
+
+    .hero__btn {
+        width: 30%;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero__title {
+        font-size: 2rem;
+    }
+
+    .hero__text {
+        font-size: 1rem;
+    }
+}
+            </style>
+    </head>
+
+<header class="hero">
+    <div class="hero__content">
+        <img src="{% static 'img/Fotor_AI.png' %}" alt="hero" class="hero__img">
+        <div class="hero__text-box">
+            <h1 class="hero__title">uniHub</h1>
+            <p class="hero__text">Connecting students and creating a community</p>
+            <form class="hero__form">
+                <input type="text" class="hero__input" placeholder="Search universities or clubs">
+                <button class="hero__btn">Search</button>
+            </form>
+        </div>
+    </div>
+</header>
 <main>
     <section>
         <div class="container">
