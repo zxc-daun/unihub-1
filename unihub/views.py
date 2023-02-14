@@ -19,7 +19,7 @@ def home(request):
     context = {
         'menu': menu,
     }
-    return render(request, 'home.html', context)
+    return render(request, 'unihub/home.html', context)
 
 
 def custom_handler404(request, exception):

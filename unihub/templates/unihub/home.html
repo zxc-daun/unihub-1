@@ -1,0 +1,50 @@
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+    <head>
+        <link rel="stylesheet" href="{% static 'css/base.css/' %}">
+    </head>
+<header class="hero">
+    <div class="hero__content">
+        <img src="{% static 'img/Fotor_AI.png' %}" alt="hero" class="hero__img">
+        <div class="hero__text-box">
+            <h1 class="hero__title">uni<span>Hub</span></h1>
+            <p class="hero__text">Connecting students and creating a community</p>
+            <form class="hero__form">
+                <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" onchange="searchClub()"/>
+                <button class="hero__btn">Search</button>
+            </form>
+        </div>
+    </div>
+{#    <div class="hero__content__logo">#}
+{#        <img src="{% static 'img/logo_transparent.png' %}" alt="hero" class="hero__img">#}
+{#    </div>#}
+</header>
+<main>
+    <section>
+        <div class="container">
+            <div class="home">
+                <div class="home__content">
+                    <div class="home__content__title">
+                        <h1>uniHub</h1>
+                    </div>
+                    <div class="home__content__text">
+                        <p>uniHub is a platform for students to connect with each other and share their experiences.</p>
+                    </div>
+                    <div class="home__content__btn">
+                        <a href="#" class="btn">Get Started</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-6">
+                <div class="home__img">
+
+                </div>
+            </div>
+            </div>
+        </div>
+    </section>
+</main>
+{% endblock %}
