@@ -5,10 +5,13 @@
 {% block content %}
     <head>
         <link rel="stylesheet" href="{% static 'css/base.css/' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
+          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
+          crossorigin="anonymous" referrerpolicy="no-referrer" />
     </head>
 <header class="hero">
     <div class="hero__content">
-        <img src="{% static 'img/Fotor_AI.png' %}" alt="hero" class="hero__img">
+        <img src="{% static 'img/herImg.jpg' %}" alt="hero" class="hero__img">
         <div class="hero__text-box">
             <h1 class="hero__title">uni<span>Hub</span></h1>
             <p class="hero__text">Connecting students and creating a community</p>
@@ -18,31 +21,114 @@
             </form>
         </div>
     </div>
-{#    <div class="hero__content__logo">#}
-{#        <img src="{% static 'img/logo_transparent.png' %}" alt="hero" class="hero__img">#}
-{#    </div>#}
 </header>
 <main>
     <section>
-        <div class="container">
-            <div class="home">
-                <div class="home__content">
-                    <div class="home__content__title">
-                        <h1>uniHub</h1>
-                    </div>
-                    <div class="home__content__text">
-                        <p>uniHub is a platform for students to connect with each other and share their experiences.</p>
-                    </div>
-                    <div class="home__content__btn">
-                        <a href="#" class="btn">Get Started</a>
-                    </div>
-                </div>
+        <div class="about">
+            <div class="about__text">
+                <h1 class="about__title">About us</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
+                </p>
             </div>
-            <div class="col-6">
-                <div class="home__img">
+            <div class="about__img">
+                <img src="{% static 'img/aboutT.png' %}" alt="about" class="about__img">
+            </div>
+        </div>
+    </section>
 
+    <section class="how">
+        <div class="how__content">
+            <div class="how__text">
+                <h1 class="how__title">How it works</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
+                </p>
+            </div>
+            <div class="how__cards">
+                <div class="how__card">
+                    <i class="fas fa-search"></i>
+                    <h1 class="how__card-title">Search</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
+                </div>
+                <div class="how__card">
+                    <i class="fas fa-user-plus"></i>
+                    <h1 class="how__card-title">Join</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
+                </div>
+                <div class="how__card">
+                    <i class="fas fa-comments"></i>
+                    <h1 class="how__card-title">Connect</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="our-clubs">
+        <div class="our-clubs__title">
+            <h1 class="our-clubs__title-text">Our clubs</h1>
+        </div>
+        <div class="our-clubs__carousel" id="our-clubs__carousel">
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+{#                    Random image api #}
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 1</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 2</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 3</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 4</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 5</h1>
+                    </div>
+                </div>
+            </div>
+            <div class="our-clubs__carousel-item">
+                <div class="our-clubs__card">
+                    <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                        <h1 class="our-clubs__card-title">Club 6</h1>
+                    </div>
+                </div>
             </div>
         </div>
     </section>

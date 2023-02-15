@@ -2,7 +2,7 @@
 /* Variables */
 
 :root {
-  --color-primary: #3D1766;
+  --color-primary: transparent;
     --color-secondary: #6F1AB6;
     --color-tertiary: #c28eee;
     --color-quaternary: #b0a9b6;
@@ -31,6 +31,7 @@
     justify-content: center;
     font-family: var(--font-family);
     flex-direction: row;
+    margin-bottom: 5rem;
 }
 
 .hero__content {
@@ -41,9 +42,11 @@
 
 .hero__img {
     width: 100%;
-    height: 100vh;
+    height: 120vh;
     position: relative;
-    filter: brightness(40%);
+    filter: brightness(80%);
+    object-fit: cover;
+    margin-bottom: 5rem;
 }
 
 .hero__text-box {
@@ -57,7 +60,7 @@
 
 .hero__title {
     font-size: 7rem;
-    color: #fff;
+    color: black;
     animation: heroTitle 1s ease-out;
     margin: 0 0 -2rem -12rem;
     padding: -12rem;
@@ -71,7 +74,7 @@
 
 .hero__text {
     font-size: 1.2rem;
-    color: #fff;
+    color: black;
     animation: heroText 1s ease-out;
     margin-left: -10rem;
 }
@@ -109,6 +112,144 @@
 
 .hero__btn:hover {
     background: var(--primary-red);
+}
+
+.about {
+    background: var(--color-primary);
+    padding: 5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.about__title {
+    font-size: 3rem;
+    color: var(--title-color);
+    margin-bottom: 2rem;
+}
+
+.about__img > img {
+    object-fit: cover;
+    filter: drop-shadow(0 0 0.75rem var(--title-color));
+}
+
+.how {
+    background: rgb(239, 238, 231);
+}
+
+.how__content {
+    padding: 5rem 0;
+    max-width: 1200px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.how__title {
+    font-size: 3rem;
+    color: var(--title-color);
+    margin-bottom: 2rem;
+}
+
+.how__cards {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.how__card-title {
+    font-size: 2rem;
+    color: var(--title-color);
+    margin-bottom: 1rem;
+}
+
+.fas {
+    font-size: 3rem;
+    color: var(--text-color-dark);
+    margin-bottom: 1rem;
+    cursor: pointer;
+}
+
+.how__card-text {
+    font-size: 1.2rem;
+    color: var(--text-color);
+    margin-bottom: 1rem;
+}
+
+.how__card {
+    padding: 2rem;
+    margin: 1rem;
+    width: 300px;
+    background: #fff;
+    border-radius: 0.5rem;
+    box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+}
+
+.how__card:hover {
+    box-shadow: 0 0 0.75rem rgba(0, 0, 0, 0.2);
+    animation-name: heroImg;
+}
+
+@keyframes heroImg {
+    from {
+        transform: scale(0.5);
+    }
+    to {
+        transform: scale(1);
+    }
+}
+
+.how__card:hover .fas {
+    font-size: 3.5rem;
+}
+
+.how__card-btn {
+    width: 100%;
+    padding: 1rem;
+    font-size: 1.2rem;
+    border: 1px solid var(--title-color);
+    border-radius: 0.5rem;
+    background: var(--color-primary);
+    color: var(--text-color);
+    cursor: pointer;
+}
+
+.how__card-btn:hover {
+    background: var(--text-color-light);
+}
+
+/* Set up the carousel container */
+.our-clubs__carousel {
+display: flex;
+overflow-x: auto;
+scroll-snap-type: x mandatory;
+scroll-behavior: smooth;
+-webkit-overflow-scrolling: touch;
+width: 100%;
+}
+
+/* Set up the carousel items */
+.our-clubs__carousel-item {
+flex: 0 0 auto;
+width: 100%;
+scroll-snap-align: start;
+}
+
+/* Set up the controls */
+.our-clubs__controls {
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+/* Hide the native scrollbar */
+.our-clubs__carousel::-webkit-scrollbar {
+display: none;
 }
 
 @keyframes heroImg {

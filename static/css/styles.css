@@ -63,7 +63,7 @@ body {
 }
 
 .navbar__menu ul li a {
-  color: white;
+  color: var(--title-color);
   text-decoration: none;
   display: flex;
     justify-content: flex-end;
