@@ -1,0 +1,32 @@
+
+{% load static %}
+
+
+{% block content %}
+
+    <head>
+        <link rel="stylesheet" href="{% static 'css/footer.css' %}">
+    </head>
+
+<footer style="display: flex; flex-direction: row">
+  <div class="footer-content" style="display: flex; flex-direction: row">
+    <div class="footer-menu">
+      <h3>Menu 1</h3>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </div>
+    <div class="footer-menu">
+      <h3>Menu 2</h3>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
+{% endblock %}

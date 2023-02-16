@@ -223,33 +223,54 @@
     background: var(--text-color-light);
 }
 
-/* Set up the carousel container */
+.our-clubs {
+    background: var(--color-primary);
+    padding: 5rem 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    margin: 0 auto;
+}
 .our-clubs__carousel {
-display: flex;
-overflow-x: auto;
-scroll-snap-type: x mandatory;
-scroll-behavior: smooth;
--webkit-overflow-scrolling: touch;
-width: 100%;
+  display: flex;
+  overflow-x: scroll;
+  scroll-behavior: smooth;
+  white-space: nowrap;
+    max-width: 1120px;
 }
 
-/* Set up the carousel items */
 .our-clubs__carousel-item {
-flex: 0 0 auto;
-width: 100%;
-scroll-snap-align: start;
+  display: inline-block;
+  width: 300px;
+  height: 450px;
+  margin-right: 30px;
 }
 
-/* Set up the controls */
-.our-clubs__controls {
-display: flex;
-justify-content: space-between;
-align-items: center;
+.our-clubs__card {
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
 }
 
-/* Hide the native scrollbar */
-.our-clubs__carousel::-webkit-scrollbar {
-display: none;
+.our-clubs__card-img {
+  width: 100%;
+  height: 70%;
+  object-fit: cover;
+}
+
+.our-clubs__card-text {
+  padding: 20px;
+  text-align: center;
+}
+
+.our-clubs__card-title {
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 20px;
 }
 
 @keyframes heroImg {
