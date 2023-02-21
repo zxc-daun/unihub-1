@@ -111,6 +111,22 @@ footer {
   padding: 1em;
 }
 
+footer .footer-content {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.footer-menu {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+
+
 .container {
   max-width: 980px;
   margin: 0 auto;
