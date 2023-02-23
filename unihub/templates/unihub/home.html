@@ -4,7 +4,7 @@
 
 {% block content %}
     <head>
-        <link rel="stylesheet" href="{% static 'css/base.css/' %}">
+        <link rel="stylesheet" href="{% static "css/base.css/" %}">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
           integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
           crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -79,48 +79,18 @@
   <div class="our-clubs__title">
     <h1 class="our-clubs__title-text">Our clubs</h1>
   </div>
+        {% for c in clubs %}
   <div class="our-clubs__carousel" id="our-clubs__carousel">
     <div class="our-clubs__carousel-item">
       <div class="our-clubs__card">
-        <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
+        <img src="/media/{{ c.image }}" alt="club" class="our-clubs__card-img">
         <div class="our-clubs__card-text">
-          <h1 class="our-clubs__card-title">Club 1</h1>
+          <h1 class="our-clubs__card-title">{{ c.name }}</h1>
         </div>
       </div>
     </div>
-    <div class="our-clubs__carousel-item">
-      <div class="our-clubs__card">
-        <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
-        <div class="our-clubs__card-text">
-          <h1 class="our-clubs__card-title">Club 2</h1>
-        </div>
-      </div>
-    </div>
-    <div class="our-clubs__carousel-item">
-      <div class="our-clubs__card">
-        <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
-        <div class="our-clubs__card-text">
-          <h1 class="our-clubs__card-title">Club 3</h1>
-        </div>
-      </div>
-    </div>
-    <div class="our-clubs__carousel-item">
-      <div class="our-clubs__card">
-        <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
-        <div class="our-clubs__card-text">
-          <h1 class="our-clubs__card-title">Club 4</h1>
-        </div>
-      </div>
-    </div>
-    <div class="our-clubs__carousel-item">
-      <div class="our-clubs__card">
-        <img src="https://picsum.photos/200/300" alt="club" class="our-clubs__card-img">
-        <div class="our-clubs__card-text">
-          <h1 class="our-clubs__card-title">Club 5</h1>
-        </div>
-      </div>
-    </div>
-    </div>
+  </div>
+{% endfor %}
     </section>
 </main>
 {% endblock %}

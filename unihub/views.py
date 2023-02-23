@@ -1,5 +1,7 @@
 from django.shortcuts import render
 
+from .models import *
+
 
 # menu = [
 #     {"title": "Home", "url_name": "home"},
@@ -63,7 +65,8 @@ def register(request):
     context = {
         'menu': menu,
     }
-    return render(request, 'unihub/register.html', context)
+    return render(request, 'unihub/signup.html', context)
+
 
 def logout(request):
     menu = [{'title': 'Home'},
@@ -78,6 +81,7 @@ def logout(request):
     }
     return render(request, 'unihub/logout.html', context)
 
+
 def add(request):
     menu = [{'title': 'Home'},
             {'title': 'About'},
@@ -90,3 +94,11 @@ def add(request):
         'menu': menu,
     }
     return render(request, 'unihub/add.html', context)
+
+
+def fetch_clubs(request):
+    clubs = Club.objects.all()
+    context = {
+        'clubs': clubs,
+    }
+    return render(request, 'unihub/home.html', context)

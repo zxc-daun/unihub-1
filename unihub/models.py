@@ -1,4 +1,5 @@
 from django.db import models
+from django.urls import reverse
 
 
 class ClubCategory(models.Model):
@@ -21,6 +22,9 @@ class Club(models.Model):
 
     def __str__(self):
         return self.name
+
+    def get_absolute_url(self):
+        return reverse('club_detail', args=[str(self.id)])
 
 
 class ClubEvent(models.Model):
