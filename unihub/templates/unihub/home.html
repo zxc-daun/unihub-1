@@ -1,27 +1,9 @@
-{% extends 'unihub/base.html' %}
+{% extends './base.html' %}
 {% load static %}
 {% block title %}Home{% endblock %}
 
 {% block content %}
-    <head>
-        <link rel="stylesheet" href="{% static "css/base.css/" %}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.3.0/css/all.min.css"
-          integrity="sha512-SzlrxWUlpfuzQ+pcUCosxcglQRNAq/DZjVsC0lE40xsADsfeQoEypE+enwcOiGjk/bSuGGKHEyjSoQ1zVisanQ=="
-          crossorigin="anonymous" referrerpolicy="no-referrer" />
-    </head>
-<header class="hero">
-    <div class="hero__content">
-        <img src="{% static 'img/herImg.jpg' %}" alt="hero" class="hero__img">
-        <div class="hero__text-box">
-            <h1 class="hero__title">uni<span>Hub</span></h1>
-            <p class="hero__text">Connecting students and creating a community</p>
-            <form class="hero__form">
-                <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" onchange="searchClub()"/>
-                <button class="hero__btn">Search</button>
-            </form>
-        </div>
-    </div>
-</header>
+
 <main>
     <section>
         <div class="about">
@@ -87,6 +69,12 @@
         <div class="our-clubs__card-text">
           <h1 class="our-clubs__card-title">{{ c.name }}</h1>
         </div>
+          <div class="our-clubs__description">
+              <p class="our-clubs__description-text">{{ c.description }}</p>
+          </div>
+          <div class="our-clubs__address">
+              <p class="our-clubs__address-text">{{ c.location }}</p>
+          </div>
       </div>
     </div>
   </div>
