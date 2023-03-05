@@ -21,6 +21,18 @@ def home(request):
     return render(request, 'unihub/home.html', context)
 
 
+# Show club by slug
+def club_detail(request, slug):
+    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+            {"title": "Add", "url_name": "add"}]
+    club = Club.objects.get(slug=slug)
+    context = {
+        'menu': menu,
+        'club': club,
+    }
+    return render(request, 'unihub/club_detail.html', context)
+
+
 def custom_handler404(request, exception):
     menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
             {"title": "Add", "url_name": "add"}]

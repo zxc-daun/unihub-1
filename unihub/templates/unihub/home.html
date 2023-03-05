@@ -64,11 +64,11 @@
 
        <div class="club-wrapper">
         {% for c in clubs %}
-
+             <a href="{% url 'club_detail' c.slug %}">
               <div class="our-clubs__carousel" id="our-clubs__carousel">
                 <div class="our-clubs__carousel-item">
                   <div class="our-clubs__card">
-                    <img src="/media/{{ c.image }}" alt="club" class="our-clubs__card-img">
+                    <img src="{{ c.image.url }}" alt="club" class="our-clubs__card-img">
                     <div class="our-clubs__card-text">
                       <h1 class="our-clubs__card-title">{{ c.name }}</h1>
                     </div>
@@ -79,6 +79,7 @@
                   </div>
                 </div>
               </div>
+                </a>
         {% endfor %}
           </div>
     </section>

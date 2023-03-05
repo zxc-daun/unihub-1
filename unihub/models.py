@@ -5,6 +5,7 @@ from django.urls import reverse
 
 class ClubCategory(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
 
     def __str__(self):
         return self.name
@@ -12,6 +13,7 @@ class ClubCategory(models.Model):
 
 class Club(models.Model):
     name = models.CharField(max_length=255)
+    slug = models.SlugField(max_length=255, unique=True, verbose_name='URL')
     description = models.TextField()
     contact_email = models.EmailField()
     contact_phone = models.CharField(max_length=255)
@@ -25,7 +27,7 @@ class Club(models.Model):
         return self.name
 
     def get_absolute_url(self):
-        return reverse('club_detail', args=[str(self.id)])
+        return reverse('club_detail', args=[self.slug])
 
 
 class ClubEvent(models.Model):

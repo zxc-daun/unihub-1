@@ -1,0 +1,21 @@
+{% load static %}
+{% block content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Club Detail</title>
+</head>
+<body>
+    <div class="container">
+        <h1>Club Detail</h1>
+        <div class='club-image'>
+            <img src="{{ club.image.url }}" alt="club image" width="300" height="300">
+            <h2 class="club-name">{{ club.name }}</h2>
+            <p class='club-description'>{{ club.description }}</p>
+            <p class='club-location'>{{ club.location }}</p>
+        </div>
+    </div>
+</body>
+</html>
+{% endblock %}

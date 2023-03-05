@@ -5,8 +5,11 @@ from .models import *
 
 
 class ClubAdmin(admin.ModelAdmin):
-    list_display = ('name', 'description', 'contact_email', 'contact_phone', 'location', 'instagram', 'category',
+    list_display = ('id', 'name', 'description', 'contact_email', 'contact_phone', 'location', 'instagram', 'category',
                     'image', 'constitution',)
+    list_display_links = ('id', 'name')
+    search_fields = ('name', 'description')
+    prepopulated_fields = {'slug': ('name',)}
 
 
 admin.site.register(Club, ClubAdmin)
@@ -21,7 +24,10 @@ admin.site.register(CustomUser, CustomUserAdmin)
 
 
 class ClubCategoryAdmin(admin.ModelAdmin):
-    list_display = ('name',)
+    list_display = ('id', 'name')
+    list_display_links = ('id', 'name')
+    search_fields = ('name',)
+    prepopulated_fields = {'slug': ('name',)}
 
 
 admin.site.register(ClubCategory, ClubCategoryAdmin)

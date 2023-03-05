@@ -18,6 +18,8 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     # Categories
     path('categories/', home, name='home'),
+    # club_detail
+    path('club/<slug:slug>/', club_detail, name='club_detail'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
