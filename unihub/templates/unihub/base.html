@@ -1,4 +1,5 @@
 {% load static %}
+{% load unihub_tags %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -66,14 +67,15 @@
     <script src="{% static 'js/scripts.js' %}"></script>
 </body>
 <footer>
+    {% get_categories as categories %}
   <div class="footer-content">
     <div class="footer-menu">
-      <h3>Menu 1</h3>
-      <ul>
-        <li><a href="#">Link 1</a></li>
-        <li><a href="#">Link 2</a></li>
-        <li><a href="#">Link 3</a></li>
-      </ul>
+      <h3>Categories</h3>
+        <ul>
+            {% for c in categories %}
+            <li><a href="#">{{ c.name }}</a></li>
+            {% endfor %}
+        </ul>
     </div>
     <div class="footer-menu">
       <h3>Menu 2</h3>

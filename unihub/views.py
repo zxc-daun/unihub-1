@@ -1,18 +1,22 @@
+from django.contrib.auth import authenticate
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views import View
-from django.views.generic.edit import CreateView
-
-from .forms import RegisterForm, NewRegisterForm, CustomUserCreationForm
+from django.contrib import messages
+from django.views.generic.edit import CreateView, FormView
+from .forms import RegisterForm, NewRegisterForm, CustomUserCreationForm, CustomAuthenticationForm
 from .models import *
 
 
 def home(request):
     menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
             {"title": "Add", "url_name": "add"}]
+    cats = ClubCategory.objects.all()
+
     context = {
         'menu': menu,
+        'cats': cats,
     }
     return render(request, 'unihub/home.html', context)
 
@@ -70,7 +74,6 @@ class RegisterView(CreateView):
     def get_user_context(self, **kwargs):
         context = {
             'title': kwargs.get('title', ''),
-            # Add any other context data related to the current user here
         }
         return context
 
@@ -79,6 +82,42 @@ class RegisterView(CreateView):
         c_def = self.get_user_context(title='Registration')
         return dict(list(context.items()) + list(c_def.items()))
 
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        messages.success(self.request, 'Your account has been created! You can now log in.')
+        return response
+
+
+class LoginView(FormView):
+    form_class = AuthenticationForm
+    template_name = 'unihub/login.html'
+    success_url = reverse_lazy('home')
+
+    def form_valid(self, form):
+        email = form.cleaned_data['username']
+        password = form.cleaned_data['password']
+        user = authenticate(
+            self.request,
+            email=email,
+            password=password
+        )
+        if user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            form.add_error(None, 'Invalid email or password')
+            return super().form_invalid(form)
+
+
+class CustomLoginView(LoginView):
+    form_class = CustomAuthenticationForm
+    template_name = 'unihub/login.html'
+    success_url = reverse_lazy('home')
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['form'] = self.form_class()
+        return context
 
 
 def logout(request):

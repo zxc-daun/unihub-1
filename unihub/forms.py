@@ -1,6 +1,7 @@
 from django import forms
+from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 
 from .models import *
 
@@ -71,3 +72,26 @@ class CustomUserCreationForm(UserCreationForm):
             user.save()
         return user
 
+
+class CustomAuthenticationForm(AuthenticationForm):
+    username_or_email = forms.CharField(label='Username or Email')
+
+    def clean(self):
+        username_or_email = self.cleaned_data.get('username_or_email')
+        password = self.cleaned_data.get('password')
+
+        if username_or_email and password:
+            # Try to authenticate the user using their username or email
+            user = authenticate(username=username_or_email, password=password)
+            if user is None:
+                # If authentication fails, try again using the user's email address
+                try:
+                    user = User.objects.get(email=username_or_email)
+                    user = authenticate(username=user.username, password=password)
+                except User.DoesNotExist:
+                    pass
+
+            if user is None or not user.is_active:
+                raise forms.ValidationError('Invalid username/email or password')
+
+        return self.cleaned_data

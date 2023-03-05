@@ -223,7 +223,7 @@
 }
 
 .our-clubs {
-    background: var(--color-primary);
+    background: grey;
     padding: 5rem 0;
     display: flex;
     align-items: center;
@@ -231,12 +231,20 @@
     flex-direction: column;
     margin: 0 auto;
 }
+.club-wrapper {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: row;
+    flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0 auto;
+}
 .our-clubs__carousel {
   display: flex;
-  overflow-x: scroll;
   scroll-behavior: smooth;
-  white-space: nowrap;
-    max-width: 1120px;
+    padding: 12px;
+     align-items: center;
 }
 
 .our-clubs__carousel-item {
@@ -253,6 +261,8 @@
   border-radius: 10px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .our-clubs__card-img {
@@ -261,15 +271,18 @@
   object-fit: cover;
 }
 
-.our-clubs__card-text {
-  padding: 20px;
-  text-align: center;
-}
-
 .our-clubs__card-title {
   font-size: 24px;
   font-weight: bold;
   margin-top: 20px;
+}
+
+.our-clubs__card-text{
+  font-size: 16px;
+  color: #999;
+    text-align: start;
+    display: block;
+    padding: 12px;
 }
 
 @keyframes heroImg {

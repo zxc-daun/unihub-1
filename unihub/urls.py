@@ -7,12 +7,17 @@ from django.conf.urls.static import static
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    # path('admin-panel/', admin.site.urls, name='admin_panel'),
     path('', fetch_clubs, name='home'),
     path('add/', add, name='add'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('login/', LoginView.as_view(template_name='unihub/login.html'), name='login'),
+    # ...
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('accounts/', include('accounts.urls')),
+    # Categories
+    path('categories/', home, name='home'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
