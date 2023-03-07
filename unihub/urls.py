@@ -12,13 +12,10 @@ urlpatterns = [
     path('add/', add, name='add'),
     path('register/', RegisterView.as_view(), name='register'),
     path('login/', LoginView.as_view(template_name='unihub/login.html'), name='login'),
-    # ...
     path('login/', login, name='login'),
     path('logout/', logout, name='logout'),
     path('accounts/', include('accounts.urls')),
-    # Categories
     path('categories/', home, name='home'),
-    # club_detail
     path('club/<slug:slug>/', club_detail, name='club_detail'),
 ]
 if settings.DEBUG:

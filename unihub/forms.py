@@ -1,7 +1,10 @@
+
+from django.utils.translation import gettext as _
 from django import forms
 from django.contrib.auth import authenticate
 from django.contrib.auth.base_user import AbstractBaseUser, BaseUserManager
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.core.exceptions import ValidationError
 
 from .models import *
 
@@ -74,31 +77,31 @@ class CustomUserCreationForm(UserCreationForm):
 
 
 class CustomAuthenticationForm(AuthenticationForm):
-    username_or_email = forms.CharField(label='Username or Email')
+    username_or_email = forms.CharField(
+        label=_('Username or Email'),
+        widget=forms.TextInput(attrs={'autofocus': True}),
+        error_messages={
+            'required': _('Please enter your username or email address.'),
+        }
+    )
+    password = forms.CharField(
+        label=_('Password'),
+        strip=False,
+        widget=forms.PasswordInput(attrs={'autocomplete': 'current-password'}),
+        error_messages={
+            'required': _('Please enter your password.'),
+        },
+    )
 
     def clean(self):
-        username_or_email = self.cleaned_data.get('username_or_email')
-        password = self.cleaned_data.get('password')
+        cleaned_data = super().clean()
+        username_or_email = cleaned_data.get('username_or_email')
+        password = cleaned_data.get('password')
 
         if username_or_email and password:
-            # Try to authenticate the user using their username or email
-            user = authenticate(username=username_or_email, password=password)
+            # Authenticate user based on your custom user model
+            user = authenticate(username_or_email=username_or_email, password=password)
             if user is None:
-                # If authentication fails, try again using the user's email address
-                try:
-                    user = User.objects.get(email=username_or_email)
-                    user = authenticate(username=user.username, password=password)
-                except User.DoesNotExist:
-                    pass
+                raise forms.ValidationError(_('Invalid username/email or password'))
 
-            if user is None or not user.is_active:
-                raise forms.ValidationError('Invalid username/email or password')
-
-        return self.cleaned_data
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['username'] = forms.CharField(widget=forms.HiddenInput(), required=False)
-        self.fields['password'] = forms.CharField(widget=forms.PasswordInput())
-        self.fields['username_or_email'].widget.attrs.update({'autofocus': True})
-
+        return cleaned_data

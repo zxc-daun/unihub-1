@@ -117,6 +117,9 @@ class LoginView(FormView):
     template_name = 'unihub/login.html'
     success_url = reverse_lazy('home')
 
+    def get_success_url(self):
+        return reverse('user_profile')
+
     def form_valid(self, form):
         login(self.request, form.get_user())
         return super().form_valid(form)
@@ -127,10 +130,27 @@ class CustomLoginView(LoginView):
     template_name = 'unihub/login.html'
     success_url = reverse_lazy('home')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['form'] = self.form_class()
-        return context
+    def get_success_url(self):
+        return reverse('user_profile')
+
+    def form_valid(self, form):
+        # Authenticate user
+        username_or_email = form.cleaned_data['username_or_email']
+        password = form.cleaned_data['password']
+        user = authenticate(
+            self.request,
+            username_or_email=username_or_email,
+            password=password
+        )
+
+        # If user is authenticated, log them in and redirect to success URL
+        if user is not None:
+            login(self.request, user)
+            return super().form_valid(form)
+        else:
+            # If authentication fails, add error to form
+            form.add_error('username_or_email', 'Invalid username/email or password')
+            return self.form_invalid(form)
 
 
 def logout(request):
