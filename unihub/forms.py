@@ -95,3 +95,10 @@ class CustomAuthenticationForm(AuthenticationForm):
                 raise forms.ValidationError('Invalid username/email or password')
 
         return self.cleaned_data
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'] = forms.CharField(widget=forms.HiddenInput(), required=False)
+        self.fields['password'] = forms.CharField(widget=forms.PasswordInput())
+        self.fields['username_or_email'].widget.attrs.update({'autofocus': True})
+

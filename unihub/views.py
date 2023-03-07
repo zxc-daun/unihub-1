@@ -72,8 +72,20 @@ def custom_handler400(request, exception):
 def login(request):
     menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
             {"title": "Add", "url_name": "add"}]
+
+    if request.method == 'POST':
+        form = CustomAuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            return redirect('home')
+    else:
+        form = CustomAuthenticationForm(request)
     context = {
         'menu': menu,
+        'form': form,
     }
     return render(request, 'unihub/login.html', context)
 
@@ -101,24 +113,13 @@ class RegisterView(CreateView):
 
 
 class LoginView(FormView):
-    form_class = AuthenticationForm
+    form_class = CustomAuthenticationForm
     template_name = 'unihub/login.html'
     success_url = reverse_lazy('home')
 
     def form_valid(self, form):
-        email = form.cleaned_data['username']
-        password = form.cleaned_data['password']
-        user = authenticate(
-            self.request,
-            email=email,
-            password=password
-        )
-        if user is not None:
-            login(self.request, user)
-            return super().form_valid(form)
-        else:
-            form.add_error(None, 'Invalid email or password')
-            return super().form_invalid(form)
+        login(self.request, form.get_user())
+        return super().form_valid(form)
 
 
 class CustomLoginView(LoginView):
