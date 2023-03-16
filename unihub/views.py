@@ -9,64 +9,69 @@ from .forms import RegisterForm, NewRegisterForm, CustomUserCreationForm, Custom
 from .models import *
 
 
-def home(request):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    cats = ClubCategory.objects.all()
+class HomeView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        cats = ClubCategory.objects.all()
 
-    context = {
-        'menu': menu,
-        'cats': cats,
-    }
-    return render(request, 'unihub/home.html', context)
-
-
-# Show club by slug
-def club_detail(request, slug):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    club = Club.objects.get(slug=slug)
-    context = {
-        'menu': menu,
-        'club': club,
-    }
-    return render(request, 'unihub/club_detail.html', context)
+        context = {
+            'menu': menu,
+            'cats': cats,
+        }
+        return render(request, 'unihub/home.html', context)
 
 
-def custom_handler404(request, exception):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, "unihub/404.html", context)  # not found
+class ClubDetailView(View):
+    def get(self, request, slug):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        club = Club.objects.get(slug=slug)
+        context = {
+            'menu': menu,
+            'club': club,
+        }
+        return render(request, 'unihub/club_detail.html', context)
 
 
-def custom_handler500(request):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, "unihub/500.html", context)  # internal server error
+class CustomHandler404View(View):
+    def get(self, request, exception):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, "unihub/404.html", context)  # not found
 
 
-def custom_handler403(request, exception):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, "unihub/403.html", context)  # forbidden
+class CustomHandler500View(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, "unihub/500.html", context)  # internal server error
 
 
-def custom_handler400(request, exception):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, "unihub/400.html", context)  # bad request
+class CustomHandler403View(View):
+    def get(self, request, exception):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, "unihub/403.html", context)  # forbidden
+
+
+class CustomHandler400View(View):
+    def get(self, request, exception):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, "unihub/400.html", context)  # bad request
 
 
 def login(request):
@@ -153,36 +158,38 @@ class CustomLoginView(LoginView):
             return self.form_invalid(form)
 
 
-def logout(request):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}, {"title": "Login", "url_name": "login"},
-            {"title": "Register", "url_name": "register"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, 'unihub/logout.html', context)
+class LogoutView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}, {"title": "Login", "url_name": "login"},
+                {"title": "Register", "url_name": "register"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, 'unihub/logout.html', context)
 
 
-def add(request):
-    menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"}]
-    context = {
-        'menu': menu,
-    }
-    return render(request, 'unihub/add.html', context)
+class AddView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, 'unihub/add.html', context)
 
 
-def fetch_clubs(request):
-    menu = [{"title": "Home", "url_name": "home"},
-            {"title": "About", "url_name": "about"},
-            {"title": "Add", "url_name": "add"},
-            {"title": "Login", "url_name": "login"},
-            {"title": "Register", "url_name": "register"},
-            ]
+class FetchClubsView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"},
+                {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"},
+                {"title": "Login", "url_name": "login"},
+                {"title": "Register", "url_name": "register"}]
 
-    clubs = Club.objects.all()
-    context = {
-        'menu': menu,
-        'clubs': clubs,
-    }
-    return render(request, 'unihub/home.html', context)
+        clubs = Club.objects.all()
+        context = {
+            'menu': menu,
+            'clubs': clubs,
+        }
+        return render(request, 'unihub/home.html', context)
