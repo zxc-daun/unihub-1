@@ -1,0 +1,26 @@
+{% block content %}
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/login.css' %}">
+    <div class="login-page">
+        <div class="text-title">
+            <h1>Log in</h1>
+            <form method="post" class="login-form">
+                {% csrf_token %}
+                <div class="user-name">
+                    <label for="{{ form.username_or_email.id_for_label }}">Username or Email:</label>
+                    {{ form.username_or_email }}
+                </div>
+                <div class="password-field">
+                    <label for="{{ form.password.id_for_label }}">Password:</label>
+                    {{ form.password }}
+                </div>
+                <input type="submit" value="Login">
+                {% if request.method == 'POST' and form.errors %}
+                    <div class="errors">
+                        {{ form.errors }}
+                    </div>
+                {% endif %}
+            </form>
+        </div>
+    </div>
+{% endblock %}

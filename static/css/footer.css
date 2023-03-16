@@ -1,0 +1,36 @@
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  padding: 2rem 0;
+  background-color: #000;
+  color: #fff;
+}
+
+.footer-menu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.footer-menu ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.footer-menu ul li {
+  margin-left: 1rem;
+}
+
+.footer-menu ul li a {
+  color: #fff;
+  text-decoration: none;
+}
+
+.footer-menu ul li a:hover {
+  color: #FFC107;
+}

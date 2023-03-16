@@ -1,0 +1,87 @@
+{% extends './base.html' %}
+{% load static %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<main>
+    <section>
+        <div class="about">
+            <div class="about__text">
+                <h1 class="about__title">About us</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
+                </p>
+            </div>
+            <div class="about__img">
+                <img src="{% static 'img/aboutT.png' %}" alt="about" class="about__img">
+            </div>
+        </div>
+    </section>
+
+    <section class="how">
+        <div class="how__content">
+            <div class="how__text">
+                <h1 class="how__title">How it works</h1>
+                <p>
+                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
+                </p>
+            </div>
+            <div class="how__cards">
+                <div class="how__card">
+                    <i class="fas fa-search"></i>
+                    <h1 class="how__card-title">Search</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
+                </div>
+                <div class="how__card">
+                    <i class="fas fa-user-plus"></i>
+                    <h1 class="how__card-title">Join</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
+                </div>
+                <div class="how__card">
+                    <i class="fas fa-comments"></i>
+                    <h1 class="how__card-title">Connect</h1>
+                    <p class="how__card-text">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                    </p>
+                    <button class="how__card-btn">Learn more</button>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="our-clubs">
+  <div class="our-clubs__title">
+    <h1 class="our-clubs__title-text">Our clubs</h1>
+  </div>
+
+       <div class="club-wrapper">
+        {% for c in clubs %}
+             <a href="{% url 'club_detail' c.slug %}">
+              <div class="our-clubs__carousel" id="our-clubs__carousel">
+                <div class="our-clubs__carousel-item">
+                  <div class="our-clubs__card">
+                    <img src="{{ c.image.url }}" alt="club" class="our-clubs__card-img">
+                    <div class="our-clubs__card-text">
+                      <h1 class="our-clubs__card-title">{{ c.name }}</h1>
+                    </div>
+                      <div class="our-clubs__card-text">
+                          <p class="our-clubs__description-text">{{ c.description }}</p>
+                          <p class="our-clubs__address-text">{{ c.location }}</p>
+                      </div>
+                  </div>
+                </div>
+              </div>
+                </a>
+        {% endfor %}
+          </div>
+    </section>
+</main>
+{% endblock %}

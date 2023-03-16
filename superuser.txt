@@ -1,0 +1,5 @@
+ADMIN
+
+username: root
+email: root@example.com
+password: 1234
