@@ -1,12 +1,14 @@
 from django.contrib.auth import authenticate
+from django.contrib.auth.backends import ModelBackend, BaseBackend
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
-from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.views import View
 from django.contrib import messages
 from django.views.generic.edit import CreateView, FormView
-from .forms import RegisterForm, NewRegisterForm, CustomUserCreationForm, CustomAuthenticationForm
+from .forms import RegisterForm, NewRegisterForm, CustomUserCreationForm, CustomAuthenticationForm, \
+    CustomUsernameOrEmailAuthenticationForm
 from .models import *
+from .backends import EmailBackend
 
 
 class HomeView(View):
@@ -131,9 +133,10 @@ class LoginView(FormView):
 
 
 class CustomLoginView(LoginView):
-    form_class = CustomAuthenticationForm
+    form_class = CustomUsernameOrEmailAuthenticationForm  # Change this line
     template_name = 'unihub/login.html'
     success_url = reverse_lazy('home')
+    authentication_classes = (EmailBackend,)
 
     def get_success_url(self):
         return reverse('user_profile')
@@ -144,7 +147,7 @@ class CustomLoginView(LoginView):
         password = form.cleaned_data['password']
         user = authenticate(
             self.request,
-            username_or_email=username_or_email,
+            username=username_or_email,
             password=password
         )
 

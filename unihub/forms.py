@@ -1,4 +1,3 @@
-
 from django.utils.translation import gettext as _
 from django import forms
 from django.contrib.auth import authenticate
@@ -94,14 +93,53 @@ class CustomAuthenticationForm(AuthenticationForm):
     )
 
     def clean(self):
-        cleaned_data = super().clean()
-        username_or_email = cleaned_data.get('username_or_email')
-        password = cleaned_data.get('password')
+        username_or_email = self.cleaned_data.get('username_or_email')
+        password = self.cleaned_data.get('password')
 
         if username_or_email and password:
             # Authenticate user based on your custom user model
-            user = authenticate(username_or_email=username_or_email, password=password)
+            user = self.authenticate(username_or_email=username_or_email, password=password)
             if user is None:
                 raise forms.ValidationError(_('Invalid username/email or password'))
 
-        return cleaned_data
+        return self.cleaned_data
+
+    def authenticate(self, username_or_email, password):
+        try:
+            # Check if the input is an email address
+            user = User.objects.get(email=username_or_email)
+            username = user.username
+        except User.DoesNotExist:
+            # Assume the input is a username
+            username = username_or_email
+
+        return authenticate(username=username, password=password)
+
+
+class CustomUsernameOrEmailAuthenticationForm(AuthenticationForm):
+    username_or_email = forms.CharField(
+        max_length=254,
+        widget=forms.TextInput(attrs={'autofocus': True}),
+        label="Username or Email",
+    )
+
+    def clean(self):
+        username_or_email = self.cleaned_data.get('username_or_email')
+        password = self.cleaned_data.get('password')
+
+        if username_or_email and password:
+            self.user_cache = authenticate(
+                self.request,
+                username_or_email=username_or_email,
+                password=password,
+            )
+            if self.user_cache is None:
+                raise forms.ValidationError(
+                    "Invalid username/email or password",
+                    code='invalid_login',
+                    params={'username_or_email': username_or_email},
+                )
+            else:
+                self.confirm_login_allowed(self.user_cache)
+
+        return self.cleaned_data
