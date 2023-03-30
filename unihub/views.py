@@ -79,7 +79,7 @@ class CustomHandler400View(View):
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
-        return render(request, 'unihub.login.html', {'form': form})
+        return render(request, 'unihub/login.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
@@ -92,7 +92,7 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 return redirect('home')
-        return render(request, 'unihub.login.html', {'form': form})
+        return render(request, 'unihub/login.html', {'form': form})
 
 
 class RegisterView(View):
