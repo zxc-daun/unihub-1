@@ -91,9 +91,8 @@ class LoginView(View):
             )
             if user is not None:
                 login(request, user)
-                return redirect('home')
+                return redirect(reverse_lazy('user-dashboard'))
         return render(request, 'unihub/login.html', {'form': form})
-
 
 class RegisterView(View):
     def get(self, request, *args, **kwargs):
@@ -143,3 +142,17 @@ class FetchClubsView(View):
             'clubs': clubs,
         }
         return render(request, 'unihub/home.html', context)
+
+
+class UserDashboardView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"},
+                {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"},
+                {"title": "Login", "url_name": "login"},
+                {"title": "Register", "url_name": "register"}]
+
+        context = {
+            'menu': menu,
+        }
+        return render(request, 'unihub/user-dashboard.html', context)
