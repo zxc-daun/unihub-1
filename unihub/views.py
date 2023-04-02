@@ -6,9 +6,12 @@ from django.views import View
 from django.shortcuts import render, redirect
 
 from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 
 from .forms import LoginForm, RegistrationForm
+from django.contrib import messages
+
 
 from .models import *
 
@@ -78,7 +81,6 @@ class CustomHandler400View(View):
         return render(request, "unihub/400.html", context)  # bad request
 
 
-@method_decorator(login_required, name='dispatch')
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
@@ -99,6 +101,8 @@ class LoginView(View):
                 print("User:", user)
                 print("Request User:", request.user)
                 return redirect(reverse_lazy('user-dashboard'))
+            else:
+                messages.error(request, "Your username and password didn't match. Please try again.")
         return render(request, 'unihub/login.html', {'form': form})
 
 
@@ -152,6 +156,8 @@ class FetchClubsView(View):
         return render(request, 'unihub/home.html', context)
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(never_cache, name='dispatch')
 class UserDashboardView(LoginRequiredMixin, View):
     login_url = '/login/'
 

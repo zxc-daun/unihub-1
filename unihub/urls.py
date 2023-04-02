@@ -16,7 +16,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('categories/', HomeView.as_view(), name='home'),
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
-    # user_dashboard
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
 ]
 
