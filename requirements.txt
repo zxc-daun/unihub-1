@@ -10,3 +10,4 @@ psycopg2==2.9.5
 psycopg2-binary==2.9.5
 setuptools==49.2.1
 sqlparse==0.4.3
+django_debug_toolbar==3.8.1

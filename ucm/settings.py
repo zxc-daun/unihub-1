@@ -22,6 +22,7 @@ INSTALLED_APPS = [
     "django.contrib.sites",
     'accounts',
     "unihub",
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
@@ -34,6 +35,13 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "django.middleware.security.SecurityMiddleware",
 ]
+
+if DEBUG:
+    MIDDLEWARE.insert(0, 'debug_toolbar.middleware.DebugToolbarMiddleware')
+
+DEBUG_TOOLBAR_CONFIG = {
+    'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+}
 
 ROOT_URLCONF = "ucm.urls"
 
