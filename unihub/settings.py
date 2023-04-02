@@ -67,7 +67,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'unihub',
         'USER': 'postgres',
-        'PASSWORD': 'postgres',
+        'PASSWORD': 'yours',
         'HOST': 'localhost',
         'PORT': '5432',
     }
@@ -86,7 +86,7 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTHENTICATION_BACKENDS = [
-    'unihub.backends.EmailBackend',  # Replace 'your_app_name' with your app's name
+    'unihub.authentication.EmailBackend',
     'django.contrib.auth.backends.ModelBackend',
 ]
 

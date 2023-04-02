@@ -9,7 +9,7 @@ from django.contrib.auth import login, authenticate
 from .forms import LoginForm, RegistrationForm
 
 from .models import *
-from .backends import EmailBackend
+from .authentication import EmailBackend
 
 
 class HomeView(View):
@@ -76,6 +76,7 @@ class CustomHandler400View(View):
         }
         return render(request, "unihub/400.html", context)  # bad request
 
+
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
@@ -84,15 +85,20 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
+            print("Form Data:", form.cleaned_data)
             user = authenticate(
                 request,
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password']
             )
+            print("Authenticated User:", user)
             if user is not None:
                 login(request, user)
+                print("User:", user)
+                print("Request User:", request.user)
                 return redirect(reverse_lazy('user-dashboard'))
         return render(request, 'unihub/login.html', {'form': form})
+
 
 class RegisterView(View):
     def get(self, request, *args, **kwargs):
@@ -106,6 +112,7 @@ class RegisterView(View):
             login(request, user)
             return redirect('home')
         return render(request, 'unihub/register.html', {'form': form})
+
 
 class LogoutView(View):
     def get(self, request):
