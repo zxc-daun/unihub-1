@@ -40,12 +40,13 @@
 }
 
 .hero__img {
-    width: 100%;
     height: 120vh;
     position: relative;
     filter: brightness(80%);
     object-fit: cover;
     margin-bottom: 5rem;
+    background-repeat: no-repeat;
+    z-index: 0;
 }
 
 .hero__text-box {
@@ -312,21 +313,6 @@
     }
 }
 
-
-@media (max-width: 992px) {
-    .hero__content {
-        flex-direction: column;
-    }
-
-    .hero__img {
-        width: 100%;
-        margin-bottom: 2rem;
-    }
-
-    .hero__text-box {
-        width: 100%;
-    }
-}
 
 @media (max-width: 768px) {
     .hero__title {

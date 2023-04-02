@@ -1,0 +1,36 @@
+{% load static %}
+{% load unihub_tags %}
+
+
+<footer>
+    {% get_categories as categories %}
+  <div class="footer-content">
+    <div class="footer-menu">
+      <h3>Categories</h3>
+        <ul>
+            {% for c in categories %}
+            <li><a href="#">{{ c.name }}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div class="footer-menu">
+      <h3>Menu 2</h3>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </div>
+    <div class="footer-menu">
+      <h3>Menu 3</h3>
+      <ul>
+        <li><a href="#">Link 1</a></li>
+        <li><a href="#">Link 2</a></li>
+        <li><a href="#">Link 3</a></li>
+      </ul>
+    </div>
+    <div class="footer-logo">
+      <img src="your-logo.png" alt="Your Logo">
+    </div>
+  </div>
+</footer>

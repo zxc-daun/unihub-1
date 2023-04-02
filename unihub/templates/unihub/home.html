@@ -3,6 +3,21 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+{% block hero %}
+    <div class="hero">
+        <div class="hero__content">
+            <img src="{% static 'img/herImg.jpg' %}" alt="hero" class="hero__img">
+            <div class="hero__text-box">
+                <h1 class="hero__title">uni<span>Hub</span></h1>
+                <p class="hero__text">Connecting students and creating a community</p>
+                <form class="hero__form">
+                    <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" onchange="searchClub()"/>
+                    <button class="hero__btn">Search</button>
+                </form>
+            </div>
+        </div>
+    </div>
+{% endblock %}
 
 <main>
     <section>

@@ -1,15 +1,16 @@
-from django.contrib.auth import authenticate
-from django.contrib.auth.backends import ModelBackend, BaseBackend
-from django.shortcuts import render, redirect
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse_lazy
+from django.utils.decorators import method_decorator
 from django.views import View
 from django.shortcuts import render, redirect
 
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import login, authenticate, logout
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import LoginForm, RegistrationForm
 
 from .models import *
-from .authentication import EmailBackend
 
 
 class HomeView(View):
@@ -77,6 +78,7 @@ class CustomHandler400View(View):
         return render(request, "unihub/400.html", context)  # bad request
 
 
+@method_decorator(login_required, name='dispatch')
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
@@ -115,14 +117,13 @@ class RegisterView(View):
 
 
 class LogoutView(View):
-    def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Add", "url_name": "add"}, {"title": "Login", "url_name": "login"},
-                {"title": "Register", "url_name": "register"}]
-        context = {
-            'menu': menu,
-        }
-        return render(request, 'unihub/logout.html', context)
+    @method_decorator(csrf_exempt)
+    def dispatch(self, *args, **kwargs):
+        return super().dispatch(*args, **kwargs)
+
+    def post(self, request):
+        logout(request)  # Log out the user
+        return render(request, 'unihub/login.html')
 
 
 class AddView(View):
@@ -151,15 +152,8 @@ class FetchClubsView(View):
         return render(request, 'unihub/home.html', context)
 
 
-class UserDashboardView(View):
-    def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"},
-                {"title": "About", "url_name": "about"},
-                {"title": "Add", "url_name": "add"},
-                {"title": "Login", "url_name": "login"},
-                {"title": "Register", "url_name": "register"}]
+class UserDashboardView(LoginRequiredMixin, View):
+    login_url = '/login/'
 
-        context = {
-            'menu': menu,
-        }
-        return render(request, 'unihub/user-dashboard.html', context)
+    def get(self, request):
+        return render(request, 'unihub/user-dashboard.html')

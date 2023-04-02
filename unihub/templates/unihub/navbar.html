@@ -1,0 +1,56 @@
+{% load static %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user-dash.css' %}">
+{% endblock %}
+
+<nav class="navbar">
+  <div class="navbar__logo">
+    <a href="{% url 'home' %}" class="navbar__link">uniHub</a>
+  </div>
+  <div class="navbar__menu" style="display: flex">
+    {% if user.is_authenticated %}
+      <div class="user-icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon" style="border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
+        <ul class="user-dropdown">
+            <li><a href="#">Profile</a></li>
+            <li>
+                <form action="{% url 'login' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+      </div>
+    {% else %}
+      <ul class="navbar__list">
+        {% for m in menu %}
+          {% if m.title != 'Login' and m.title != 'Register' %}
+            <li class="navbar__item">
+              <a href="#" class="navbar__link">{{ m.title }}</a>
+            </li>
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <ul class="navbar__list">
+        {% for m in menu %}
+          <li class="navbar__item">
+            {% if m.title == 'Login' %}
+              <a href="{% url 'login' %}" class="navbar__link">{{ m.title }}</a>
+            {% elif m.title == 'Register' %}
+              <a href="{% url 'register' %}" class="navbar__link">{{ m.title }}</a>
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% endif %}
+  </div>
+  <div class="navbar__toggle">
+    <span class="navbar__icon"></span>
+  </div>
+</nav>
+
+{% block scripts %}
+    <script src="{% static 'js/user-dash.js' %}"></script>
+{% endblock %}
+
+
