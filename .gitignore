@@ -2,4 +2,5 @@
 
 # settings.py path
 #.env
-.env
+ucm_settings_path = os.getenv('UCM_SETTINGS_PATH')
+ucm/.env
