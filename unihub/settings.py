@@ -70,8 +70,8 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'unihub',
         'USER': 'postgres',
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': 'localhost',
+        # 'PASSWORD': os.getenv('DB_PASSWORD'),
+         'HOST': 'localhost',
         'PORT': '5432',
     }
 }
@@ -94,6 +94,9 @@ AUTHENTICATION_BACKENDS = [
 ]
 
 LOGIN_REDIRECT_URL = 'user-dashboard'
+
+AUTH_USER_MODEL = 'auth.User'
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.1/topics/i18n/

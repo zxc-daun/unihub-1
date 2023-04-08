@@ -1,4 +1,12 @@
-/* form styles */
+
+.register-container {
+    margin: 0 auto;
+    max-width: 400px;
+    padding: 20px;
+  background-color: #ccc;
+}
+
+
 form {
   margin: 20px;
   max-width: 400px;

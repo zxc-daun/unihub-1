@@ -1,4 +1,4 @@
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.urls import reverse
 from django.db import models
 from django.db.models.signals import post_save
@@ -67,6 +67,7 @@ class ClubMeeting(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    roles = models.ManyToManyField(Group)
     is_club_creator = models.BooleanField(default=False)
 
     def __str__(self):
@@ -76,11 +77,23 @@ class UserProfile(models.Model):
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        user_profile = UserProfile.objects.create(user=instance)
+        # Assign the default role (club_member) to a new user
+        club_member_group = Group.objects.get(name="club_member")
+        user_profile.roles.add(club_member_group)
+
 
 @receiver(post_save, sender=User)
 def save_user_profile(sender, instance, **kwargs):
     instance.userprofile.save()
+
+
+# @receiver(post_save, sender=User)
+# def create_or_update_user_profile(sender, instance, created, **kwargs):
+#     if created:
+#         UserProfile.objects.create(user=instance)
+#     else:
+#         instance.userprofile.save()
 
 
 class UserClub(models.Model):

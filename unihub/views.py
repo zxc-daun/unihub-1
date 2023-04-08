@@ -1,5 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
+from django.http import HttpResponseRedirect
 from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -11,7 +12,6 @@ from django.views.decorators.csrf import csrf_exempt
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
-
 
 from .models import *
 
@@ -84,7 +84,7 @@ class CustomHandler400View(View):
 class LoginView(View):
     def get(self, request, *args, **kwargs):
         form = LoginForm()
-        return render(request, 'unihub/login.html', {'form': form})
+        return render(request, 'login.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
@@ -103,13 +103,13 @@ class LoginView(View):
                 return redirect(reverse_lazy('user-dashboard'))
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
-        return render(request, 'unihub/login.html', {'form': form})
+        return render(request, 'login.html', {'form': form})
 
 
 class RegisterView(View):
     def get(self, request, *args, **kwargs):
         form = RegistrationForm()
-        return render(request, 'unihub/register.html', {'form': form})
+        return render(request, 'register.html', {'form': form})
 
     def post(self, request, *args, **kwargs):
         form = RegistrationForm(request.POST)
@@ -117,17 +117,24 @@ class RegisterView(View):
             user = form.save()
             login(request, user)
             return redirect('home')
-        return render(request, 'unihub/register.html', {'form': form})
+        return render(request, 'register.html', {'form': form})
 
 
 class LogoutView(View):
-    @method_decorator(csrf_exempt)
-    def dispatch(self, *args, **kwargs):
-        return super().dispatch(*args, **kwargs)
-
     def post(self, request):
         logout(request)  # Log out the user
-        return render(request, 'unihub/login.html')
+        # Redirect the user to the login page or another page after logging out
+        return HttpResponseRedirect(reverse('login'))
+
+
+class AboutView(View):
+    def get(self, request):
+        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                {"title": "Add", "url_name": "add"}]
+        context = {
+            'menu': menu,
+        }
+        return render(request, 'unihub/about.html', context)
 
 
 class AddView(View):

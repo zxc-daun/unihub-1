@@ -10,6 +10,20 @@
 {% block hero %}{% endblock %}
 
 {% block main_content %}
+    <header class="navbar__menu" style="display: flex">
+     <div class="user-icon">
+        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon" style="border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
+        <ul class="user-dropdown">
+            <li><a href="#">Profile</a></li>
+            <li>
+                <form action="{% url 'logout' %}" method="post">
+                    {% csrf_token %}
+                    <button type="submit">Logout</button>
+                </form>
+            </li>
+        </ul>
+      </div>
+    </header>
     <main class="main-dashboard">
         <h1>Welcome to your Dashboard</h1>
         <p>Here you can manage your profile, view notifications, and more.</p>
