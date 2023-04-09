@@ -1,43 +1,47 @@
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/register.css' %}">
+{% endblock %}
+
 {% block content %}
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'css/forms.css' %}">
-
-<div class="register-container">
-  <h2>Register</h2>
-  <form method="post">
-    {% csrf_token %}
-    <div class="form-group">
-      <label for="{{ form.username.id_for_label }}">Username:</label>
-      {{ form.username }}
+<main class="register-main">
+    <div class="register-form-wrapper">
+        <h2 class="register-title">Register</h2>
+        <form method="post" class="register-form">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="{{ form.username.id_for_label }}">Username:</label>
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.email.id_for_label }}">Email:</label>
+                {{ form.email }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password1.id_for_label }}">Password:</label>
+                {{ form.password1 }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
+                {{ form.password2 }}
+            </div>
+            <div class="form-group">
+                <label for="{{ form.club_admin.id_for_label }}">Club Admin:</label>
+                {{ form.is_admin }}
+            </div>
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                        <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <button type="submit" class="register-btn">Register</button>
+        </form>
+        <p class="register-login-link">Already have an account? <a href="{% url 'login' %}">Login</a></p>
     </div>
-    <div class="form-group">
-      <label for="{{ form.email.id_for_label }}">Email:</label>
-      {{ form.email }}
-    </div>
-    <div class="form-group">
-      <label for="{{ form.password1.id_for_label }}">Password:</label>
-      {{ form.password1 }}
-    </div>
-    <div class="form-group">
-      <label for="{{ form.password2.id_for_label }}">Confirm Password:</label>
-      {{ form.password2 }}
-    </div>
-    <div class="form-group">
-      <label for="{{ form.club_admin.id_for_label }}">Club Admin:</label>
-      {{ form.is_admin }}
-    </div>
-    <button type="submit" class="btn btn-primary">Register</button>
-  </form>
-
-{% if messages %}
-    <div class="messages">
-        {% for message in messages %}
-            <div{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</div>
-        {% endfor %}
-    </div>
-{% endif %}
-</div>
+</main>
 {% endblock %}
-{% block footer %}
-    {% load static %}
-{% endblock %}
+

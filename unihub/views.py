@@ -9,6 +9,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
+from django.views.generic import TemplateView
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
@@ -83,9 +84,13 @@ class CustomHandler400View(View):
 
 
 class LoginView(View):
+    template_name = 'login.html'
+
     def get(self, request, *args, **kwargs):
         form = LoginForm()
-        return render(request, 'login.html', {'form': form})
+        context = self.get_context_data()
+        context['form'] = form
+        return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
@@ -97,18 +102,18 @@ class LoginView(View):
             )
             if user is not None:
                 login(request, user)
-
-                # Check if the user belongs to the club_admin group
-                is_admin = user.groups.filter(name='club_admin').exists()
-
-                # Redirect to the appropriate dashboard based on user role
-                if is_admin:
-                    return redirect(reverse('club_admin_dashboard'))
-                else:
-                    return redirect(reverse('user-dashboard'))
+                return redirect(reverse_lazy('user-dashboard'))
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
-        return render(request, 'login.html', {'form': form})
+        context = self.get_context_data()
+        context['form'] = form
+        return render(request, self.template_name, context)
+
+    def get_context_data(self, **kwargs):
+        context = {}
+        context['menu'] = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
+                           {"title": "Add", "url_name": "add"}]
+        return context
 
 
 class RegisterView(View):

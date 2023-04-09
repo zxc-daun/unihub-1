@@ -5,8 +5,13 @@
   box-sizing: border-box;
 }
 
-html {
+html, body {
   height: 100%;
+  margin: 0;
+}
+
+main {
+  flex: 1;
 }
 
 body {
@@ -15,6 +20,7 @@ body {
   padding: 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   min-height: 100%;
 }
 
@@ -142,4 +148,146 @@ footer {
   justify-content: space-between;
   align-items: center;
 }
+
+.login-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.login-form-wrapper {
+  background-color: #f5f5f5;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.login-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.login-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.login-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-btn:hover {
+  background-color: #2980b9;
+}
+
+.register-link {
+  color: #3498db;
+  text-decoration: none;
+}
+
+.register-link:hover {
+  text-decoration: underline;
+}
+
+.message.error {
+  color: red;
+}
+
+.message.success {
+  color: green;
+}
+
+.register-main {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.register-form-wrapper {
+  background-color: #f5f5f5;
+  padding: 2rem;
+  border-radius: 8px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.register-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.register-form .form-group {
+  margin-bottom: 1rem;
+}
+
+.register-btn {
+  background-color: #3498db;
+  color: white;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.register-btn:hover {
+  background-color: #2980b9;
+}
+
+/* Add these styles to your existing CSS file */
+
+/* Style for input labels */
+.login-form label,
+.register-form label {
+  font-size: 0.875rem;
+  color: #616161;
+  display: block;
+  margin-bottom: 4px;
+}
+
+/* Style for input fields */
+.login-form input[type="text"],
+.login-form input[type="password"],
+.login-form input[type="email"],
+.register-form input[type="text"],
+.register-form input[type="password"],
+.register-form input[type="email"] {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #9e9e9e;
+  font-size: 1rem;
+  padding: 6px 0;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+  color: #424242;
+  transition: border-color 0.3s;
+}
+
+/* Focus effect for input fields */
+.login-form input[type="text"]:focus,
+.login-form input[type="password"]:focus,
+.login-form input[type="email"]:focus,
+.register-form input[type="text"]:focus,
+.register-form input[type="password"]:focus,
+.register-form input[type="email"]:focus {
+  border-bottom: 2px solid #3f51b5;
+}
+
+/* Add some margin between the inputs */
+.login-form .form-group,
+.register-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
 
