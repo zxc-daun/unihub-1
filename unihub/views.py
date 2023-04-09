@@ -1,19 +1,16 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponseRedirect
-from django.urls import reverse_lazy
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.shortcuts import render, redirect
-
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_exempt
-from django.views.generic import TemplateView
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
-
+from rest_framework import viewsets
+from .serializers import *
 from .models import *
 from .utils import is_club_admin
 
@@ -102,17 +99,21 @@ class LoginView(View):
             )
             if user is not None:
                 login(request, user)
-                return redirect(reverse_lazy('user-dashboard'))
+                if user.groups.filter(name='club_admin').exists():
+                    # The user is a club admin, redirect to club_admin_dashboard
+                    return redirect(reverse('club_admin_dashboard'))
+                else:
+                    # The user is not a club admin, redirect to user_dashboard
+                    return redirect(reverse('user_dashboard'))
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
+
         context = self.get_context_data()
         context['form'] = form
         return render(request, self.template_name, context)
 
     def get_context_data(self, **kwargs):
         context = {}
-        context['menu'] = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                           {"title": "Add", "url_name": "add"}]
         return context
 
 
@@ -135,7 +136,6 @@ class RegisterView(View):
             login(request, user)
             messages.success(request, "Registration successful!")
 
-            # Redirect to the appropriate dashboard based on user role
             if is_admin:
                 return redirect(reverse('club_admin_dashboard'))
             else:
@@ -197,6 +197,43 @@ class UserDashboardView(LoginRequiredMixin, View):
 
 
 class ClubAdminDashboardView(View):
+    template_name = 'club_admin_dashboard.html'
 
-    def get(self, request):
-        return render(request, 'unihub/club_admin_dashboard.html')
+    def get(self, request, *args, **kwargs):
+        context = {}
+        return render(request, self.template_name, context)
+
+
+class ClubCategoryViewSet(viewsets.ModelViewSet):
+    queryset = ClubCategory.objects.all()
+    serializer_class = ClubCategorySerializer
+
+
+class ClubViewSet(viewsets.ModelViewSet):
+    queryset = Club.objects.all()
+    serializer_class = ClubSerializer
+
+
+class ClubEventViewSet(viewsets.ModelViewSet):
+    queryset = ClubEvent.objects.all()
+    serializer_class = ClubEventSerializer
+
+
+class ClubMemberViewSet(viewsets.ModelViewSet):
+    queryset = ClubMember.objects.all()
+    serializer_class = ClubMemberSerializer
+
+
+class ClubMeetingViewSet(viewsets.ModelViewSet):
+    queryset = ClubMeeting.objects.all()
+    serializer_class = ClubMeetingSerializer
+
+
+class UserProfileViewSet(viewsets.ModelViewSet):
+    queryset = UserProfile.objects.all()
+    serializer_class = UserProfileSerializer
+
+
+class UserClubViewSet(viewsets.ModelViewSet):
+    queryset = UserClub.objects.all()
+    serializer_class = UserClubSerializer

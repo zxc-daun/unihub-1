@@ -54,7 +54,7 @@ ROOT_URLCONF = "ucm.urls"
 TEMPLATES = [
     {
         "BACKEND": "django.template.backends.django.DjangoTemplates",
-        "DIRS": [os.path.join(BASE_DIR, 'unihub/templates')],
+        "DIRS": [os.path.join(BASE_DIR, 'templates')],
         "OPTIONS": {
             "context_processors": [
                 "django.template.context_processors.debug",

@@ -1,0 +1,98 @@
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Club Admin{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.0/css/all.min.css"
+          integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/a1C3Pi6vj7lDyD-0a3xI5F_J3gHEGw4V4zryj1"
+          crossorigin="anonymous">
+{% endblock %}
+{% block content %}
+<main>
+  <div class="wrapper">
+<nav id="sidebar">
+  <div class="sidebar-header">
+    <h3>Club Admin</h3>
+  </div>
+
+  <ul class="list-unstyled components">
+    <li>
+      <a href="#clubSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-users"></i> Club Management
+      </a>
+      <ul class="collapse list-unstyled" id="clubSubMenu">
+        <li>
+          <a href="#"><i class="fas fa-plus"></i> Create Club</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-edit"></i> Edit Club Details</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-trash-alt"></i> Delete Club</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#memberSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-user-friends"></i> Member Management
+      </a>
+      <ul class="collapse list-unstyled" id="memberSubMenu">
+        <li>
+          <a href="#"><i class="fas fa-user-plus"></i> Add Member</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-user-edit"></i> Edit Member Details</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-user-times"></i> Remove Member</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#eventSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-calendar-alt"></i> Event Management
+      </a>
+      <ul class="collapse list-unstyled" id="eventSubMenu">
+        <li>
+          <a href="#"><i class="fas fa-plus"></i> Create Event</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-edit"></i> Edit Event Details</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-trash-alt"></i> Delete Event</a>
+        </li>
+      </ul>
+    </li>
+    <li>
+      <a href="#meetingSubMenu" data-toggle="collapse" aria-expanded="false" class="dropdown-toggle">
+        <i class="fas fa-handshake"></i> Meeting Management
+      </a>
+      <ul class="collapse list-unstyled" id="meetingSubMenu">
+        <li>
+          <a href="#"><i class="fas fa-calendar-plus"></i> Schedule Meeting</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-calendar-edit"></i> Edit Meeting Details</a>
+        </li>
+        <li>
+          <a href="#"><i class="fas fa-calendar-times"></i> Delete Meeting</a>
+        </li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+
+    <div id="content">
+      <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="container-fluid">
+          <button type="button" id="sidebarCollapse" class="btn btn-info">
+            <i class="fas fa-align-left"></i>
+            <span>Toggle Sidebar</span>
+          </button>
+        </div>
+      </nav>
+    </div>
+    </div>
+</main>
+{% endblock %}

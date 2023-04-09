@@ -26,7 +26,8 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     'accounts',
-    "unihub"
+    "unihub",
+    'rest_framework',
 ]
 
 MIDDLEWARE = [

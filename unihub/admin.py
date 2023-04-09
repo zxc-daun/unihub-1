@@ -34,3 +34,9 @@ class CustomUserAdmin(UserAdmin):
 # Unregister the original User admin and register the customized User admin
 admin.site.unregister(User)
 admin.site.register(User, CustomUserAdmin)
+
+admin.site.register(ClubEvent)
+admin.site.register(ClubMember)
+admin.site.register(ClubMeeting)
+admin.site.register(UserProfile)
+admin.site.register(UserClub)

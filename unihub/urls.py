@@ -3,11 +3,23 @@ from django.urls import path, re_path, include
 from .views import *
 from django.conf import settings
 from django.conf.urls.static import static
+from rest_framework.routers import DefaultRouter
+from . import views
+
+router = DefaultRouter()
+router.register(r'club_categories', views.ClubCategoryViewSet)
+router.register(r'clubs', views.ClubViewSet)
+router.register(r'club_events', views.ClubEventViewSet)
+router.register(r'club_members', views.ClubMemberViewSet)
+router.register(r'club_meetings', views.ClubMeetingViewSet)
+router.register(r'user_profiles', views.UserProfileViewSet)
+router.register(r'user_clubs', views.UserClubViewSet)
 
 
 urlpatterns = [
     #
     path("admin/", admin.site.urls),
+    path('', include(router.urls)),
     # path('admin-panel/', admin.site.urls, name='admin_panel'),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
@@ -30,7 +42,6 @@ if settings.DEBUG:
     urlpatterns = [
                       re_path(r'^__debug__/', include(debug_toolbar.urls)),
                   ] + urlpatterns
-
 
 handler404 = CustomHandler404View.as_view()
 handler500 = CustomHandler500View.as_view()

@@ -11,6 +11,7 @@ urlpatterns = [
     path('admin-panel/', admin.site.urls, name='admin_panel'),
     path('', include('unihub.urls')),
     path('accounts/', include('accounts.urls')),
+    path('api/', include('unihub.urls')),
 ]
 
 if settings.DEBUG:
