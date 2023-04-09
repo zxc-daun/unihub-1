@@ -1,0 +1,139 @@
+{% extends "unihub/base.html" %}
+{% load unihub_tags %}
+
+
+{% block content %}
+  <h1>Create Club</h1>
+  <form id="create-club-form" novalidate>
+      <div class="material-input">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name" class="input-field" required>
+        <div class="error-msg" id="name-error"></div>
+      </div>
+
+      <div class="material-input">
+        <label for="description">Description:</label>
+        <textarea id="description" name="description" class="input-field" required></textarea>
+      </div>
+
+      <div class="material-input">
+        <label for="contact_email">Contact Email:</label>
+        <input type="email" id="contact_email" name="contact_email" class="input-field" required>
+      </div>
+
+      <div class="material-input">
+        <label for="contact_phone">Contact Phone:</label>
+        <input type="tel" id="contact_phone" name="contact_phone" class="input-field" required>
+      </div>
+
+      <div class="material-input">
+        <label for="location">Location:</label>
+        <input type="text" id="location" name="location" class="input-field" required>
+      </div>
+
+      <div class="material-input">
+        <label for="instagram">Instagram:</label>
+        <input type="text" id="instagram" name="instagram" class="input-field">
+      </div>
+
+      <div class="material-input">
+        <label for="category">Category:</label>
+        <select id="category" name="category" class="input-field" required>
+          <option value="">Select Category</option>
+          {% for category in get_categories %}
+            <option value="{{ category.id }}">{{ category.name }}</option>
+          {% endfor %}
+        </select>
+        <div class="error-msg" id="category-error"></div>
+    </div>
+
+      <div class="material-input">
+        <label for="image">Image:</label>
+        <input type="file" id="image" name="image" class="input-field">
+      </div>
+
+      <div class="material-input">
+        <label for="constitution">Constitution:</label>
+        <input type="file" id="constitution" name="constitution" class="input-field">
+      </div>
+
+      <button type="submit" class="submit-button">Create Club</button>
+</form>
+
+  <script>
+  const nameInput = document.querySelector("#name");
+  const categoryInput = document.querySelector("#category");
+  const nameError = document.querySelector("#name-error");
+  const categoryError = document.querySelector("#category-error");
+
+  function validateName() {
+    if (!nameInput.value.trim()) {
+      nameError.textContent = "Name is required.";
+      return false;
+    } else {
+      nameError.textContent = "";
+      return true;
+    }
+  }
+
+  function validateCategory() {
+    if (!categoryInput.value) {
+      categoryError.textContent = "Category is required.";
+      return false;
+    } else {
+      categoryError.textContent = "";
+      return true;
+    }
+  }
+
+  document.querySelector("#create-club-form").addEventListener("submit", async (event) => {
+    event.preventDefault();
+
+    const isNameValid = validateName();
+    const isCategoryValid = validateCategory();
+
+    if (!isNameValid || !isCategoryValid) {
+      return;
+    }
+
+    const formData = new FormData(event.target);
+
+    const response = await fetch("/api/clubs/", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "X-CSRFToken": "{{ csrf_token }}",
+      },
+      body: JSON.stringify(Object.fromEntries(formData)),
+    });
+
+    if (response.ok) {
+      window.location.href = "/";  // Redirect to the desired location after a successful club creation
+    } else {
+      alert("Failed to create club. Please check your input and try again.");
+    }
+  });
+
+  nameInput.addEventListener("input", validateName);
+  categoryInput.addEventListener("input", validateCategory);
+    document.querySelector("#create-club-form").addEventListener("submit", async (event) => {
+      event.preventDefault();
+      const formData = new FormData(event.target);
+
+      const response = await fetch("/api/clubs/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}",
+        },
+        body: JSON.stringify(Object.fromEntries(formData)),
+      });
+
+      if (response.ok) {
+        window.location.href = "/";  // Redirect to the desired location after a successful club creation
+      } else {
+        alert("Failed to create club. Please check your input and try again.");
+      }
+    });
+  </script>
+{% endblock %}

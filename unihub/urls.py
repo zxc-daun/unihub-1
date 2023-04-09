@@ -31,6 +31,7 @@ urlpatterns = [
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
     path('club_admin_dashboard/', ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
+    path("create-club/", CreateClubView.as_view(), name="create-club"),
 ]
 
 if settings.DEBUG:

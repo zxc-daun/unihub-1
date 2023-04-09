@@ -204,6 +204,11 @@ class ClubAdminDashboardView(View):
         return render(request, self.template_name, context)
 
 
+class CreateClubView(View):
+    def get(self, request):
+        return render(request, "create_club.html")
+
+
 class ClubCategoryViewSet(viewsets.ModelViewSet):
     queryset = ClubCategory.objects.all()
     serializer_class = ClubCategorySerializer
