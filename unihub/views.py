@@ -14,6 +14,7 @@ from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
 
 from .models import *
+from .utils import is_club_admin
 
 
 class HomeView(View):
@@ -89,18 +90,22 @@ class LoginView(View):
     def post(self, request, *args, **kwargs):
         form = LoginForm(request.POST)
         if form.is_valid():
-            print("Form Data:", form.cleaned_data)
             user = authenticate(
                 request,
                 username=form.cleaned_data['username'],
                 password=form.cleaned_data['password']
             )
-            print("Authenticated User:", user)
             if user is not None:
                 login(request, user)
-                print("User:", user)
-                print("Request User:", request.user)
-                return redirect(reverse_lazy('user-dashboard'))
+
+                # Check if the user belongs to the club_admin group
+                is_admin = user.groups.filter(name='club_admin').exists()
+
+                # Redirect to the appropriate dashboard based on user role
+                if is_admin:
+                    return redirect(reverse('club_admin_dashboard'))
+                else:
+                    return redirect(reverse('user-dashboard'))
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
         return render(request, 'login.html', {'form': form})
@@ -115,15 +120,29 @@ class RegisterView(View):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             user = form.save()
+            is_admin = form.cleaned_data.get("is_admin")
+            if is_admin:
+                club_admin_group = Group.objects.get(name="club_admin")
+                club_admin_group.user_set.add(user)
+
+            # Authenticate the user to set the backend attribute
+            user = authenticate(request, username=user.username, password=form.cleaned_data.get("password1"))
             login(request, user)
-            return redirect('home')
+            messages.success(request, "Registration successful!")
+
+            # Redirect to the appropriate dashboard based on user role
+            if is_admin:
+                return redirect(reverse('club_admin_dashboard'))
+            else:
+                return redirect(reverse('user-dashboard'))
+        else:
+            messages.error(request, "Error in registration, please check the details.")
         return render(request, 'register.html', {'form': form})
 
 
 class LogoutView(View):
     def post(self, request):
-        logout(request)  # Log out the user
-        # Redirect the user to the login page or another page after logging out
+        logout(request)
         return HttpResponseRedirect(reverse('login'))
 
 
@@ -170,3 +189,9 @@ class UserDashboardView(LoginRequiredMixin, View):
 
     def get(self, request):
         return render(request, 'unihub/user-dashboard.html')
+
+
+class ClubAdminDashboardView(View):
+
+    def get(self, request):
+        return render(request, 'unihub/club_admin_dashboard.html')

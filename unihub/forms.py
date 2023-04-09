@@ -13,10 +13,15 @@ class LoginForm(forms.Form):
 
 class RegistrationForm(UserCreationForm):
     email = forms.EmailField(required=True)
+    is_admin = forms.BooleanField(
+        required=False,
+        initial=False,
+        label='Register as a Club Admin'
+    )
 
     class Meta:
         model = User
-        fields = ("username", "email", "password1", "password2")
+        fields = ("username", "email", "password1", "password2", "is_admin")
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
@@ -28,8 +33,13 @@ class RegistrationForm(UserCreationForm):
         return user
 
 
-# Add this signal handler to create UserProfile objects automatically
 @receiver(post_save, sender=User)
 def create_user_profile(sender, instance, created, **kwargs):
     if created:
-        UserProfile.objects.create(user=instance)
+        UserProfile.objects.get_or_create(user=instance)
+
+
+try:
+    post_save.disconnect(create_user_profile, sender=User)
+except:
+    pass

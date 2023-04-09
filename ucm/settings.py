@@ -82,8 +82,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': 'unihub',
         'USER': 'postgres',
-        # 'PASSWORD': os.getenv('DB_PASSWORD'),
-         'HOST': 'localhost',
+        'HOST': 'localhost',
         'PORT': '5432',
     }
 }

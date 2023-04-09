@@ -16,9 +16,9 @@ urlpatterns = [
     path('register/', RegisterView.as_view(), name='register'),
     path('about/', AboutView.as_view(), name='about'),
     path('accounts/', include('accounts.urls')),
-    path('categories/', HomeView.as_view(), name='home'),
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
+    path('club_admin_dashboard/', ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
 ]
 
 if settings.DEBUG:
