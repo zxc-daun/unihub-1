@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.db import models
 from django.db.models.signals import post_save
 from django.dispatch import receiver
+from django.utils.text import slugify
 
 
 class ClubCategory(models.Model):
@@ -24,12 +25,28 @@ class Club(models.Model):
     category = models.ForeignKey(ClubCategory, on_delete=models.CASCADE)
     image = models.ImageField(upload_to='club_images')
     constitution = models.FileField(upload_to='club_constitutions')
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='created_clubs')
 
     def __str__(self):
         return self.name
 
     def get_absolute_url(self):
         return reverse('club_detail', args=[self.slug])
+
+    def save(self, *args, **kwargs):
+        if not self.slug:
+            self.slug = slugify(self.name)
+
+            unique_slug = self.slug
+            counter = 1
+            while Club.objects.filter(slug=unique_slug).exclude(id=self.id).exists():
+                unique_slug = f"{self.slug}-{counter}"
+                counter += 1
+
+            self.slug = unique_slug
+
+        print(f"Saving club with slug: {self.slug}")  # Add this print statement
+        super().save(*args, **kwargs)
 
 
 class ClubEvent(models.Model):

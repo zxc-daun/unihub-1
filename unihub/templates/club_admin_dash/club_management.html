@@ -1,0 +1,90 @@
+{% load static %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
+{% endblock %}
+<style>
+    .club-info-container {
+        width: 100%;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .club-image {
+        width: 100%;
+        height: auto;
+    }
+
+    .club-description {
+        margin-top: 20px;
+        font-size: 18px;
+    }
+
+    .club-field {
+        margin-top: 10px;
+    }
+</style>
+<section class="clubs-cards">
+    <div class="container">
+        <div class="card clubs">
+            <div class="flex-content">
+                <span class="material-icons">group_work</span>
+                <p class="big-number">1</p>
+            </div>
+             <h2>Number of Clubs</h2>
+        </div>
+        <div class="card followers">
+            <div class="flex-content">
+                <span class="material-icons">people</span>
+                <p class="big-number">1234</p>
+            </div>
+                <h2>Club Followers</h2>
+        </div>
+        <div class="card events">
+            <div class="flex-content">
+                <span class="material-icons">event</span>
+                <p class="big-number">5</p>
+            </div>
+            <h2>Events</h2>
+        </div>
+    </div>
+</section>
+<section class="club-info">
+    <div class="club-info-container">
+
+    </div>
+</section>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    const apiUrl = "http://localhost:8000/api/api/clubs";
+    const token = "ca99d734fbc46a4317b938aac8240b5c813b58aa";
+
+    fetch(`${apiUrl}?creator=self`, {
+        headers: {
+            "Authorization": `Token ${token}`
+        }
+    })
+    .then(response => response.json())
+    .then(clubs => {
+        const club = clubs[0]; // Assuming the first club is the one you want to display
+        const container = document.querySelector(".club-info-container");
+
+        // Update the HTML with club information
+        container.innerHTML = `
+            <img class="club-image" src="${club.image}" alt="${club.name}">
+            <h2>${club.name}</h2>
+            <p class="club-description">${club.description}</p>
+            <p class="club-field"><strong>Contact Email:</strong> ${club.contact_email}</p>
+            <p class="club-field"><strong>Contact Phone:</strong> ${club.contact_phone}</p>
+            <p class="club-field"><strong>Location:</strong> ${club.location}</p>
+            <p class="club-field"><strong>Instagram:</strong> <a href="${club.instagram}" target="_blank">${club.instagram}</a></p>
+            <p class="club-field"><strong>Constitution:</strong> <a href="${club.constitution}" target="_blank">Download</a></p>
+        `;
+    })
+    .catch(error => {
+        console.error("Error fetching club data:", error);
+    });
+});
+
+</script>

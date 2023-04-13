@@ -19,8 +19,10 @@ router.register(r'user_clubs', views.UserClubViewSet)
 urlpatterns = [
     #
     path("admin/", admin.site.urls),
-    path('', include(router.urls)),
+    path('api/', include(router.urls)),
     # path('admin-panel/', admin.site.urls, name='admin_panel'),
+    path('api/login/', LoginApiView.as_view(), name='api-login'),
+    path('api/api/clubs/', views.ClubListAPIView.as_view(), name='club_list_api'),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
     path('logout/', LogoutView.as_view(), name='logout'),

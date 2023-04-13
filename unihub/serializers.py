@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import ClubCategory, Club, ClubEvent, ClubMember, ClubMeeting, UserProfile, UserClub
+from django.contrib.auth.models import Group, User
 
 
 class ClubCategorySerializer(serializers.ModelSerializer):
@@ -9,6 +10,9 @@ class ClubCategorySerializer(serializers.ModelSerializer):
 
 
 class ClubSerializer(serializers.ModelSerializer):
+    slug = serializers.SlugField(read_only=True)
+    creator = serializers.ReadOnlyField(source='creator.username')
+
     class Meta:
         model = Club
         fields = '__all__'

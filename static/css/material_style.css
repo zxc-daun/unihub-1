@@ -1,3 +1,8 @@
+.create-club-container {
+  margin: 0 auto;
+  width: 500px;
+}
+
 .material-input {
   display: flex;
   flex-direction: column;

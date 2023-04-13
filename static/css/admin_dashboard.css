@@ -1,0 +1,74 @@
+
+
+.container {
+    display: flex;
+    justify-content: center;
+    height: 100vh;
+    gap: 20px;
+    margin-top: 1rem;
+    width: 1080px;
+}
+
+.card {
+    position: relative;
+    width: 350px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+    padding: 20px;
+    overflow: hidden;
+}
+
+.card h2 {
+    font-size: 34px;
+    margin: 0;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.flex-content p {
+    font-size: 18px;
+    margin: 0;
+    z-index: 2;
+}
+
+.flex-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.card .material-icons {
+    font-size: 90px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    opacity: 0.5;
+}
+
+.card .big-number {
+    font-size: 130px;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.clubs {
+    background-color: #ff7f7f;
+    border: 1px solid #910303;
+}
+
+.followers {
+    background-color: #7e91f8;
+    border: 1px solid #1a237e;
+}
+
+.events {
+    background-color: #65c2ba;
+    border: 1px solid #004d40;
+}

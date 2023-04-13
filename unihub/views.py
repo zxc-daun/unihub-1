@@ -9,11 +9,15 @@ from django.views.decorators.cache import never_cache
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
-from rest_framework import viewsets
+from rest_framework import viewsets, generics
 from .serializers import *
 from .models import *
-from .utils import is_club_admin
-
+from django.core.files.storage import default_storage
+from rest_framework import permissions
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.authtoken.models import Token
+from rest_framework import status
 
 class HomeView(View):
     def get(self, request):
@@ -108,6 +112,9 @@ class LoginView(View):
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
 
+            # Print the token here
+            print(request.headers.get('Authorization'))
+
         context = self.get_context_data()
         context['form'] = form
         return render(request, self.template_name, context)
@@ -197,7 +204,7 @@ class UserDashboardView(LoginRequiredMixin, View):
 
 
 class ClubAdminDashboardView(View):
-    template_name = 'club_admin_dashboard.html'
+    template_name = 'club_admin_dash/club_admin_dashboard.html'
 
     def get(self, request, *args, **kwargs):
         context = {}
@@ -205,8 +212,8 @@ class ClubAdminDashboardView(View):
 
 
 class CreateClubView(View):
-    def get(self, request):
-        return render(request, "create_club.html")
+    def get(self, request, *args, **kwargs):
+        return render(request, 'club_admin_dash/create_club.html')
 
 
 class ClubCategoryViewSet(viewsets.ModelViewSet):
@@ -217,6 +224,20 @@ class ClubCategoryViewSet(viewsets.ModelViewSet):
 class ClubViewSet(viewsets.ModelViewSet):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
+    permission_classes = [permissions.IsAuthenticated]
+
+    def perform_create(self, serializer):
+        image = self.request.FILES['image']
+        constitution = self.request.FILES['constitution']
+
+        image_path = default_storage.save(f"club_images/{image.name}", image)
+        constitution_path = default_storage.save(f"club_constitutions/{constitution.name}", constitution)
+
+        serializer.save(
+            image=image_path,
+            constitution=constitution_path,
+            creator=self.request.user
+        )
 
 
 class ClubEventViewSet(viewsets.ModelViewSet):
@@ -242,3 +263,31 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserClubViewSet(viewsets.ModelViewSet):
     queryset = UserClub.objects.all()
     serializer_class = UserClubSerializer
+
+
+class LoginApiView(APIView):
+
+    def post(self, request, *args, **kwargs):
+        email = request.data.get('email')
+        password = request.data.get('password')
+
+        try:
+            user_obj = User.objects.get(email=email)
+            user = authenticate(request, username=user_obj.username, password=password)
+        except User.DoesNotExist:
+            user = None
+
+        if user is not None:
+            token, created = Token.objects.get_or_create(user=user)
+            return Response({'token': token.key}, status=status.HTTP_200_OK)
+        else:
+            return Response({"error": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
+
+
+class ClubListAPIView(generics.ListAPIView):
+    queryset = Club.objects.all()
+    serializer_class = ClubSerializer
+
+
+
+
