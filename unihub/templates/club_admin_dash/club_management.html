@@ -9,9 +9,7 @@
         margin: 0 auto;
         padding: 20px;
     }
-
-    .club-image {
-        width: 100%;
+    .container{
         height: auto;
     }
 
@@ -20,9 +18,95 @@
         font-size: 18px;
     }
 
-    .club-field {
-        margin-top: 10px;
-    }
+    .club-info {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.club-info-title-heading {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.club-info-title-line {
+    border: 1px solid #ccc;
+}
+
+.club-item {
+    margin-bottom: 40px;
+}
+
+.club-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.club-item-image {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    margin-bottom: 20px;
+    border-radius: 12px;
+}
+
+.club-info-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.club-info-details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.club-description-box,
+.club-category-box,
+.club-contact-box,
+.club-location-box,
+.club-files-box,
+.club-followers-box {
+    flex: 1;
+    background-color: #f8f8f8;
+    margin: 5px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+.club-description-title,
+.club-category-title,
+.club-contact-title,
+.club-location-title,
+.club-files-title,
+.club-followers-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.club-description,
+.club-category,
+.club-contact,
+.club-location,
+.club-files,
+.club-followers {
+    font-size: 14px;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}
 </style>
 <section class="clubs-cards">
     <div class="container">
@@ -51,40 +135,121 @@
 </section>
 <section class="club-info">
     <div class="club-info-container">
-
+    <div class="club-info-title">
+        <h1 class="club-info-title-heading">Your Clubs</h1>
+        <hr class="club-info-title-line">
+    </div>
+        {% for club in clubs %}
+        <div class="club-item">
+        <div class="club-title">
+            <h2 contenteditable="true">{{ club.name }}</h2>
+        </div>
+        <div class="club-item-image">
+            <img class="club-info-image" src="{{ club.image.url }}" alt="Club Image">
+        </div>
+            <div class="club-description-box">
+                    <div class="club-description-title">
+                        <h3>Description</h3>
+                    </div>
+                    <div class="club-description">
+                        <p contenteditable="true">{{ club.description }}</p>
+                    </div>
+                </div>
+            <div class="club-info-details">
+                <div class="club-category-box">
+                    <div class="club-category-title">
+                        <h3>Category</h3>
+                    </div>
+                    <div class="club-category">
+                        <p contenteditable="true">{{ club.category }}</p>
+                    </div>
+                </div>
+                <div class="club-contact-box">
+                    <div class="club-contact-title">
+                        <h3>Contact</h3>
+                    </div>
+                    <div class="club-contact">
+                        <p contenteditable="true">Email: {{ club.contact_email }}</p>
+                        <p contenteditable="true">Phone: {{ club.contact_phone }}</p>
+                    </div>
+                </div>
+                <div class="club-location-box">
+                    <div class="club-location-title">
+                        <h3>Location</h3>
+                    </div>
+                    <div class="club-location">
+                        <p contenteditable="true">{{ club.location }}</p>
+                    </div>
+                </div>
+                <div class="club-files-box">
+                    <div class="club-files-title">
+                        <h3>Files</h3>
+                    </div>
+                    <div class="club-files">
+                        <p contenteditable="true">Constitution: <a href="{{ club.constitution.url }}">Download</a></p>
+                    </div>
+                </div>
+                <div class="club-followers-box">
+                    <div class="club-followers-title">
+                        <h3>Followers</h3>
+                    </div>
+                    <div class="club-followers">
+                        <p>1234</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div>No clubs created by you.</div>
+        {% endfor %}
+     <div class="save-button">
+                <button type="button" class="btn-save-changes">Save Changes</button>
+            </div>
     </div>
 </section>
 
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
-    const apiUrl = "http://localhost:8000/api/api/clubs";
-    const token = "ca99d734fbc46a4317b938aac8240b5c813b58aa";
+    function csrfSafeMethod(method) {
+        // these HTTP methods do not require CSRF protection
+        return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+    }
 
-    fetch(`${apiUrl}?creator=self`, {
-        headers: {
-            "Authorization": `Token ${token}`
-        }
-    })
-    .then(response => response.json())
-    .then(clubs => {
-        const club = clubs[0]; // Assuming the first club is the one you want to display
-        const container = document.querySelector(".club-info-container");
+    function updateClubData(club_id, field_name, new_value) {
+        let data = {
+            'club_id': club_id,
+            'field_name': field_name,
+            'new_value': new_value
+        };
 
-        // Update the HTML with club information
-        container.innerHTML = `
-            <img class="club-image" src="${club.image}" alt="${club.name}">
-            <h2>${club.name}</h2>
-            <p class="club-description">${club.description}</p>
-            <p class="club-field"><strong>Contact Email:</strong> ${club.contact_email}</p>
-            <p class="club-field"><strong>Contact Phone:</strong> ${club.contact_phone}</p>
-            <p class="club-field"><strong>Location:</strong> ${club.location}</p>
-            <p class="club-field"><strong>Instagram:</strong> <a href="${club.instagram}" target="_blank">${club.instagram}</a></p>
-            <p class="club-field"><strong>Constitution:</strong> <a href="${club.constitution}" target="_blank">Download</a></p>
-        `;
-    })
-    .catch(error => {
-        console.error("Error fetching club data:", error);
+        $.ajax({
+            url: '/update_club_data/',
+            type: 'POST',
+            data: data,
+            beforeSend: function (xhr, settings) {
+                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
+                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+                }
+            },
+            success: function (response) {
+                console.log(response);
+            },
+            error: function (xhr, textStatus, errorThrown) {
+                console.error('Error updating club data:', errorThrown);
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        // Save changes when the Save Changes button is clicked
+        $('.btn-save-changes').click(function() {
+            const clubItem = $(this).closest('.club-item');
+            const clubId = clubItem.data('club-id');
+            clubItem.find('[contenteditable="true"]').each(function() {
+                let fieldName = $(this).data('field');
+                let newValue = $(this).text();
+                updateClubData(clubId, fieldName, newValue);
+            });
+            clubItem.find('.save-button').hide();
+        });
     });
-});
-
 </script>

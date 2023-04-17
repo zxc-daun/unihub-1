@@ -1,11 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
-from django.views import View
+from django.views import View, generic
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
@@ -18,6 +19,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+
 
 class HomeView(View):
     def get(self, request):
@@ -205,10 +207,15 @@ class UserDashboardView(LoginRequiredMixin, View):
 
 class ClubAdminDashboardView(View):
     template_name = 'club_admin_dash/club_admin_dashboard.html'
+    context_object_name = 'clubs'
 
     def get(self, request, *args, **kwargs):
-        context = {}
+        clubs = Club.objects.filter(creator=request.user)
+        context = {'clubs': clubs}
         return render(request, self.template_name, context)
+
+    def get_queryset(self):
+        return Club.objects.filter(creator=self.request.user.username)
 
 
 class CreateClubView(View):
@@ -289,5 +296,23 @@ class ClubListAPIView(generics.ListAPIView):
     serializer_class = ClubSerializer
 
 
+@method_decorator(login_required, name='dispatch')
+@method_decorator(csrf_exempt, name='dispatch')
+class UpdateClubDataView(View):
+    def post(self, request, *args, **kwargs):
+        club_id = request.POST.get('club_id')
+        field_name = request.POST.get('field_name')
+        new_value = request.POST.get('new_value')
 
+        try:
+            club = Club.objects.get(pk=club_id, creator=request.user.username)
+            setattr(club, field_name, new_value)
+            club.save()
+            return JsonResponse({'status': 'success'})
+        except Club.DoesNotExist:
+            return JsonResponse({'status': 'error', 'message': 'Club not found or not authorized'})
+        except Exception as e:
+            return JsonResponse({'status': 'error', 'message': f'Error updating club data: {e}'})
 
+    def get(self, request, *args, **kwargs):
+        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
