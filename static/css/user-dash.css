@@ -65,4 +65,38 @@
 
 .main-dashboard {
     flex:1;
+    display: flex;
+    justify-content: space-between;
+    background: #cccccc;
+}
+
+.main-dashboard > aside {
+    width: 25%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.left-dashboard,
+.right-dashboard {
+    width: 25%;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.center-dashboard {
+    width: 50%;
+    /* If you want to add padding, do it here */
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.user-info-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
 }

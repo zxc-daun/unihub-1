@@ -60,6 +60,7 @@ TEMPLATES = [
                 "django.template.context_processors.request",
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
+                'unihub.context_processors.current_user',
             ],
         },
     },
@@ -100,12 +101,13 @@ AUTHENTICATION_BACKENDS = [
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
+        'rest_framework.authentication.SessionAuthentication',
     ],
 }
 
 
 LOGIN_REDIRECT_URL = 'user-dashboard'
-
+LOGIN_URL = 'login'
 AUTH_USER_MODEL = 'auth.User'
 
 

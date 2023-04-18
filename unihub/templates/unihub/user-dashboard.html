@@ -5,28 +5,79 @@
 {% block title %}Dashboard{% endblock %}
 {% block styles %}
     <link rel="stylesheet" href="{% static 'css/user-dash.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
 {% endblock %}
 
 {% block hero %}{% endblock %}
 
+
 {% block main_content %}
-    <header class="navbar__menu" style="display: flex">
-     <div class="user-icon">
-        <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon" style="border-radius: 50%; width: 30px; height: 30px; cursor: pointer;">
-        <ul class="user-dropdown">
-            <li><a href="#">Profile</a></li>
-            <li>
-                <form action="{% url 'logout' %}" method="post">
-                    {% csrf_token %}
-                    <button type="submit">Logout</button>
-                </form>
-            </li>
-        </ul>
-      </div>
-    </header>
+    <style>
+        .main-dashboard {
+            flex:1;
+            display: flex;
+            justify-content: space-between;
+            background: #d7e5fa;
+        }
+
+        .main-dashboard > aside {
+            width: 25%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .left-dashboard,
+        .right-dashboard {
+            width: 25%;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .center-dashboard {
+            width: 50%;
+            /* If you want to add padding, do it here */
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .user-info-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            background: #ffffff;
+            padding: 10px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+        }
+    </style>
+
     <main class="main-dashboard">
-        <h1>Welcome to your Dashboard</h1>
-        <p>Here you can manage your profile, view notifications, and more.</p>
-        <!-- Add more content here as needed -->
+       <aside class="left-dashboard">
+               {% if current_user.is_authenticated %}
+            <div class="user-info-container">
+                <div class="user-info-img">
+                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon" style="border-radius: 50%; width: 100px; height: 100px;">
+                </div>
+                <div class="user-info">
+                    <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+                    <p>Email: {{ current_user.email }}</p>
+                    <p>Username: {{ current_user.username }}</p>
+                    <p>Date joined: {{ current_user.date_joined }}</p>
+                </div>
+            </div>
+        {% else %}
+            <p>You are not logged in</p>
+        {% endif %}
+        </aside>
+
+        <section class="center-dashboard">
+            <!-- All clubs content goes here -->
+        </section>
+        <aside class="right-dashboard">
+            <!-- Followed clubs content goes here -->
+        </aside>
     </main>
 {% endblock %}

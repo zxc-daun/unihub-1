@@ -1,14 +1,12 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect, JsonResponse
+from django.http import HttpResponseRedirect
 from django.utils.decorators import method_decorator
-from django.views import View, generic
+from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
-from django.views.decorators.csrf import csrf_exempt
-from rest_framework.generics import UpdateAPIView
-from rest_framework.permissions import IsAuthenticated
+from django.views.generic import TemplateView
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
@@ -108,15 +106,11 @@ class LoginView(View):
             if user is not None:
                 login(request, user)
                 if user.groups.filter(name='club_admin').exists():
-                    # The user is a club admin, redirect to club_admin_dashboard
-                    return redirect(reverse('club_admin_dashboard'))
+                    return HttpResponseRedirect(reverse('club_admin_dashboard'))
                 else:
-                    # The user is not a club admin, redirect to user_dashboard
-                    return redirect(reverse('user_dashboard'))
+                    return HttpResponseRedirect(reverse('user-dashboard'))
             else:
                 messages.error(request, "Your username and password didn't match. Please try again.")
-
-            # Print the token here
             print(request.headers.get('Authorization'))
 
         context = self.get_context_data()
@@ -142,7 +136,6 @@ class RegisterView(View):
                 club_admin_group = Group.objects.get(name="club_admin")
                 club_admin_group.user_set.add(user)
 
-            # Authenticate the user to set the backend attribute
             user = authenticate(request, username=user.username, password=form.cleaned_data.get("password1"))
             login(request, user)
             messages.success(request, "Registration successful!")
@@ -200,11 +193,13 @@ class FetchClubsView(View):
 
 @method_decorator(login_required, name='dispatch')
 @method_decorator(never_cache, name='dispatch')
-class UserDashboardView(LoginRequiredMixin, View):
-    login_url = '/login/'
+class UserDashboardView(LoginRequiredMixin, TemplateView):
+    template_name = "unihub/user-dashboard.html"
 
-    def get(self, request):
-        return render(request, 'unihub/user-dashboard.html')
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['current_user'] = self.request.user
+        return context
 
 
 class ClubAdminDashboardView(View):
@@ -218,19 +213,6 @@ class ClubAdminDashboardView(View):
 
     def get_queryset(self):
         return Club.objects.filter(creator=self.request.user.username)
-
-
-# class ClubDashboardView(View):
-#     template_name = 'club_user_dash/club_dashboard.html'
-#     context_object_name = 'club'
-#
-#     def get(self, request, *args, **kwargs):
-#         club = Club.objects.get(pk=kwargs['pk'])
-#         context = {'club': club}
-#         return render(request, self.template_name, context)
-#
-#     def get_queryset(self):
-#         return Club.objects.filter(pk=self.kwargs['pk'])
 
 
 class CreateClubView(View):
@@ -313,6 +295,8 @@ class LoginApiView(APIView):
 
         if user is not None:
             token, created = Token.objects.get_or_create(user=user)
+            login(request, user)
+            user_dashboard_url = reverse('user-dashboard')  # Add this line
             return Response({'token': token.key}, status=status.HTTP_200_OK)
         else:
             return Response({"error": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
