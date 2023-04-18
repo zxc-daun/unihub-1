@@ -7,6 +7,8 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
+from rest_framework.generics import UpdateAPIView
+from rest_framework.permissions import IsAuthenticated
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
@@ -246,6 +248,13 @@ class ClubViewSet(viewsets.ModelViewSet):
             creator=self.request.user
         )
 
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
+
 
 class ClubEventViewSet(viewsets.ModelViewSet):
     queryset = ClubEvent.objects.all()
@@ -296,23 +305,30 @@ class ClubListAPIView(generics.ListAPIView):
     serializer_class = ClubSerializer
 
 
-@method_decorator(login_required, name='dispatch')
-@method_decorator(csrf_exempt, name='dispatch')
-class UpdateClubDataView(View):
-    def post(self, request, *args, **kwargs):
-        club_id = request.POST.get('club_id')
-        field_name = request.POST.get('field_name')
-        new_value = request.POST.get('new_value')
+#
+# @method_decorator(login_required, name='dispatch')
+# @method_decorator(csrf_exempt, name='dispatch')
+# class UpdateClubDataView(View):
+#     def put(self, request, *args, **kwargs):
+#         club_id = request.POST.get('club_id')
+#         field_name = request.POST.get('field_name')
+#         new_value = request.POST.get('new_value')
+#
+#         try:
+#             club = Club.objects.get(pk=club_id, creator=request.user.username)
+#             setattr(club, field_name, new_value)
+#             club.save()
+#             return JsonResponse({'status': 'success'})
+#         except Club.DoesNotExist:
+#             return JsonResponse({'status': 'error', 'message': 'Club not found or not authorized'})
+#         except Exception as e:
+#             return JsonResponse({'status': 'error', 'message': f'Error updating club data: {e}'})
+#
+#     def get(self, request, *args, **kwargs):
+#         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
-        try:
-            club = Club.objects.get(pk=club_id, creator=request.user.username)
-            setattr(club, field_name, new_value)
-            club.save()
-            return JsonResponse({'status': 'success'})
-        except Club.DoesNotExist:
-            return JsonResponse({'status': 'error', 'message': 'Club not found or not authorized'})
-        except Exception as e:
-            return JsonResponse({'status': 'error', 'message': f'Error updating club data: {e}'})
-
-    def get(self, request, *args, **kwargs):
-        return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
+# class ClubUpdateView(UpdateAPIView):
+#     queryset = Club.objects.all()
+#     serializer_class = ClubSerializer
+#     permission_classes = [IsAuthenticated]
+#     lookup_field = 'pk'

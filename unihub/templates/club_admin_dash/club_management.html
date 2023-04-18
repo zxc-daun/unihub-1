@@ -2,6 +2,9 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
 {% endblock %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/C5ptZ/2U+6Q8gF6dTCsz6l0B6swOMZLIU8E6CM" crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/C5ptZ/2U+6Q8gF6dTCsz6l0B6swOMZLIU8E6CM" crossorigin="anonymous"></script>
+
 <style>
     .club-info-container {
         width: 100%;
@@ -9,8 +12,13 @@
         margin: 0 auto;
         padding: 20px;
     }
-    .container{
+    .clubs-cards-container{
         height: auto;
+        display: flex;
+        flex-direction: row;
+        gap: 20px;
+        padding: 20px;
+        margin: 0 auto;
     }
 
     .club-description {
@@ -109,7 +117,7 @@ a:hover {
 }
 </style>
 <section class="clubs-cards">
-    <div class="container">
+    <div class="clubs-cards-container">
         <div class="card clubs">
             <div class="flex-content">
                 <span class="material-icons">group_work</span>
@@ -140,9 +148,12 @@ a:hover {
         <hr class="club-info-title-line">
     </div>
         {% for club in clubs %}
-        <div class="club-item">
+    <div class="club-item" data-club-id="{{ club.id }}">
         <div class="club-title">
-            <h2 contenteditable="true">{{ club.name }}</h2>
+            <h2 contenteditable="true" data-field="name">
+{#                <span data-club-id="{{ club.id }}">{{ club.id }}</span>#}
+                {{ club.name }}
+            </h2>
         </div>
         <div class="club-item-image">
             <img class="club-info-image" src="{{ club.image.url }}" alt="Club Image">
@@ -152,7 +163,7 @@ a:hover {
                         <h3>Description</h3>
                     </div>
                     <div class="club-description">
-                        <p contenteditable="true">{{ club.description }}</p>
+                        <p contenteditable="true" data-field="description">{{ club.description }}</p>
                     </div>
                 </div>
             <div class="club-info-details">
@@ -161,7 +172,7 @@ a:hover {
                         <h3>Category</h3>
                     </div>
                     <div class="club-category">
-                        <p contenteditable="true">{{ club.category }}</p>
+                        <p contenteditable="true" data-field="category">{{ club.category }}</p>
                     </div>
                 </div>
                 <div class="club-contact-box">
@@ -169,8 +180,8 @@ a:hover {
                         <h3>Contact</h3>
                     </div>
                     <div class="club-contact">
-                        <p contenteditable="true">Email: {{ club.contact_email }}</p>
-                        <p contenteditable="true">Phone: {{ club.contact_phone }}</p>
+                        <p contenteditable="true" data-field="email">Email: {{ club.contact_email }}</p>
+                        <p contenteditable="true" data-field="contact_phone">Phone: {{ club.contact_phone }}</p>
                     </div>
                 </div>
                 <div class="club-location-box">
@@ -178,7 +189,7 @@ a:hover {
                         <h3>Location</h3>
                     </div>
                     <div class="club-location">
-                        <p contenteditable="true">{{ club.location }}</p>
+                        <p contenteditable="true" data-field="location">{{ club.location }}</p>
                     </div>
                 </div>
                 <div class="club-files-box">
@@ -186,7 +197,9 @@ a:hover {
                         <h3>Files</h3>
                     </div>
                     <div class="club-files">
-                        <p contenteditable="true">Constitution: <a href="{{ club.constitution.url }}">Download</a></p>
+                        <p>Constitution: <a href="{{ club.constitution.url }}">Download</a></p>
+                        <input type="file" id="constitution-input" style="display:none;">
+                        <button class="btn-edit-constitution">Edit</button>
                     </div>
                 </div>
                 <div class="club-followers-box">
@@ -198,13 +211,13 @@ a:hover {
                     </div>
                 </div>
             </div>
+            {% empty %}
+            <div>No clubs created by you.</div>
+            {% endfor %}
+             <div class="save-button">
+                 <button type="button" class="btn-save-changes">Save Changes</button>
+             </div>
         </div>
-        {% empty %}
-        <div>No clubs created by you.</div>
-        {% endfor %}
-     <div class="save-button">
-                <button type="button" class="btn-save-changes">Save Changes</button>
-            </div>
     </div>
 </section>
 
@@ -215,41 +228,80 @@ a:hover {
     }
 
     function updateClubData(club_id, field_name, new_value) {
-        let data = {
-            'club_id': club_id,
-            'field_name': field_name,
-            'new_value': new_value
+        let data = {};
+        data[field_name] = new_value;
+
+        let xhr = new XMLHttpRequest();
+        xhr.open('PUT', `/api/clubs/${club_id}/`, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+
+        if (!csrfSafeMethod(xhr.method) && !xhr.crossDomain) {
+            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+            xhr.setRequestHeader('Authorization', 'Token {{ user.auth_token.key }}');
+        }
+
+        xhr.onreadystatechange = function () {
+            if (xhr.readyState === 4) {
+                if (xhr.status === 200) {
+                    console.log(JSON.parse(xhr.responseText));
+                } else {
+                    console.error('Error updating club data:', xhr.statusText);
+                }
+            }
         };
 
-        $.ajax({
-            url: '/update_club_data/',
-            type: 'POST',
-            data: data,
-            beforeSend: function (xhr, settings) {
-                if (!csrfSafeMethod(settings.type) && !this.crossDomain) {
-                    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-                }
-            },
-            success: function (response) {
-                console.log(response);
-            },
-            error: function (xhr, textStatus, errorThrown) {
-                console.error('Error updating club data:', errorThrown);
-            }
-        });
+        xhr.send(JSON.stringify(data));
+        console.log('Sent:', data)
     }
 
-    $(document).ready(function () {
-        // Save changes when the Save Changes button is clicked
-        $('.btn-save-changes').click(function() {
-            const clubItem = $(this).closest('.club-item');
-            const clubId = clubItem.data('club-id');
-            clubItem.find('[contenteditable="true"]').each(function() {
-                let fieldName = $(this).data('field');
-                let newValue = $(this).text();
-                updateClubData(clubId, fieldName, newValue);
+    function uploadFile(clubId, fieldName, file) {
+    let formData = new FormData();
+    formData.append(fieldName, file);
+
+    let xhr = new XMLHttpRequest();
+    xhr.open('PUT', `/api/clubs/${clubId}/`, true);
+    xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
+    xhr.setRequestHeader('Authorization', 'Token {{ user.auth_token.key }}');
+
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            if (xhr.status === 200) {
+                console.log(JSON.parse(xhr.responseText));
+            } else {
+                console.error('Error uploading file:', xhr.statusText);
+            }
+        }
+    };
+
+    xhr.send(formData);
+}
+
+    document.querySelector('.btn-edit-constitution').addEventListener('click', function() {
+        const clubItem = this.closest('.club-item');
+        const clubId = clubItem.dataset.clubId;
+
+        const fileInput = document.getElementById('constitution-input');
+        fileInput.click();
+        fileInput.addEventListener('change', function() {
+            const file = fileInput.files[0];
+            uploadFile(clubId, 'constitution', file);
+        });
+    });
+
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelectorAll('.btn-save-changes').forEach(function (saveButton) {
+            saveButton.addEventListener('click', function () {
+                const clubItem = saveButton.closest('.club-item');
+                console.log('clubItem:', clubItem); // Add this line to log the clubItem element
+                const clubId = clubItem.dataset.clubId;
+                clubItem.querySelectorAll('[contenteditable="true"]').forEach(function (editableField) {
+                    let fieldName = editableField.dataset.field;
+                    let newValue = editableField.textContent;
+                    updateClubData(clubId, fieldName, newValue);
+                });
+                clubItem.querySelector('.save-button').style.display = 'none';
             });
-            clubItem.find('.save-button').hide();
         });
     });
 </script>
+
