@@ -255,6 +255,11 @@ class ClubViewSet(viewsets.ModelViewSet):
         serializer.save()
         return Response(serializer.data)
 
+    def delete(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
 
 class ClubEventViewSet(viewsets.ModelViewSet):
     queryset = ClubEvent.objects.all()
@@ -303,7 +308,6 @@ class LoginApiView(APIView):
 class ClubListAPIView(generics.ListAPIView):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
-
 
 #
 # @method_decorator(login_required, name='dispatch')
