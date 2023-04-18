@@ -33,6 +33,7 @@ urlpatterns = [
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
     path('club_admin_dashboard/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
+    # path('club_user_dashboard/', views.ClubDashboardView.as_view(), name='club_user_dashboard'),
     path("create-club/", CreateClubView.as_view(), name="create-club"),
     # path('update_club_data/', views.UpdateClubDataView.as_view(), name='update_club_data'),
     # path('api/clubs/<int:pk>/', views.ClubUpdateView.as_view(), name='club_update'),

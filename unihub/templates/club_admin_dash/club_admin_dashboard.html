@@ -79,19 +79,38 @@
                         Create Club
                      </a>
                   </li>
-                  <li>
-                     <a href="#" data-content="edit-club">
-                        <i class="material-icons">edit</i>
-                        Edit Club Details
-                     </a>
-                  </li>
-                  <li>
-                     <a href="#"><i class="material-icons">delete</i>Delete Club</a>
-                  </li>
                </ul>
             </li>
-            <!-- ... -->
          </ul>
+        <ul class="list-unstyled components">
+            <li>
+            <a href="#followerSubMenu" class="dropdown-toggle">
+            <i class="material-icons">group_add</i>
+            Follower Management
+            </a>
+            <ul class="list-unstyled collapse" id="followerSubMenu">
+                <li>
+                    <a href="#"><i class="material-icons">visibility</i>Show Follower</a>
+                </li>
+            </ul>
+            </li>
+        </ul>
+        <ul class="list-unstyled components">
+            <li>
+            <a href="#eventSubMenu" class="dropdown-toggle">
+            <i class="material-icons">event</i>
+            Event Management
+            </a>
+            <ul class="list-unstyled collapse" id="eventSubMenu">
+                <li>
+                    <a href="#"><i class="material-icons">add_circle_outline</i>Create Event</a>
+                </li>
+                <li>
+                    <a href="#"><i class="material-icons">visibility</i>Show Event</a>
+                </li>
+            </ul>
+            </li>
+        </ul>
       </nav>
         {% endblock %}
       <section id="main-content" style="margin: 0 auto">

@@ -17,6 +17,25 @@
   <div class="navbar__toggle">
     <span class="navbar__icon"></span>
   </div>
+    {% if user.is_authenticated %}
+      <div class="navbar__user">
+        <div class="navbar__user--name">
+{#          <a href="{% url 'user-profile' %}" class="navbar__link">{{ user.username }}</a>#}
+        </div>
+        <div class="navbar__user--logout">
+          <a href="{% url 'logout' %}" class="navbar__link">Logout</a>
+        </div>
+      </div>
+    {% else %}
+      <div class="navbar__user">
+        <div class="navbar__user--name">
+          <a href="{% url 'login' %}" class="navbar__link">Login</a>
+        </div>
+        <div class="navbar__user--logout">
+          <a href="{% url 'register' %}" class="navbar__link">Register</a>
+        </div>
+      </div>
+    {% endif %}
 </nav>
 
 {% block scripts %}

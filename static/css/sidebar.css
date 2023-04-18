@@ -51,6 +51,7 @@
   min-width: 250px;
   display: none;
   transition: all 0.3s;
+    z-index: 999;
 }
 
 #sidebar ul li ul li a {

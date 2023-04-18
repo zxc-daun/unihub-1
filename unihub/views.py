@@ -159,7 +159,7 @@ class RegisterView(View):
 class LogoutView(View):
     def post(self, request):
         logout(request)
-        return HttpResponseRedirect(reverse('login'))
+        return HttpResponseRedirect(reverse('home'))
 
 
 class AboutView(View):
@@ -218,6 +218,19 @@ class ClubAdminDashboardView(View):
 
     def get_queryset(self):
         return Club.objects.filter(creator=self.request.user.username)
+
+
+# class ClubDashboardView(View):
+#     template_name = 'club_user_dash/club_dashboard.html'
+#     context_object_name = 'club'
+#
+#     def get(self, request, *args, **kwargs):
+#         club = Club.objects.get(pk=kwargs['pk'])
+#         context = {'club': club}
+#         return render(request, self.template_name, context)
+#
+#     def get_queryset(self):
+#         return Club.objects.filter(pk=self.kwargs['pk'])
 
 
 class CreateClubView(View):
@@ -309,30 +322,12 @@ class ClubListAPIView(generics.ListAPIView):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
 
-#
-# @method_decorator(login_required, name='dispatch')
-# @method_decorator(csrf_exempt, name='dispatch')
-# class UpdateClubDataView(View):
-#     def put(self, request, *args, **kwargs):
-#         club_id = request.POST.get('club_id')
-#         field_name = request.POST.get('field_name')
-#         new_value = request.POST.get('new_value')
-#
-#         try:
-#             club = Club.objects.get(pk=club_id, creator=request.user.username)
-#             setattr(club, field_name, new_value)
-#             club.save()
-#             return JsonResponse({'status': 'success'})
-#         except Club.DoesNotExist:
-#             return JsonResponse({'status': 'error', 'message': 'Club not found or not authorized'})
-#         except Exception as e:
-#             return JsonResponse({'status': 'error', 'message': f'Error updating club data: {e}'})
-#
-#     def get(self, request, *args, **kwargs):
-#         return JsonResponse({'status': 'error', 'message': 'Invalid request method'})
 
-# class ClubUpdateView(UpdateAPIView):
-#     queryset = Club.objects.all()
-#     serializer_class = ClubSerializer
-#     permission_classes = [IsAuthenticated]
-#     lookup_field = 'pk'
+# Logout
+
+class LogoutAPIView(APIView):
+    permission_classes = [permissions.IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        request.user.auth_token.delete()
+        return Response(status=status.HTTP_200_OK)
