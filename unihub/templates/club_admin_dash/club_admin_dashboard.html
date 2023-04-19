@@ -89,9 +89,11 @@
             Follower Management
             </a>
             <ul class="list-unstyled collapse" id="followerSubMenu">
-                <li>
-                    <a href="#"><i class="material-icons">visibility</i>Show Follower</a>
-                </li>
+                {% for club in clubs %}
+                    <li>
+                        <a href="{% url 'show-followers' club.slug %}"><i class="material-icons">visibility</i>Show Followers</a>
+                    </li>
+                {% endfor %}
             </ul>
             </li>
         </ul>

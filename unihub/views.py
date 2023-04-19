@@ -1,5 +1,5 @@
 from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -19,6 +19,8 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.authtoken.models import Token
 from rest_framework import status
+from django.views.generic import ListView
+
 
 
 class HomeView(View):
@@ -212,6 +214,7 @@ class ClubAdminDashboardView(View):
 
     def get(self, request, *args, **kwargs):
         clubs = Club.objects.filter(creator=request.user)
+        club = clubs.first()  # Get the first club in the queryset
         context = {'clubs': clubs}
         return render(request, self.template_name, context)
 
@@ -339,3 +342,19 @@ class ClubFollowView(View):
             return JsonResponse(response)
         else:
             return JsonResponse({'status': 'error', 'message': 'User is not authenticated'})
+
+
+class ShowClubFollowersView(UserPassesTestMixin, ListView):
+    model = ClubMember
+    template_name = 'club_admin_dash/show_followers.html'
+    context_object_name = 'followers'
+
+    def get_queryset(self):
+        club = Club.objects.get(slug=self.kwargs['slug'])
+        return ClubMember.objects.filter(club=club)
+
+    def test_func(self):
+        club = Club.objects.get(slug=self.kwargs['slug'])
+        return self.request.user == club.creator
+
+

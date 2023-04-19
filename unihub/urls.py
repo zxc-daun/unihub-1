@@ -20,6 +20,8 @@ urlpatterns = [
     path('club_admin_dashboard/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
     path("create-club/", CreateClubView.as_view(), name="create-club"),
     path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
+    path('club/<slug:slug>/followers/', ShowClubFollowersView.as_view(), name='show-followers'),
+
 ]
 
 if settings.DEBUG:
