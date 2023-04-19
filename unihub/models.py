@@ -85,6 +85,11 @@ class ClubMeeting(models.Model):
 
 class UserProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user_image = models.ImageField(upload_to='user_images/', null=True, blank=True)
+
+    class Meta:
+        verbose_name = 'User Profile'
+        verbose_name_plural = 'User Profiles'
 
     def __str__(self):
         return self.user.username
@@ -110,3 +115,5 @@ class UserClub(models.Model):
 
     def __str__(self):
         return str(self.user) + ' - ' + str(self.club)
+
+

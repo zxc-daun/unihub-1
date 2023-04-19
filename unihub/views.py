@@ -22,7 +22,6 @@ from rest_framework import status
 from django.views.generic import ListView
 
 
-
 class HomeView(View):
     def get(self, request):
         menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
@@ -215,7 +214,23 @@ class ClubAdminDashboardView(View):
     def get(self, request, *args, **kwargs):
         clubs = Club.objects.filter(creator=request.user)
         club = clubs.first()  # Get the first club in the queryset
-        context = {'clubs': clubs}
+
+        # Initialize counts to 0
+        clubs_count = 0
+        followers_count = 0
+        events_count = 0
+
+        if clubs.exists():
+            clubs_count = clubs.count()
+            followers_count = ClubMember.objects.filter(club__in=clubs).count()
+            events_count = ClubEvent.objects.filter(club__in=clubs).count()
+
+        context = {
+            'clubs': clubs,
+            'clubs_count': clubs_count,
+            'followers_count': followers_count,
+            'events_count': events_count,
+        }
         return render(request, self.template_name, context)
 
     def get_queryset(self):
@@ -363,3 +378,35 @@ class ClubInfoView(DetailView):
     template_name = 'club_info.html'
     context_object_name = 'club'
     slug_url_kwarg = 'slug'
+
+
+class EditProfileView(LoginRequiredMixin, View):
+    template_name = 'unihub/edit_profile.html'
+
+    def get(self, request):
+        return render(request, self.template_name)
+
+    def post(self, request):
+        # Get user info from the form
+        first_name = request.POST['first_name']
+        last_name = request.POST['last_name']
+        email = request.POST['email']
+        username = request.POST['username']
+        user_image = request.FILES.get('user_image', None)
+
+        # Update user info
+        user = request.user
+        user.first_name = first_name
+        user.last_name = last_name
+        user.email = email
+        user.username = username
+        user.save()
+
+        # Update user profile
+        profile, _ = UserProfile.objects.get_or_create(user=user)
+        if user_image:
+            profile.user_image = user_image
+            profile.save()
+
+        messages.success(request, 'Profile updated successfully')
+        return redirect('edit_profile')

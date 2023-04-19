@@ -22,6 +22,7 @@ urlpatterns = [
     path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
     path('club/<slug:slug>/followers/', ShowClubFollowersView.as_view(), name='show-followers'),
     path('club/<slug:slug>/', ClubInfoView.as_view(), name='club-info'),
+    path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
 
 ]
 

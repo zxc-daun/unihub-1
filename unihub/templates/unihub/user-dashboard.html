@@ -34,6 +34,7 @@
             width: 20%;
             padding: 10px;
             box-sizing: border-box;
+            border-radius: 5px;
         }
 
         .center-dashboard {
@@ -56,7 +57,6 @@
             display: flex;
             flex-direction: column;
             padding: 10px;
-            border-radius: 5px;
         }
 
         .center-dashboard {
@@ -70,6 +70,7 @@
         flex-wrap: wrap;
         gap: 1rem;
         justify-content: center;
+        margin: 1rem 0;
     }
 
     .user-club-card {
@@ -141,26 +142,55 @@
         border-radius: 50%;
         object-fit: cover;
     }
+
+    .edit-profile-btn {
+        background-color: #03f162;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+    }
+
+    .edit-profile-btn:hover {
+        background-color: #03f1a2;
+    }
+
+    .user-profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
     </style>
 
     <main class="main-dashboard">
        <aside class="left-dashboard">
-               {% if current_user.is_authenticated %}
-            <div class="user-info-container">
-                <div class="user-info-img">
-                    <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="User Icon" style="border-radius: 50%; width: 100px; height: 100px;">
+            {% if current_user.is_authenticated %}
+                <div class="user-info-container">
+                    <div class="user-info-img">
+                    {% with current_user.userprofile as profile %}
+                        <img src="{{ profile.user_image.url }}" alt="{{ current_user.username }}'s Profile Image" class="user-profile-image">
+                    {% endwith %}
+                    </div>
+                    <div class="user-info">
+                        <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+                        <p>Email: {{ current_user.email }}</p>
+                        <p>Username: {{ current_user.username }}</p>
+                        <p>Date joined: {{ current_user.date_joined }}</p>
+                        <a href="{% url 'edit_profile' %}">
+                            <button class="edit-profile-btn">edit</button>
+                        </a>
+                    </div>
                 </div>
-                <div class="user-info">
-                    <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
-                    <p>Email: {{ current_user.email }}</p>
-                    <p>Username: {{ current_user.username }}</p>
-                    <p>Date joined: {{ current_user.date_joined }}</p>
-                </div>
-            </div>
-        {% else %}
-            <p>You are not logged in</p>
-        {% endif %}
+            {% else %}
+                <p>You are not logged in</p>
+            {% endif %}
         </aside>
+
 
         <section class="center-dashboard">
             <div class="user-club-title">
@@ -172,7 +202,7 @@
                     <div class="user-club-card">
                         <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
                         <div class="user-club-info">
-                            <a href="{% url 'club-info' club.slug %}" class="club-card-link" target="_blank" style="text-decoration: none">
+                            <a href="{% url 'club-info' club.slug %}" class="club-card-link" target="_blank" style="text-decoration: none; color: black">
                             <h3 class="user-club-name">{{ club.name }}</h3>
                             <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
                             </a>
