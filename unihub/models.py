@@ -62,6 +62,7 @@ class ClubEvent(models.Model):
 
 
 class ClubMember(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, default=None)
     club = models.ForeignKey(Club, on_delete=models.CASCADE)
     name = models.CharField(max_length=255)
     email = models.EmailField()

@@ -13,7 +13,6 @@
           </li>
         {% endfor %}
       </ul>
-    </div>
   <div class="navbar__toggle">
     <span class="navbar__icon"></span>
   </div>
@@ -23,7 +22,10 @@
 {#          <a href="{% url 'user-profile' %}" class="navbar__link">{{ user.username }}</a>#}
         </div>
         <div class="navbar__user--logout">
-          <a href="{% url 'logout' %}" class="navbar__link">Logout</a>
+            <form action="{% url 'logout' %}" method="post" id="logout-form">
+                {% csrf_token %}
+                <a href="#" id="logout-link" class="navbar__link">Logout</a>
+            </form>
         </div>
       </div>
     {% else %}
@@ -41,3 +43,25 @@
 {% block scripts %}
     <script src="{% static 'js/user-dash.js' %}"></script>
 {% endblock %}
+
+<script>
+document.getElementById('logout-link').addEventListener('click', function(event) {
+  event.preventDefault();
+    console.log('clicked')
+
+  const csrfToken = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+  const form = document.createElement('form');
+  form.setAttribute('method', 'post');
+  form.setAttribute('action', '{% url 'logout' %}');
+
+  const csrfInput = document.createElement('input');
+  csrfInput.setAttribute('type', 'hidden');
+  csrfInput.setAttribute('name', 'csrfmiddlewaretoken');
+  csrfInput.setAttribute('value', csrfToken);
+  form.appendChild(csrfInput);
+
+  document.body.appendChild(form);
+  form.submit();
+});
+</script>
+

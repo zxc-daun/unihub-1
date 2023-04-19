@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
 from django.shortcuts import render, redirect
@@ -152,7 +152,7 @@ class RegisterView(View):
 class LogoutView(View):
     def post(self, request):
         logout(request)
-        return HttpResponseRedirect(reverse('home'))
+        return HttpResponseRedirect(reverse('login'))
 
 
 class AboutView(View):
@@ -199,6 +199,10 @@ class UserDashboardView(LoginRequiredMixin, TemplateView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['current_user'] = self.request.user
+        context['clubs'] = Club.objects.all()
+        followed_clubs = ClubMember.objects.filter(user=self.request.user)
+        context['followed_clubs'] = followed_clubs
+        context['followed_club_ids'] = [club_member.club.id for club_member in followed_clubs]
         return context
 
 
@@ -315,3 +319,23 @@ class LogoutAPIView(APIView):
     def post(self, request, *args, **kwargs):
         request.user.auth_token.delete()
         return Response(status=status.HTTP_200_OK)
+
+
+class ClubFollowView(View):
+    def post(self, request, *args, **kwargs):
+        user = request.user
+        club_id = request.POST.get('club_id')
+        club = Club.objects.get(id=club_id)
+
+        if user.is_authenticated:
+            club_member, created = ClubMember.objects.get_or_create(user=user, club=club)
+
+            if created:
+                response = {'status': 'followed'}
+            else:
+                club_member.delete()
+                response = {'status': 'unfollowed'}
+
+            return JsonResponse(response)
+        else:
+            return JsonResponse({'status': 'error', 'message': 'User is not authenticated'})

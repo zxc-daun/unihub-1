@@ -10,15 +10,16 @@ urlpatterns = [
     #path('api/', include('unihub.api_urls')),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
-    path('logout/', LogoutView.as_view(), name='logout'),
     path('login/', LoginView.as_view(), name='login'),
     path('register/', RegisterView.as_view(), name='register'),
+    path('logout/', LogoutView.as_view(), name='logout'),
     path('about/', AboutView.as_view(), name='about'),
     path('accounts/', include('accounts.urls')),
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
     path('club_admin_dashboard/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
     path("create-club/", CreateClubView.as_view(), name="create-club"),
+    path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
 ]
 
 if settings.DEBUG:
