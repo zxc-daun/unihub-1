@@ -21,6 +21,7 @@ urlpatterns = [
     path("create-club/", CreateClubView.as_view(), name="create-club"),
     path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
     path('club/<slug:slug>/followers/', ShowClubFollowersView.as_view(), name='show-followers'),
+    path('club/<slug:slug>/', ClubInfoView.as_view(), name='club-info'),
 
 ]
 

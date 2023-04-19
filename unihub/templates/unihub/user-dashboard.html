@@ -19,14 +19,14 @@
             flex:1;
             display: flex;
             justify-content: space-between;
-            background: #d7e5fa;
         }
 
         .main-dashboard > aside {
             width: 20%;
             padding: 10px;
             box-sizing: border-box;
-            margin: 1rem
+            margin: 1rem;
+            background: #f5f5f5;
         }
 
         .left-dashboard,
@@ -40,6 +40,7 @@
             width: 60%;
             padding: 10px;
             box-sizing: border-box;
+            background: #f5f5f5;;
         }
 
         .user-info-container {
@@ -47,27 +48,21 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            background: #ffffff;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .right-dashboard {
             display: flex;
             flex-direction: column;
-            background: #ffffff;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .center-dashboard {
             margin: 1rem;
-            background: #ffffff;
             padding: 10px;
             border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
     .user-clubs-container {
@@ -84,6 +79,13 @@
         display: flex;
         flex-direction: column;
         width: 300px;
+    }
+
+    .user-club-card:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
     }
 
     .user-club-image {
@@ -170,8 +172,10 @@
                     <div class="user-club-card">
                         <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
                         <div class="user-club-info">
+                            <a href="{% url 'club-info' club.slug %}" class="club-card-link" target="_blank" style="text-decoration: none">
                             <h3 class="user-club-name">{{ club.name }}</h3>
                             <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
+                            </a>
                             {% if club.id in followed_club_ids %}
                                 <button class="user-follow-btn" data-club-id="{{ club.id }}" onclick="toggleFollow(event)">Unfollow</button>
                             {% else %}

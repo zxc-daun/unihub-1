@@ -102,6 +102,11 @@
                 <hr class="club-info-title-line">
             </div>
             <div class="club-item" data-club-id="{{ club.id }}">
+                <div class="club-title">
+                    <h2 contenteditable="true" data-field="name">
+                        {{ club.name }}
+                    </h2>
+                </div>
                 <div class="club-item-image">
                     <img class="club-info-image" src="{{ club.image.url }}" alt="Club Image">
                     <input type="file" class="edit-image-input" accept="image/*">
@@ -112,7 +117,7 @@
                         <h3>Description</h3>
                     </div>
                     <div class="club-description">
-                        <p    data-field="description">{{ club.description }}</p>
+                        <p contenteditable="true" data-field="description">{{ club.description }}</p>
                     </div>
                 </div>
                 <div class="club-info-details">
@@ -121,7 +126,7 @@
                             <h3>Category</h3>
                         </div>
                         <div class="club-category">
-                            <p data-field="category">{{ club.category }}</p>
+                            <p contenteditable="true" data-field="category">{{ club.category }}</p>
                         </div>
                     </div>
                     <div class="club-contact-box">
@@ -129,8 +134,8 @@
                             <h3>Contact</h3>
                         </div>
                         <div class="club-contact">
-                            <p data-field="email">Email: {{ club.contact_email }}</p>
-                            <p data-field="contact_phone">Phone: {{ club.contact_phone }}</p>
+                            <p contenteditable="true" data-field="email">Email: {{ club.contact_email }}</p>
+                            <p contenteditable="true" data-field="contact_phone">Phone: {{ club.contact_phone }}</p>
                         </div>
                     </div>
                     <div class="club-location-box">
@@ -138,7 +143,7 @@
                             <h3>Location</h3>
                         </div>
                         <div class="club-location">
-                            <p data-field="location">{{ club.location }}</p>
+                            <p contenteditable="true" data-field="location">{{ club.location }}</p>
                         </div>
                     </div>
                     <div class="club-files-box">
@@ -147,7 +152,17 @@
                         </div>
                         <div class="club-files">
                             <p>Constitution: <a href="{{ club.constitution.url }}">Download</a></p>
+                            <input type="file" id="constitution-input" style="display:none;">
+                            <button class="btn-edit-constitution">Edit</button>
                         </div>
+                    </div>
+                </div>
+                <div class="club-item-buttons">
+                     <div class="save-button">
+                         <button type="button" class="btn-save-changes">Save Changes</button>
+                     </div>
+                    <div class="delete-button">
+                        <button type="button" class="btn-delete-club">Delete Club</button>
                     </div>
                 </div>
             </div>

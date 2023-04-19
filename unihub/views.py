@@ -6,7 +6,7 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, DetailView
 
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
@@ -358,3 +358,8 @@ class ShowClubFollowersView(UserPassesTestMixin, ListView):
         return self.request.user == club.creator
 
 
+class ClubInfoView(DetailView):
+    model = Club
+    template_name = 'club_info.html'
+    context_object_name = 'club'
+    slug_url_kwarg = 'slug'
