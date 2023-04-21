@@ -1,3 +1,5 @@
+import json
+
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, JsonResponse
@@ -6,6 +8,7 @@ from django.views import View
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, DetailView
 
 from .forms import LoginForm, RegistrationForm
@@ -213,9 +216,8 @@ class ClubAdminDashboardView(View):
 
     def get(self, request, *args, **kwargs):
         clubs = Club.objects.filter(creator=request.user)
-        club = clubs.first()  # Get the first club in the queryset
+        club = clubs.first()
 
-        # Initialize counts to 0
         clubs_count = 0
         followers_count = 0
         events_count = 0
@@ -230,6 +232,7 @@ class ClubAdminDashboardView(View):
             'clubs_count': clubs_count,
             'followers_count': followers_count,
             'events_count': events_count,
+            'first_club_slug': club.slug if club else None,
         }
         return render(request, self.template_name, context)
 
@@ -278,11 +281,6 @@ class ClubViewSet(viewsets.ModelViewSet):
         return Response(status=status.HTTP_204_NO_CONTENT)
 
 
-class ClubEventViewSet(viewsets.ModelViewSet):
-    queryset = ClubEvent.objects.all()
-    serializer_class = ClubEventSerializer
-
-
 class ClubMemberViewSet(viewsets.ModelViewSet):
     queryset = ClubMember.objects.all()
     serializer_class = ClubMemberSerializer
@@ -328,8 +326,6 @@ class ClubListAPIView(generics.ListAPIView):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
 
-
-# Logout
 
 class LogoutAPIView(APIView):
     permission_classes = [permissions.IsAuthenticated]
@@ -410,3 +406,70 @@ class EditProfileView(LoginRequiredMixin, View):
 
         messages.success(request, 'Profile updated successfully')
         return redirect('edit_profile')
+
+
+class CreateEventView(LoginRequiredMixin, View):
+    template_name = 'club_admin_dash/create_event.html'
+
+    def get(self, request):
+        club_id = request.GET.get('club', '')
+        club = None
+        if club_id:
+            try:
+                club = Club.objects.get(id=club_id)
+            except Club.DoesNotExist:
+                messages.error(request, 'Club not found')
+                club = None
+
+        clubs = Club.objects.filter(creator=request.user)
+
+        context = {'club': club, 'clubs': clubs}
+        return render(request, self.template_name, context)
+
+    def post(self, request):
+        title = request.POST.get('title')
+        description = request.POST.get('description')
+        start_time = request.POST.get('start_date')
+        end_time = request.POST.get('end_date')
+        club_id = request.POST.get('club')
+        location = request.POST.get('location')
+
+        if club_id:
+            try:
+                club = Club.objects.get(id=club_id)
+            except Club.DoesNotExist:
+                return JsonResponse({'status': 'error', 'message': 'Club not found'})
+
+            if request.user == club.creator:
+                club_event = ClubEvent.objects.create(
+                    name=title,
+                    description=description,
+                    start_time=start_time,
+                    end_time=end_time,
+                    club=club,
+                    location=location,
+                    creator=request.user
+                )
+                club_event.save()
+                print('Event created successfully')
+                return redirect('club_admin_dashboard', slug=club.slug)
+            else:
+                return render(request, self.template_name, {'error': 'You are not the creator of this club'})
+
+        return JsonResponse({'status': 'error', 'message': 'Invalid club ID'})
+
+
+class ClubEventListView(ListView):
+    model = ClubEvent
+    template_name = 'club_admin_dash/club_event_list.html'
+    context_object_name = 'events'
+
+    def get(self, request, *args, **kwargs):
+        club = Club.objects.get(slug=self.kwargs['slug'])
+        events = ClubEvent.objects.filter(club=club)
+        context = {'events': events, 'club': club}
+        return render(request, self.template_name, context)
+
+    def get_queryset(self):
+        club = Club.objects.get(slug=self.kwargs['slug'])
+        return ClubEvent.objects.filter(club=club)

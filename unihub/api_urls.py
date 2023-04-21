@@ -2,10 +2,11 @@ from django.urls import path, include
 from . import views
 from rest_framework.routers import DefaultRouter
 
+from .views import CreateEventView
+
 router = DefaultRouter()
 router.register(r'club_categories', views.ClubCategoryViewSet)
 router.register(r'clubs', views.ClubViewSet)
-router.register(r'club_events', views.ClubEventViewSet)
 router.register(r'club_members', views.ClubMemberViewSet)
 router.register(r'club_meetings', views.ClubMeetingViewSet)
 router.register(r'user_profiles', views.UserProfileViewSet)

@@ -56,9 +56,11 @@ class ClubEvent(models.Model):
     start_time = models.DateTimeField()
     end_time = models.DateTimeField()
     location = models.CharField(max_length=255)
+    creator = models.ForeignKey(User, null=True, on_delete=models.SET_NULL, related_name='created_events')  # Add this line
 
     def __str__(self):
         return self.name
+
 
 
 class ClubMember(models.Model):

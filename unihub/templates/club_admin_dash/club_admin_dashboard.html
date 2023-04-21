@@ -105,10 +105,10 @@
             </a>
             <ul class="list-unstyled collapse" id="eventSubMenu">
                 <li>
-                    <a href="#"><i class="material-icons">add_circle_outline</i>Create Event</a>
+                    <a href="{% url 'create-event'%}"><i class="material-icons">add_circle_outline</i>Create Event</a>
                 </li>
                 <li>
-                    <a href="#"><i class="material-icons">visibility</i>Show Event</a>
+                    <a href="{% url 'club_events' first_club_slug %}"><i class="material-icons">visibility</i>Show Event</a>
                 </li>
             </ul>
             </li>

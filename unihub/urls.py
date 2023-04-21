@@ -7,7 +7,7 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    #path('api/', include('unihub.api_urls')),
+    path('api/', include('unihub.api_urls')),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
     path('login/', LoginView.as_view(), name='login'),
@@ -17,13 +17,14 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
-    path('club_admin_dashboard/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
+    path('club_admin_dashboard/<slug:slug>/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
     path("create-club/", CreateClubView.as_view(), name="create-club"),
     path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
     path('club/<slug:slug>/followers/', ShowClubFollowersView.as_view(), name='show-followers'),
     path('club/<slug:slug>/', ClubInfoView.as_view(), name='club-info'),
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
-
+    path('create-event/', CreateEventView.as_view(), name='create-event'),
+    path('club_events/<str:slug>/', views.ClubEventListView.as_view(), name='club_events'),
 ]
 
 if settings.DEBUG:

@@ -122,11 +122,11 @@ a:hover {
     margin: 10px;
     }
 
-    .save-button, .delete-button {
+    .save-button, .delete-button, .create-event-button {
         margin: 5px;
     }
 
-    .btn-save-changes, .btn-delete-club {
+    .btn-save-changes, .btn-delete-club, .btn-create-event {
         padding: 10px 20px;
         border: none;
         border-radius: 5px;
@@ -141,6 +141,10 @@ a:hover {
 
     .btn-delete-club {
         background-color: #f44336;
+    }
+
+    .btn-create-event {
+        background-color: #61ddee;
     }
 </style>
 <section class="clubs-cards">
@@ -247,6 +251,9 @@ a:hover {
                  <div class="save-button">
                      <button type="button" class="btn-save-changes">Save Changes</button>
                  </div>
+                <div class="create-event-button">
+                    <a href="{% url 'create-event' %}?club={{ club.id }}"><button type="button" class="btn-create-event">Create Event</button></a>
+                </div>
                 <div class="delete-button">
                     <button type="button" class="btn-delete-club">Delete Club</button>
                 </div>

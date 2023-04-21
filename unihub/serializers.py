@@ -31,7 +31,7 @@ class ClubSerializer(serializers.ModelSerializer):
 class ClubEventSerializer(serializers.ModelSerializer):
     class Meta:
         model = ClubEvent
-        fields = '__all__'
+        fields = ('id', 'title', 'description', 'start_date', 'end_date', 'location', 'creator')
 
 
 class ClubMemberSerializer(serializers.ModelSerializer):
