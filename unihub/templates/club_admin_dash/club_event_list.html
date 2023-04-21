@@ -10,6 +10,7 @@
             max-width: 1200px;
             margin: 0 auto;
             padding: 20px;
+            min-height: 75vh;
         }
 
         .event-item {
@@ -21,6 +22,7 @@
             border-radius: 4px;
             padding: 20px;
             margin-bottom: 20px;
+            margin-top: 10px;
         }
 
         .event-details {
@@ -91,15 +93,18 @@
 
     <section class="events">
         <div class="events-container">
-            <h2>All Club Events</h2>
+        <div>
+            <h1>All Club Events</h1>
+            <hr>
+        </div>
             {% for event in events %}
-                <div class="event-item">
+                <div class="event-item" data-event-id="{{ event.id }}">
                     <div class="event-details">
-                        <h3 class="event-title">{{ event.name }}</h3>
+                        <h3 class="event-title" contenteditable="true" data-field="name">{{ event.name }}</h3>
                         <p class="event-detail" contenteditable="true" data-field="description">{{ event.description }}</p>
                         <p class="event-detail"><span class="event-detail-bold">Start time:</span> {{ event.start_time }}</p>
                         <p class="event-detail"><span class="event-detail-bold">End time:</span> {{ event.end_time }}</p>
-                        <p class="event-detail" contenteditable="true" data-field="location"><span class="event-detail-bold">Location:</span> {{ event.location }}</p>
+                        <p class="event-detail"><span class="event-detail-bold">Location:</span><span contenteditable="true" data-field="location">{{ event.location }}</span></p>
                     </div>
                     <div class="event-buttons">
                         <div class="event-button event-save">
@@ -120,4 +125,73 @@
             {% endfor %}
         </div>
     </section>
+
+    <script>
+        document.querySelectorAll('.event-save').forEach(saveButton => {
+            saveButton.addEventListener('click', async (event) => {
+                const eventItem = event.target.closest('.event-item');
+                const eventId = eventItem.dataset.eventId;
+                const name = eventItem.querySelector('[data-field="name"]').textContent;
+                const description = eventItem.querySelector('[data-field="description"]').textContent;
+                const location = eventItem.querySelector('[data-field="location"]').textContent;
+
+                const eventData = {
+                    name: name,
+                    description: description,
+                    location: location,
+                };
+
+                const response = await fetch(`/update-event/${eventId}/`, {
+                    method: 'PUT',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                    body: JSON.stringify(eventData),
+                });
+
+                if (response.ok) {
+                    alert('Event updated successfully.');
+                } else {
+                    alert('Failed to update event. Please try again.');
+                }
+            });
+        });
+
+        document.querySelectorAll('.event-delete').forEach(deleteButton => {
+            deleteButton.addEventListener('click', async (event) => {
+                const eventItem = event.target.closest('.event-item');
+                const eventId = eventItem.dataset.eventId;
+
+                const response = await fetch(`/delete-event/${eventId}/`, {
+                    method: 'DELETE',
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                });
+
+                if (response.ok) {
+                    eventItem.remove();
+                    alert('Event deleted successfully.');
+                } else {
+                    alert('Failed to delete event. Please try again.');
+                }
+            });
+        });
+
+         document.querySelectorAll('.event-complete').forEach(completeButton => {
+        completeButton.addEventListener('click', (event) => {
+            const eventItem = event.target.closest('.event-item');
+            eventItem.style.color = 'grey';
+            eventItem.querySelectorAll('i').forEach(icon => {
+                icon.style.color = 'grey';
+            });
+        });
+    });
+
+        function getCookie(name) {
+            const cookieValue = document.cookie.match('(^|;)\\s*' + name + '\\s*=\\s*([^;]+)');
+            return cookieValue ? cookieValue.pop() : '';
+        }
+    </script>
 {% endblock %}

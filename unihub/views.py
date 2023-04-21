@@ -5,7 +5,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
@@ -46,6 +46,7 @@ class ClubDetailView(View):
         context = {
             'menu': menu,
             'club': club,
+            'events': club.clubevent_set.all(),
         }
         return render(request, 'unihub/club_detail.html', context)
 
@@ -233,6 +234,7 @@ class ClubAdminDashboardView(View):
             'followers_count': followers_count,
             'events_count': events_count,
             'first_club_slug': club.slug if club else None,
+            'events': ClubEvent.objects.filter(club__in=clubs),
         }
         return render(request, self.template_name, context)
 
@@ -390,7 +392,6 @@ class EditProfileView(LoginRequiredMixin, View):
         username = request.POST['username']
         user_image = request.FILES.get('user_image', None)
 
-        # Update user info
         user = request.user
         user.first_name = first_name
         user.last_name = last_name
@@ -398,7 +399,6 @@ class EditProfileView(LoginRequiredMixin, View):
         user.username = username
         user.save()
 
-        # Update user profile
         profile, _ = UserProfile.objects.get_or_create(user=user)
         if user_image:
             profile.user_image = user_image
@@ -473,3 +473,36 @@ class ClubEventListView(ListView):
     def get_queryset(self):
         club = Club.objects.get(slug=self.kwargs['slug'])
         return ClubEvent.objects.filter(club=club)
+
+
+@csrf_exempt
+def update_event(request, event_id):
+    if request.method == 'PUT':
+        event = get_object_or_404(ClubEvent, id=event_id)
+        data = json.loads(request.body)
+
+        event.name = data.get('name', event.name)
+        event.description = data.get('description', event.description)
+        event.location = data.get('location', event.location)
+        event.save()
+
+        return JsonResponse({'status': 'success', 'message': 'Event updated'})
+
+
+@csrf_exempt
+def delete_event(request, event_id):
+    if request.method == 'DELETE':
+        event = get_object_or_404(ClubEvent, id=event_id)
+        event.delete()
+
+        return JsonResponse({'status': 'success', 'message': 'Event deleted'})
+
+
+@csrf_exempt
+def complete_event(request, event_id):
+    if request.method == 'POST':
+        event = get_object_or_404(ClubEvent, id=event_id)
+        event.completed = True
+        event.save()
+
+        return JsonResponse({'status': 'success', 'message': 'Event marked as complete'})

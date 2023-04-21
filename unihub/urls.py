@@ -17,7 +17,7 @@ urlpatterns = [
     path('accounts/', include('accounts.urls')),
     path('club/<slug:slug>/', ClubDetailView.as_view(), name='club_detail'),
     path('user_dashboard/', UserDashboardView.as_view(), name='user-dashboard'),
-    path('club_admin_dashboard/<slug:slug>/', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
+    path('club_admin_dashboard', views.ClubAdminDashboardView.as_view(), name='club_admin_dashboard'),
     path("create-club/", CreateClubView.as_view(), name="create-club"),
     path('club_follow/', ClubFollowView.as_view(), name='club_follow'),
     path('club/<slug:slug>/followers/', ShowClubFollowersView.as_view(), name='show-followers'),
@@ -25,6 +25,9 @@ urlpatterns = [
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
     path('create-event/', CreateEventView.as_view(), name='create-event'),
     path('club_events/<str:slug>/', views.ClubEventListView.as_view(), name='club_events'),
+    path('update-event/<int:event_id>/', views.update_event, name='update-event'),
+    path('delete-event/<int:event_id>/', views.delete_event, name='delete-event'),
+    path('complete-event/<int:event_id>/', views.complete_event, name='complete-event'),
 ]
 
 if settings.DEBUG:
