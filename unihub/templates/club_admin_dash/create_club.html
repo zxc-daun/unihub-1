@@ -3,6 +3,7 @@
 {% load unihub_tags %}
 {% load static %}
 {% block club_content %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
     <style>
     .create-club-container{
         min-height: auto;
@@ -10,6 +11,9 @@
 
     .submit-button {
         border-radius: 6px;
+        margin-bottom: 2rem;
+    }
+    .g-recaptcha {
         margin-bottom: 2rem;
     }
     </style>
@@ -74,6 +78,8 @@
                 <input type="file" id="constitution" name="constitution" class="input-field" style="margin-top: 2rem" accept=".pdf,.doc,.docx">
               </div>
         <button type="button" class="submit-button" id="submit-btn">Create Club</button>
+         <!-- Captcha -->
+           <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key"></div>
         </div>
     </form>
 <script>
@@ -85,6 +91,13 @@ document.addEventListener('DOMContentLoaded', () => {
     const categoryInput = document.querySelector('#category');
     const nameError = document.querySelector('#name-error');
     const categoryError = document.querySelector('#category-error');
+
+    const recaptchaResponse = document.querySelector('#g-recaptcha-response');
+        if (!recaptchaResponse.value) {
+            alert('Please verify the captcha before submitting the form.');
+            return;
+        }
+
 
     function validateName() {
       if (!nameInput.value.trim()) {

@@ -525,4 +525,3 @@ class CategoryView(TemplateView):
         return context
 
 
-
