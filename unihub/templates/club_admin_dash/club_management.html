@@ -2,8 +2,6 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'css/admin_dashboard.css' %}">
 {% endblock %}
-<script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/C5ptZ/2U+6Q8gF6dTCsz6l0B6swOMZLIU8E6CM" crossorigin="anonymous"></script>
-<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" integrity="sha384-KyZXEAg3QhqLMpG8r+Knujsl5/C5ptZ/2U+6Q8gF6dTCsz6l0B6swOMZLIU8E6CM" crossorigin="anonymous"></script>
 
 <style>
     .club-info-container {
@@ -359,22 +357,40 @@ a:hover {
         }
     }
 
-    function deleteClub(club_id) {
-        let xhr = new XMLHttpRequest();
-        xhr.open('DELETE', `/api/clubs/${club_id}/`, true);
-
-        if (!csrfSafeMethod(xhr.method) && !xhr.crossDomain) {
-            xhr.setRequestHeader("X-CSRFToken", "{{ csrf_token }}");
-            xhr.setRequestHeader('Authorization', 'Token {{ user.auth_token.key }}');
+    function getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
         }
+        return cookieValue;
+    }
+
+
+    function deleteClub(clubId) {
+        const xhr = new XMLHttpRequest();
+        const url = `/api/clubs/${clubId}/`; // Remove "/delete" from the URL
+        const csrfToken = getCookie('csrftoken');
+        const authToken = localStorage.getItem('authToken');
+
+        xhr.open('DELETE', url, true);
+        xhr.setRequestHeader('Content-Type', 'application/json;charset=UTF-8');
+        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+        xhr.setRequestHeader('Authorization', `Bearer ${authToken}`);
 
         xhr.onreadystatechange = function () {
             if (xhr.readyState === 4) {
                 if (xhr.status === 204) {
-                    console.log('Club deleted successfully');
+                    console.log("Club deleted successfully");
                     location.reload();
                 } else {
-                    console.error('Error deleting club:', xhr.statusText);
+                    console.error('Error deleting club. Status:', xhr.status, 'Status text:', xhr.statusText, 'Response:', xhr.responseText);
                 }
             }
         };

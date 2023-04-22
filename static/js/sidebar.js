@@ -1,12 +1,6 @@
 
 document.addEventListener("DOMContentLoaded", function () {
-  const sidebarToggle = document.getElementById("sidebarCollapse");
-  const sidebar = document.getElementById("sidebar");
   const dropdownToggles = document.querySelectorAll("#sidebar .dropdown-toggle");
-
-  sidebarToggle.addEventListener("click", function () {
-    sidebar.classList.toggle("active");
-  });
 
   dropdownToggles.forEach((toggle) => {
     toggle.parentElement.addEventListener("mouseenter", function () {

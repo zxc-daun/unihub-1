@@ -148,13 +148,14 @@
             </div>
 
         </div>
+
     </section>
-    <section class="our-clubs">
+    <section class="our-clubs" style="background: #383737">
   <div class="our-clubs__title">
     <h1 class="about__title" style="margin-bottom: 1rem">Our clubs</h1>
   </div>
 
-       <div class="club-wrapper">
+        <div class="club-wrapper">
             <div class="our-clubs__carousel" id="our-clubs__carousel">
                 {% for c in clubs %}
                 <a href="{% url 'club_detail' c.slug %}">

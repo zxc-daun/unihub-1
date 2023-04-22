@@ -28,8 +28,9 @@ urlpatterns = [
     path('delete-event/<int:event_id>/', views.delete_event, name='delete-event'),
     path('complete-event/<int:event_id>/', views.complete_event, name='complete-event'),
     path('category/<str:category_slug>/', views.CategoryView.as_view(), name='category_view'),
+    path('clubs/<int:pk>/', ClubViewSet.as_view({'delete': 'destroy'}), name='club-delete'),
 
-    path('home/api/', include('unihub.api_urls')),
+    path('v1/', include('unihub.api_urls')),
 ]
 
 if settings.DEBUG:
