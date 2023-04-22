@@ -1,10 +1,75 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Title</title>
-</head>
-<body>
-
-</body>
-</html>
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}About{% endblock %}
+{% block content %}
+<style>
+   .about-page-container {
+   width: 100%;
+   max-width: 1200px;
+   margin: 0 auto;
+   padding: 20px;
+   display: flex;
+   flex-direction: column;
+   align-items: center;
+   }
+   .about__header {
+   text-align: center;
+   margin-bottom: 20px;
+   }
+   .about__title {
+   font-size: 36px;
+   margin-bottom: 10px;
+   }
+   .about__image {
+   position: relative;
+   overflow: hidden;
+   height: 400px;
+   margin-bottom: 20px;
+   border-radius: 12px;
+   }
+   .about__image img {
+   width: 100%;
+   height: auto;
+   object-fit: cover;
+   display: block;
+   }
+   .about__text {
+   max-width: 800px;
+   margin: 0 auto;
+   padding: 20px;
+   }
+   .about__text p {
+   font-size: 18px;
+   line-height: 1.5;
+   margin-bottom: 20px;
+   }
+   @media (max-width: 768px) {
+   .about-page-container {
+   padding: 20px 10px;
+   }
+   .about__image {
+   height: 300px;
+   }
+   .about__text {
+   padding: 20px 0;
+   }
+   }
+</style>
+<div class="about-page-container">
+   <div class="about__header">
+      <h1 class="about__title">About us</h1>
+      <hr>
+   </div>
+   <div class="about__image">
+      <img src="{% static 'img/aboutH.jpeg' %}" alt="about us">
+   </div>
+   <div class="about__text">
+      <p>
+         Welcome to uniHub, the ultimate platform for student club management! Our mission is to provide students and club organizers with a simple, efficient, and user-friendly way to manage clubs, events, and collaborations. From creating and joining clubs to organizing events and connecting with like-minded individuals, uniHub is here to enhance your extracurricular experience throughout your academic journey.
+      </p>
+      <p>uniHub is designed to cater to the diverse interests and passions of students from various fields and disciplines. Whether you're an aspiring artist, a budding entrepreneur, a tech enthusiast, or a sports fanatic, you'll find a thriving community of like-minded peers on our platform. We understand the importance of extracurricular activities in shaping well-rounded individuals and fostering personal growth, which is why we have created a platform that makes it easy for you to engage in the activities you love.</p>
+      <p>Our platform offers a plethora of features tailored to streamline club management and enhance the overall experience for both organizers and members. Club admins can efficiently manage their clubs, monitor memberships, schedule events, and communicate with members, all in one place. Members, on the other hand, can easily discover and join clubs that align with their interests, stay updated on upcoming events, and connect with fellow members who share their passions.</p>
+      <p>Join us today and discover the endless possibilities that await you on uniHub, where students come together to learn, grow, and make the most of their college experience. Together, let's create a vibrant and thriving community that nurtures your passions, fuels your curiosity, and inspires you to reach for the stars. Welcome to the world of uniHub – the future of student club management!</p>
+   </div>
+</div>
+{% endblock %}

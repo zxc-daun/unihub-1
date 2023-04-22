@@ -1,7 +1,37 @@
 {% load static %}
 {% block styles %}
 {% endblock %}
+<style>
+    .navbar__logo a,
+.navbar__link {
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+}
 
+.navbar__list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+.navbar__item {
+    margin-left: 15px;
+}
+
+.navbar__link:hover {
+    color: #0ff1c8;
+    transition: color 0.3s;
+}
+
+.navbar__user--logout {
+    margin-left: 10px;
+}
+
+.navbar__toggle {
+    display: none;
+}
+</style>
 <nav class="navbar">
   <div class="navbar__logo">
     <a href="{% url 'home' %}" class="navbar__link">uniHub</a>
@@ -18,23 +48,11 @@
   </div>
     {% if user.is_authenticated %}
       <div class="navbar__user">
-        <div class="navbar__user--name">
-{#          <a href="{% url 'user-profile' %}" class="navbar__link">{{ user.username }}</a>#}
-        </div>
         <div class="navbar__user--logout">
             <form action="{% url 'logout' %}" method="post" id="logout-form">
                 {% csrf_token %}
                 <a href="#" id="logout-link" class="navbar__link">Logout</a>
             </form>
-        </div>
-      </div>
-    {% else %}
-      <div class="navbar__user">
-        <div class="navbar__user--name">
-          <a href="{% url 'login' %}" class="navbar__link">Login</a>
-        </div>
-        <div class="navbar__user--logout">
-          <a href="{% url 'register' %}" class="navbar__link">Register</a>
         </div>
       </div>
     {% endif %}

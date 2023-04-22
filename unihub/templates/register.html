@@ -1,11 +1,16 @@
 {% extends 'unihub/base.html' %}
 {% load static %}
-{% block title %}Login{% endblock %}
+{% block title %}Register{% endblock %}
 {% block extra_css %}
     <link rel="stylesheet" href="{% static 'css/register.css' %}">
 {% endblock %}
 
 {% block content %}
+    <style>
+    .register-main {
+        margin: 10rem;
+    }
+    </style>
 <main class="register-main">
     <div class="register-form-wrapper">
         <h2 class="register-title">Register</h2>

@@ -7,7 +7,6 @@ from . import views
 
 urlpatterns = [
     path("admin/", admin.site.urls),
-    path('api/', include('unihub.api_urls')),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
     path('login/', LoginView.as_view(), name='login'),
@@ -28,6 +27,9 @@ urlpatterns = [
     path('update-event/<int:event_id>/', views.update_event, name='update-event'),
     path('delete-event/<int:event_id>/', views.delete_event, name='delete-event'),
     path('complete-event/<int:event_id>/', views.complete_event, name='complete-event'),
+    path('category/<str:category_slug>/', views.CategoryView.as_view(), name='category_view'),
+
+    path('home/api/', include('unihub.api_urls')),
 ]
 
 if settings.DEBUG:

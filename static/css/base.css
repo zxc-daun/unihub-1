@@ -40,7 +40,8 @@
 }
 
 .hero__img {
-    height: 120vh;
+    height: 130vh;
+    width: 100%;
     position: relative;
     filter: brightness(80%);
     object-fit: cover;
@@ -137,11 +138,10 @@
 }
 
 .how {
-    background: rgb(239, 238, 231);
+    background: #000000;
 }
 
 .how__content {
-    padding: 5rem 0;
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
@@ -224,7 +224,7 @@
 }
 
 .our-clubs {
-    background: grey;
+    background: #f3f4f6;
     padding: 5rem 0;
     display: flex;
     align-items: center;
@@ -241,6 +241,7 @@
     max-width: 1200px;
     margin: 0 auto;
 }
+
 .our-clubs__carousel {
   display: flex;
   scroll-behavior: smooth;
@@ -264,6 +265,13 @@
   overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.our-clubs__card:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+    color: black;
 }
 
 .our-clubs__card-img {

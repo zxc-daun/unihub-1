@@ -3,6 +3,86 @@
 {% block title %}Home{% endblock %}
 
 {% block content %}
+    <style>
+    .about__learn-more {
+    display: inline-block;
+    padding: 10px 20px;
+    background-color: rgba(6, 248, 228, 0.8);
+    color: #ffffff;
+    text-decoration: none;
+    font-weight: bold;
+    border-radius: 5px;
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+.about__learn-more:hover {
+    background-color: rgba(6, 248, 228, 1);
+    color: #000000;
+}
+
+.how {
+    background-color: #000000;
+    padding: 5rem 0;
+}
+
+.how__cards {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+}
+
+.how__card {
+    backdrop-filter: blur(10px);
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+    text-align: center;
+    width: 30%;
+    min-height: 470px;
+}
+
+.how__card:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    transition: all 0.3s ease;
+}
+
+.how__card > img {
+    width: 200px;
+    height: 200px;
+    object-fit: cover;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+}
+
+
+.how__card-title {
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.how__card-text {
+    font-size: 1rem;
+    margin-bottom: 1rem;
+    color: #032c28;
+}
+
+.our-clubs__description-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.hero__content {
+    width: 100%;
+}
+
+.hero__img {
+    width: 100%;
+    height: 140vh;
+}
+
+
+    </style>
 {% block hero %}
     <div class="hero">
         <div class="hero__content">
@@ -10,8 +90,9 @@
             <div class="hero__text-box">
                 <h1 class="hero__title">uni<span>Hub</span></h1>
                 <p class="hero__text">Connecting students and creating a community</p>
-                <form class="hero__form">
-                    <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" onchange="searchClub()"/>
+                <form class="hero__form" onsubmit="searchRedirect(event)">
+                    <label for="search"></label>
+                    <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" />
                     <button class="hero__btn">Search</button>
                 </form>
             </div>
@@ -20,14 +101,14 @@
 {% endblock %}
 
 <main>
-    <section>
+    <section style="background: #383737">
         <div class="about">
             <div class="about__text">
                 <h1 class="about__title">About us</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
-                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
+                <p style="color: white">
+                    Welcome to uniHub, the ultimate platform for student club management! Our mission is to provide students and club organizers with a simple, efficient, and user-friendly way to manage clubs, events, and collaborations. From creating and joining clubs to organizing events and connecting with like-minded individuals, uniHub is here to enhance your extracurricular experience throughout your academic journey.
                 </p>
+                <a href="{% url 'about' %}" class="about__learn-more">Learn More</a>
             </div>
             <div class="about__img">
                 <img src="{% static 'img/aboutT.png' %}" alt="about" class="about__img">
@@ -39,64 +120,82 @@
         <div class="how__content">
             <div class="how__text">
                 <h1 class="how__title">How it works</h1>
-                <p>
-                    Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
-                    beatae commodi consequatur cumque, cupiditate delectus deleniti doloribus ea eius enim eos esse et
-                </p>
+                <p style="color:white">
+                    uniHub is a streamlined platform for students to create, join, and manage clubs with ease. Our user-friendly interface supports club organization and keeps members informed, enabling everyone to focus on building a thriving community.                </p>
             </div>
             <div class="how__cards">
                 <div class="how__card">
-                    <i class="fas fa-search"></i>
-                    <h1 class="how__card-title">Search</h1>
+                    <img src="{% static 'img/searchH.png' %}" alt="discover" class="how__card-img">
+                    <h1 class="how__card-title">Discover</h1>
                     <p class="how__card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                        Explore the wide range of clubs available, and find the perfect one to match your interests and passions.
                     </p>
-                    <button class="how__card-btn">Learn more</button>
                 </div>
                 <div class="how__card">
-                    <i class="fas fa-user-plus"></i>
+                    <img src="{% static 'img/joinH.png' %}" alt="join" class="how__card-img">
                     <h1 class="how__card-title">Join</h1>
                     <p class="how__card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                        Become a member of clubs that interest you, and get access to exclusive events, resources, and networking opportunities.
                     </p>
-                    <button class="how__card-btn">Learn more</button>
                 </div>
                 <div class="how__card">
-                    <i class="fas fa-comments"></i>
+                    <img src="{% static 'img/connectH.png' %}" alt="connect" class="how__card-img">
                     <h1 class="how__card-title">Connect</h1>
                     <p class="how__card-text">
-                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus adipisci alias aliquid atque autem
+                        Engage with fellow club members, share ideas, and collaborate on projects to create a thriving community.
                     </p>
-                    <button class="how__card-btn">Learn more</button>
                 </div>
             </div>
+
         </div>
     </section>
     <section class="our-clubs">
   <div class="our-clubs__title">
-    <h1 class="our-clubs__title-text">Our clubs</h1>
+    <h1 class="about__title" style="margin-bottom: 1rem">Our clubs</h1>
   </div>
 
        <div class="club-wrapper">
-        {% for c in clubs %}
-             <a href="{% url 'club_detail' c.slug %}">
-              <div class="our-clubs__carousel" id="our-clubs__carousel">
-                <div class="our-clubs__carousel-item">
-                  <div class="our-clubs__card">
-                    <img src="{{ c.image.url }}" alt="club" class="our-clubs__card-img">
-                    <div class="our-clubs__card-text">
-                      <h1 class="our-clubs__card-title">{{ c.name }}</h1>
+            <div class="our-clubs__carousel" id="our-clubs__carousel">
+                {% for c in clubs %}
+                <a href="{% url 'club_detail' c.slug %}">
+                    <div class="our-clubs__carousel-item" data-index="{{ forloop.counter0 }}">
+                        <div class="our-clubs__card">
+                            <img src="{{ c.image.url }}" alt="club" class="our-clubs__card-img">
+                            <div class="our-clubs__card-text">
+                                <h1 class="our-clubs__card-title">{{ c.name }}</h1>
+                            </div>
+                            <div class="our-clubs__card-text">
+                                <p class="our-clubs__description-text">{{ c.description }}</p>
+                                <p class="our-clubs__address-text">{{ c.location }}</p>
+                            </div>
+                        </div>
                     </div>
-                      <div class="our-clubs__card-text">
-                          <p class="our-clubs__description-text">{{ c.description }}</p>
-                          <p class="our-clubs__address-text">{{ c.location }}</p>
-                      </div>
-                  </div>
-                </div>
-              </div>
                 </a>
-        {% endfor %}
-          </div>
+                {% endfor %}
+            </div>
+       </div>
     </section>
 </main>
+
+    <script>
+    const carousel = document.getElementById('our-clubs__carousel');
+    const carouselItems = carousel.querySelectorAll('.our-clubs__carousel-item');
+    let currentIndex = 0;
+    const delay = 1000;
+
+    carouselItems[currentIndex].classList.add('active');
+
+    function updateCarousel() {
+        carouselItems[currentIndex].classList.remove('active');
+        currentIndex = (currentIndex + 1) % carouselItems.length;
+        carouselItems[currentIndex].classList.add('active');
+    }
+
+    function searchRedirect(event) {
+        event.preventDefault();
+        window.location.href = "{% url 'login' %}";
+    }
+
+    setInterval(updateCarousel, delay);
+</script>
 {% endblock %}
