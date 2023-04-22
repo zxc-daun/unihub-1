@@ -6,7 +6,7 @@ from django.conf.urls.static import static
 from . import views
 
 urlpatterns = [
-    path("admin/", admin.site.urls),
+    #path("admin/", admin.site.urls),
     path('', FetchClubsView.as_view(), name='home'),
     path('add/', AddView.as_view(), name='add'),
     path('login/', LoginView.as_view(), name='login'),
@@ -29,7 +29,6 @@ urlpatterns = [
     path('complete-event/<int:event_id>/', views.complete_event, name='complete-event'),
     path('category/<str:category_slug>/', views.CategoryView.as_view(), name='category_view'),
     path('clubs/<int:pk>/', ClubViewSet.as_view({'delete': 'destroy'}), name='club-delete'),
-
     path('api/', include('unihub.api_urls')),
 ]
 

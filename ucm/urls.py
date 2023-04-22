@@ -7,12 +7,12 @@ from django.conf.urls.static import static
 from unihub.views import CustomHandler404View, CustomHandler500View, CustomHandler403View, CustomHandler400View
 
 urlpatterns = [
-    # path("admin/", admin.site.urls),
+    path("admin/", admin.site.urls),
     path('admin-panel/', admin.site.urls, name='admin_panel'),
     path('', include('unihub.urls')),
     path('captcha/', include('captcha.urls')),
     path('accounts/', include('accounts.urls')),
-    path('api/', include('unihub.urls')),
+    path('api/', include('unihub.api_urls')),
 ]
 
 if settings.DEBUG:

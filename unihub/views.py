@@ -10,7 +10,9 @@ from django.contrib.auth import login, authenticate, logout
 from django.views.decorators.cache import never_cache
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView, DetailView
+from rest_framework.permissions import IsAuthenticatedOrReadOnly
 
+from accounts import admin
 from .forms import LoginForm, RegistrationForm
 from django.contrib import messages
 from rest_framework import viewsets, generics
@@ -274,7 +276,7 @@ class ClubCategoryViewSet(viewsets.ModelViewSet):
 class ClubViewSet(viewsets.ModelViewSet):
     queryset = Club.objects.all()
     serializer_class = ClubSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [IsAuthenticatedOrReadOnly]
 
     def perform_create(self, serializer):
         image = self.request.FILES['image']
@@ -521,3 +523,6 @@ class CategoryView(TemplateView):
                 {"title": "Register", "url_name": "register"}, {"title": "About", "url_name": "about"}]
         context['menu'] = menu
         return context
+
+
+
