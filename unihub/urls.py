@@ -23,14 +23,14 @@ urlpatterns = [
     path('club/<slug:slug>/', ClubInfoView.as_view(), name='club-info'),
     path('edit_profile/', EditProfileView.as_view(), name='edit_profile'),
     path('create-event/', CreateEventView.as_view(), name='create-event'),
-    path('club_events/<str:slug>/', views.ClubEventListView.as_view(), name='club_events'),
+    path('club_events/<slug:slug>/', ClubEventListView.as_view(), name='club_events'),
     path('update-event/<int:event_id>/', views.update_event, name='update-event'),
     path('delete-event/<int:event_id>/', views.delete_event, name='delete-event'),
     path('complete-event/<int:event_id>/', views.complete_event, name='complete-event'),
     path('category/<str:category_slug>/', views.CategoryView.as_view(), name='category_view'),
     path('clubs/<int:pk>/', ClubViewSet.as_view({'delete': 'destroy'}), name='club-delete'),
 
-    path('v1/', include('unihub.api_urls')),
+    path('api/', include('unihub.api_urls')),
 ]
 
 if settings.DEBUG:

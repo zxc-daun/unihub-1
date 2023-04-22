@@ -81,6 +81,20 @@
     height: 140vh;
 }
 
+.our-clubs__carousel {
+        display: flex;
+        overflow: hidden;
+        white-space: nowrap;
+        width: 100%;
+    }
+
+.our-clubs__carousel-item {
+    display: inline-block;
+    transition: transform 0.5s;
+    max-width: 100%;
+    white-space: normal;
+}
+
 
     </style>
 {% block hero %}
@@ -154,7 +168,6 @@
   <div class="our-clubs__title">
     <h1 class="about__title" style="margin-bottom: 1rem">Our clubs</h1>
   </div>
-
         <div class="club-wrapper">
             <div class="our-clubs__carousel" id="our-clubs__carousel">
                 {% for c in clubs %}
@@ -177,19 +190,29 @@
        </div>
     </section>
 </main>
-
-    <script>
+<script>
     const carousel = document.getElementById('our-clubs__carousel');
     const carouselItems = carousel.querySelectorAll('.our-clubs__carousel-item');
+    const firstItem = carouselItems[0].cloneNode(true);
+    carousel.appendChild(firstItem);
     let currentIndex = 0;
     const delay = 1000;
-
-    carouselItems[currentIndex].classList.add('active');
+    const transitionDuration = 500;
 
     function updateCarousel() {
-        carouselItems[currentIndex].classList.remove('active');
-        currentIndex = (currentIndex + 1) % carouselItems.length;
-        carouselItems[currentIndex].classList.add('active');
+        if (currentIndex === carouselItems.length) {
+            carouselItems.forEach((item) => {
+                item.style.transform = `translateX(0%)`;
+                item.style.transitionDuration = `0ms`;
+            });
+            currentIndex = 0;
+        } else {
+            carouselItems.forEach((item) => {
+                item.style.transform = `translateX(-${(currentIndex + 1) * 100}%)`;
+                item.style.transitionDuration = `${transitionDuration}ms`;
+            });
+            currentIndex++;
+        }
     }
 
     function searchRedirect(event) {
@@ -197,6 +220,7 @@
         window.location.href = "{% url 'login' %}";
     }
 
-    setInterval(updateCarousel, delay);
+    setInterval(updateCarousel, delay + transitionDuration);
 </script>
+
 {% endblock %}

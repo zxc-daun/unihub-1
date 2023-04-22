@@ -113,6 +113,8 @@ class LoginView(View):
                 password=form.cleaned_data['password']
             )
             if user is not None:
+                token, _ = Token.objects.get_or_create(user=user)
+                request.session['token'] = token.key
                 login(request, user)
                 if user.groups.filter(name='club_admin').exists():
                     return HttpResponseRedirect(reverse('club_admin_dashboard'))
@@ -157,10 +159,7 @@ class RegisterView(View):
             login(request, user)
             messages.success(request, "Registration successful!")
 
-            if is_admin:
-                return redirect(reverse('club_admin_dashboard'))
-            else:
-                return redirect(reverse('user-dashboard'))
+            return redirect('login')
         else:
             messages.error(request, "Error in registration, please check the details.")
         return render(request, 'register.html', {'form': form})
@@ -253,7 +252,7 @@ class ClubAdminDashboardView(View):
             'clubs_count': clubs_count,
             'followers_count': followers_count,
             'events_count': events_count,
-            'first_club_slug': club.slug if club else None,
+            'club_slug': club.slug if club else None,
             'events': ClubEvent.objects.filter(club__in=clubs),
         }
         return render(request, self.template_name, context)
@@ -283,11 +282,13 @@ class ClubViewSet(viewsets.ModelViewSet):
 
         image_path = default_storage.save(f"club_images/{image.name}", image)
         constitution_path = default_storage.save(f"club_constitutions/{constitution.name}", constitution)
+        category = ClubCategory.objects.get(pk=self.request.data['category'])
 
         serializer.save(
             image=image_path,
             constitution=constitution_path,
-            creator=self.request.user
+            creator=self.request.user,
+            category=category
         )
 
     def update(self, request, *args, **kwargs):
@@ -323,27 +324,6 @@ class UserProfileViewSet(viewsets.ModelViewSet):
 class UserClubViewSet(viewsets.ModelViewSet):
     queryset = UserClub.objects.all()
     serializer_class = UserClubSerializer
-
-
-class LoginApiView(APIView):
-
-    def post(self, request, *args, **kwargs):
-        email = request.data.get('email')
-        password = request.data.get('password')
-
-        try:
-            user_obj = User.objects.get(email=email)
-            user = authenticate(request, username=user_obj.username, password=password)
-        except User.DoesNotExist:
-            user = None
-
-        if user is not None:
-            token, created = Token.objects.get_or_create(user=user)
-            login(request, user)
-            user_dashboard_url = reverse('user-dashboard')  # Add this line
-            return Response({'token': token.key}, status=status.HTTP_200_OK)
-        else:
-            return Response({"error": "Invalid email or password"}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class ClubListAPIView(generics.ListAPIView):
@@ -474,7 +454,7 @@ class CreateEventView(LoginRequiredMixin, View):
                 )
                 club_event.save()
                 print('Event created successfully')
-                return redirect('club_admin_dashboard', slug=club.slug)
+                return redirect('club_admin_dashboard')
             else:
                 return render(request, self.template_name, {'error': 'You are not the creator of this club'})
 
@@ -487,9 +467,8 @@ class ClubEventListView(ListView):
     context_object_name = 'events'
 
     def get(self, request, *args, **kwargs):
-        club = Club.objects.get(slug=self.kwargs['slug'])
-        events = ClubEvent.objects.filter(club=club)
-        context = {'events': events, 'club': club}
+        events = ClubEvent.objects.filter(club__slug=self.kwargs['slug'])
+        context = {'events': events, 'club': self.kwargs['slug']}
         return render(request, self.template_name, context)
 
     def get_queryset(self):

@@ -178,6 +178,9 @@
                     <h2>Events</h2>
                 </div>
             {% for event in events %}
+                {% if events|length == 0 %}
+                    <p>No events</p>
+                {% endif %}
                 {% if event.club.id == club.id %}
                     <div class="event-wrapper">
                         <div class="event-details">

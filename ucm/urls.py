@@ -10,6 +10,7 @@ urlpatterns = [
     # path("admin/", admin.site.urls),
     path('admin-panel/', admin.site.urls, name='admin_panel'),
     path('', include('unihub.urls')),
+    path('captcha/', include('captcha.urls')),
     path('accounts/', include('accounts.urls')),
     path('api/', include('unihub.urls')),
 ]

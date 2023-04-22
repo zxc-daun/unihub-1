@@ -1,9 +1,25 @@
 {% extends 'unihub/base.html' %}
+{% block title %}Create Club{% endblock %}
 {% load unihub_tags %}
 {% load static %}
 {% block club_content %}
+    <style>
+    .create-club-container{
+        min-height: auto;
+    }
+
+    .submit-button {
+        border-radius: 6px;
+        margin-bottom: 2rem;
+    }
+    </style>
 <form id="create-club-form" class="create-club-container" style="margin: 0 auto; width: 500px" novalidate>
+{% csrf_token %}
+    <div>
         <h1>Create Club</h1>
+    <hr>
+    </div>
+
          <div id="create-club-form" novalidate>
               <div class="material-input">
                 <label for="name">Name:</label>
@@ -108,13 +124,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const formData = new FormData(form);
 
-    const response = await fetch('/api/clubs/', {
-      method: 'POST',
-      headers: {
-        'X-CSRFToken': '{{ csrf_token }}',
-      },
-      body: formData,
-    });
+      let userToken = '{{ request.session.token }}';
+          const response = await fetch('/api/clubs/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Authorization': 'Token ' + userToken,
+            },
+            body: formData,
+          });
 
     if (response.ok) {
       alert('Club created successfully!')
