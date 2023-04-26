@@ -26,84 +26,59 @@ from rest_framework.authtoken.models import Token
 from rest_framework import status
 from django.views.generic import ListView
 
+from .utils import DataMixins
 
-class HomeView(View):
+
+class HomeView(DataMixins):
+    exclude_menu_items = ['home', 'logout']
+
     def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                ]
-        cats = ClubCategory.objects.all()
-
-        context = {
-            'menu': menu,
-            'cats': cats,
-        }
+        context = self.get_context_data(menu_exclude=self.exclude_menu_items)
         return render(request, 'unihub/home.html', context)
 
 
-class ClubDetailView(View):
+class ClubDetailView(DataMixins):
     def get(self, request, slug):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Login", "url_name": "login"}, {"title": "Register", "url_name": "register"}
-                ]
         club = Club.objects.get(slug=slug)
-        context = {
-            'menu': menu,
+        context = self.get_context_data()
+        context.update({
             'club': club,
             'events': club.clubevent_set.all(),
-        }
+        })
         return render(request, 'unihub/club_detail.html', context)
 
 
-class CustomHandler404View(View):
+class CustomHandler404View(DataMixins):
     def get(self, request, exception):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Add", "url_name": "add"}]
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, "unihub/404.html", context)
 
 
-class CustomHandler500View(View):
+class CustomHandler500View(DataMixins):
     def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Add", "url_name": "add"}]
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, "unihub/500.html", context)
 
 
-class CustomHandler403View(View):
+class CustomHandler403View(DataMixins):
     def get(self, request, exception):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Login", "url_name": "login"}, {"title": "Register", "url_name": "register"}]
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, "unihub/403.html", context)
 
 
-class CustomHandler400View(View):
+class CustomHandler400View(DataMixins):
     def get(self, request, exception):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Login", "url_name": "login"}, {"title": "Register", "url_name": "register"}]
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, "unihub/400.html", context)
 
 
-class LoginView(View):
+class LoginView(DataMixins):
     template_name = 'login.html'
 
     def get(self, request, *args, **kwargs):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Register", "url_name": "register"}]
         form = LoginForm()
         context = self.get_context_data()
         context['form'] = form
-        context['menu'] = menu
         return render(request, self.template_name, context)
 
     def post(self, request, *args, **kwargs):
@@ -130,16 +105,8 @@ class LoginView(View):
         context['form'] = form
         return render(request, self.template_name, context)
 
-    def get_context_data(self, **kwargs):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Login", "url_name": "login"}]
-        context = {
-            'menu': menu,
-        }
-        return context
 
-
-class RegisterView(View):
+class RegisterView(DataMixins):
     template_name = 'register.html'
 
     def get(self, request, *args, **kwargs):
@@ -166,14 +133,6 @@ class RegisterView(View):
             messages.error(request, "Error in registration, please check the details.")
         return render(request, 'register.html', {'form': form})
 
-    def get_context_data(self, **kwargs):
-        context = {'nav_links': [
-            {'name': 'Home', 'url': reverse('home')},
-            {'name': 'About', 'url': reverse('about')},
-            {'name': 'Login', 'url': reverse('login')},
-        ]}
-        return context
-
 
 class LogoutView(View):
     def post(self, request):
@@ -181,39 +140,23 @@ class LogoutView(View):
         return HttpResponseRedirect(reverse('login'))
 
 
-class AboutView(View):
+class AboutView(DataMixins):
     def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "Login", "url_name": "login"},
-                {"title": "Register", "url_name": "register"}]
-
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, 'about.html', context)
 
 
-class AddView(View):
+class AddView(DataMixins):
     def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "About", "url_name": "about"},
-                {"title": "Add", "url_name": "add"}]
-        context = {
-            'menu': menu,
-        }
+        context = self.get_context_data()
         return render(request, 'unihub/add.html', context)
 
 
-class FetchClubsView(View):
+class FetchClubsView(DataMixins):
     def get(self, request):
-        menu = [{"title": "Home", "url_name": "home"},
-                {"title": "About", "url_name": "about"},
-                {"title": "Login", "url_name": "login"},
-                {"title": "Register", "url_name": "register"}]
-
         clubs = Club.objects.all()
-        context = {
-            'menu': menu,
-            'clubs': clubs,
-        }
+        context = self.get_context_data()
+        context['clubs'] = clubs
         return render(request, 'unihub/home.html', context)
 
 
@@ -523,5 +466,3 @@ class CategoryView(TemplateView):
                 {"title": "Register", "url_name": "register"}, {"title": "About", "url_name": "about"}]
         context['menu'] = menu
         return context
-
-

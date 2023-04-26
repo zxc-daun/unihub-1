@@ -31,18 +31,23 @@
 .navbar__toggle {
     display: none;
 }
+.navbar__link--hidden {
+        display: none;
+    }
 </style>
 <nav class="navbar">
   <div class="navbar__logo">
     <a href="{% url 'home' %}" class="navbar__link">uniHub</a>
   </div>
-     <ul class="navbar__list">
-        {% for m in menu %}
-          <li class="navbar__item">
-            <a href="{% url m.url_name %}" class="navbar__link">{{ m.title }}</a>
-          </li>
-        {% endfor %}
-      </ul>
+     {% with request.resolver_match.url_name as current_url_name %}
+        <ul class="navbar__list">
+            {% for m in menu %}
+            <li class="navbar__item">
+                <a href="{% url m.url_name %}" class="navbar__link{% if m.url_name == current_url_name %} navbar__link--hidden{% endif %}">{{ m.title }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    {% endwith %}
   <div class="navbar__toggle">
     <span class="navbar__icon"></span>
   </div>
