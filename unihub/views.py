@@ -2,6 +2,7 @@ import json
 
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.core.paginator import Paginator
 from django.http import HttpResponseRedirect, JsonResponse
 from django.utils.decorators import method_decorator
 from django.views import View
@@ -454,7 +455,7 @@ def complete_event(request, event_id):
         return JsonResponse({'status': 'success', 'message': 'Event marked as complete'})
 
 
-class CategoryView(TemplateView):
+class CategoryView(DataMixins, TemplateView):
     template_name = 'unihub/category_template.html'
 
     def get_context_data(self, **kwargs):
@@ -462,7 +463,16 @@ class CategoryView(TemplateView):
         category_slug = self.kwargs['category_slug']
         category = ClubCategory.objects.get(slug=category_slug)
         context['category'] = category
-        menu = [{"title": "Home", "url_name": "home"}, {"title": "Login", "url_name": "login"},
-                {"title": "Register", "url_name": "register"}, {"title": "About", "url_name": "about"}]
-        context['menu'] = menu
+        clubs_per_page = 6
+
+        if category.name == "All":
+            clubs = Club.objects.all()
+        else:
+            clubs = category.club_set.all()
+
+        paginator = Paginator(clubs, clubs_per_page)
+        page = self.request.GET.get('page')
+        clubs_paginated = paginator.get_page(page)
+        context['clubs'] = clubs_paginated
+
         return context

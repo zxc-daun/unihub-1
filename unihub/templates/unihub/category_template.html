@@ -82,28 +82,91 @@
     border-radius: 50%;
     object-fit: cover;
 }
+    .pagination {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 1rem 0;
+        }
+
+        .pagination .step-links {
+            display: flex;
+            align-items: center;
+        }
+
+        .pagination a {
+            color: black;
+            display: inline-block;
+            padding: 8px 16px;
+            text-decoration: none;
+            transition: background-color .3s;
+        }
+
+        .pagination a:hover {
+            background-color: #ddd;
+            border-radius: 5px;
+        }
+
+        .pagination span.current {
+            display: inline-block;
+            padding: 8px 16px;
+        }
 
     </style>
     <section class="center-dashboard">
-        <div class="user-club-title">
-            <h2>{{ category.name }}</h2>
-            <hr>
-        </div>
-        <div class="user-clubs-container">
-            {% for club in category.club_set.all %}
-                <div class="user-club-card">
-                    <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
-                    <div class="user-club-info">
-                        <a href="{{ club.get_absolute_url }}" class="club-card-link" style="text-decoration: none; color: black">
-                            <h3 class="user-club-name">{{ club.name }}</h3>
-                            <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
-                        </a>
-                        <a href="{% url 'login' %}" class="user-follow-btn">Follow</a>
-                    </div>
+    <div class="user-club-title">
+        <h2>{{ category.name }}</h2>
+        <hr>
+    </div>
+    <div class="user-clubs-container">
+    {% if category.name == "All" %}
+        {% for club in clubs %}
+            <div class="user-club-card">
+                <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
+                <div class="user-club-info">
+                    <a href="{{ club.get_absolute_url }}" class="club-card-link" style="text-decoration: none; color: black">
+                        <h3 class="user-club-name">{{ club.name }}</h3>
+                        <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
+                    </a>
+                    <a href="{% url 'login' %}" class="user-follow-btn">Follow</a>
                 </div>
-            {% empty %}
-                <p>No clubs found in this category.</p>
-            {% endfor %}
-        </div>
+            </div>
+        {% empty %}
+            <p>No clubs found in this category.</p>
+        {% endfor %}
+    {% else %}
+        {% for club in category.club_set.all %}
+            <div class="user-club-card">
+                <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
+                <div class="user-club-info">
+                    <a href="{{ club.get_absolute_url }}" class="club-card-link" style="text-decoration: none; color: black">
+                        <h3 class="user-club-name">{{ club.name }}</h3>
+                        <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
+                    </a>
+                    <a href="{% url 'login' %}" class="user-follow-btn">Follow</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No clubs found in this category.</p>
+        {% endfor %}
+    {% endif %}
+    </div>
+    <div class="pagination">
+        <span class="step-links">
+            {% if clubs.has_previous %}
+                <a href="?page=1"><i class="material-icons">first_page</i></a>
+                <a href="?page={{ clubs.previous_page_number }}"><i class="material-icons">chevron_left</i></a>
+            {% endif %}
+
+            <span class="current">
+                Page {{ clubs.number }} of {{ clubs.paginator.num_pages }}.
+            </span>
+
+            {% if clubs.has_next %}
+                <a href="?page={{ clubs.next_page_number }}"><i class="material-icons">chevron_right</i></a>
+                <a href="?page={{ clubs.paginator.num_pages }}"><i class="material-icons">last_page</i></a>
+            {% endif %}
+        </span>
+    </div>
     </section>
 {% endblock %}
