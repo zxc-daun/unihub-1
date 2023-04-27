@@ -6,96 +6,35 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}?v={{ STATIC_VERSION }}">
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/sidebar.css' %}">
+    <link rel="stylesheet" href="{% static 'css/material_style.css' %}">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/material-icons@latest/font/material-icons.min.css">
+    <script src="{% static 'js/sidebar.js' %}"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <title>{% block title %}Home{% endblock %}</title>
 </head>
 <body>
-    <header>
+    <header style="background: black; z-index: 9999; position: relative">
     {% block navbar %}
-    <nav class="navbar">
-      <div class="navbar__logo">
-        <a href="{% url 'home' %}" class="navbar__link">uniHub</a>
-      </div>
-      <div class="navbar__menu" style="display: flex">
-        <ul class="navbar__list">
-          {% for m in menu %}
-            {% if m.title != 'Login' and m.title != 'Register' %}
-              <li class="navbar__item">
-                <a href="#" class="navbar__link">{{ m.title }}</a>
-              </li>
-            {% endif %}
-          {% endfor %}
-        </ul>
-        <ul class="navbar__list">
-          {% for m in menu %}
-            <li class="navbar__item">
-              {% if m.title == 'Login' %}
-                <a href="{% url 'login' %}" class="navbar__link">{{ m.title }}</a>
-              {% elif m.title == 'Register' %}
-                <a href="{% url 'register' %}" class="navbar__link">{{ m.title }}</a>
-              {% endif %}
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-      <div class="navbar__toggle">
-        <span class="navbar__icon"></span>
-      </div>
-    </nav>
-{% endblock %}
-
-    {% block hero %}
-       <div class="hero">
-        <div class="hero__content">
-            <img src="{% static 'img/herImg.jpg' %}" alt="hero" class="hero__img">
-            <div class="hero__text-box">
-                <h1 class="hero__title">uni<span>Hub</span></h1>
-                <p class="hero__text">Connecting students and creating a community</p>
-                <form class="hero__form">
-                    <input type="text" class="hero__input" placeholder="Search universities or clubs" id="search" onchange="searchClub()"/>
-                    <button class="hero__btn">Search</button>
-                </form>
-            </div>
-        </div>
-    </div>
+        {% include 'unihub/navbar.html' %}
     {% endblock %}
     </header>
-    {% block content %}
 
-    {% endblock %}
+    {% block content %}
+        {% block main_content %}
+            {% block sidebar %}{% endblock %}
+            {% block club_content %}{% endblock %}
+            {% block followers_content %} {% endblock %}
+        {% endblock %}
+    {% endblock content %}
+
     <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/sidebar.js' %}"></script>
+
+    {% block footer %}
+        {% include 'unihub/footer.html' %}
+    {% endblock %}
 </body>
-<footer>
-    {% get_categories as categories %}
-  <div class="footer-content">
-    <div class="footer-menu">
-      <h3>Categories</h3>
-        <ul>
-            {% for c in categories %}
-            <li><a href="#">{{ c.name }}</a></li>
-            {% endfor %}
-        </ul>
-    </div>
-    <div class="footer-menu">
-      <h3>Menu 2</h3>
-      <ul>
-        <li><a href="#">Link 1</a></li>
-        <li><a href="#">Link 2</a></li>
-        <li><a href="#">Link 3</a></li>
-      </ul>
-    </div>
-    <div class="footer-menu">
-      <h3>Menu 3</h3>
-      <ul>
-        <li><a href="#">Link 1</a></li>
-        <li><a href="#">Link 2</a></li>
-        <li><a href="#">Link 3</a></li>
-      </ul>
-    </div>
-    <div class="footer-logo">
-      <img src="your-logo.png" alt="Your Logo">
-    </div>
-  </div>
-</footer>
 </html>

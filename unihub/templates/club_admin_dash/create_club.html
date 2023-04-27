@@ -1,0 +1,169 @@
+{% extends 'unihub/base.html' %}
+{% block title %}Create Club{% endblock %}
+{% load unihub_tags %}
+{% load static %}
+{% block club_content %}
+    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <style>
+    .create-club-container{
+        min-height: auto;
+    }
+
+    .submit-button {
+        border-radius: 6px;
+        margin-bottom: 2rem;
+    }
+    .g-recaptcha {
+        margin-bottom: 2rem;
+    }
+    </style>
+<form id="create-club-form" class="create-club-container" style="margin: 0 auto; width: 500px" novalidate>
+{% csrf_token %}
+    <div>
+        <h1>Create Club</h1>
+    <hr>
+    </div>
+
+         <div id="create-club-form" novalidate>
+              <div class="material-input">
+                <label for="name">Name:</label>
+                <input type="text" id="name" name="name" class="input-field" required placeholder="Enter the club's name" style="margin-top: 2rem">
+                <div class="error-msg" id="name-error"></div>
+              </div>
+
+              <div class="material-input">
+                <label for="description">Description:</label>
+                <textarea id="description" name="description" class="input-field" placeholder="Enter the club's description" required style="margin-top: 2rem"></textarea>
+              </div>
+
+              <div class="material-input">
+                <label for="contact_email">Contact Email:</label>
+                <input type="email" id="contact_email" placeholder="Enter the club's email's address" name="contact_email" class="input-field" required style="margin-top: 2rem">
+              </div>
+
+              <div class="material-input">
+                <label for="contact_phone">Contact Phone:</label>
+                <input type="tel" id="contact_phone" name="contact_phone" placeholder="Enter the club's contact number" class="input-field" required style="margin-top: 2rem">
+              </div>
+
+              <div class="material-input">
+                <label for="location">Location:</label>
+                <input type="text" id="location" name="location" placeholder="Enter the club's meeting location" class="input-field" required style="margin-top: 2rem">
+              </div>
+
+              <div class="material-input">
+                <label for="instagram">Instagram:</label>
+                <input type="text" id="instagram" name="instagram" placeholder="Enter the club's Instagram" class="input-field" style="margin-top: 2rem">
+              </div>
+
+              <div class="material-input">
+                <label for="category">Category:</label>
+                <select id="category" name="category" class="input-field" required style="margin-top: 2rem">
+                  <option value="">Select Category</option>
+                  {% get_categories as categories %}
+                    {% for category in categories %}
+                      <option value="{{ category.id }}">{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+                  <div class="error-msg" id="category-error"></div>
+              </div>
+
+              <div class="material-input" style="margin-bottom: 10px">
+                <label for="image">Image:</label>
+                <input type="file" id="image" name="image" class="input-field" style="margin-top: 2rem" accept="image/*">
+              </div>
+
+              <div class="material-input" style="margin-bottom: 10px">
+                <label for="constitution">Constitution:</label>
+                <input type="file" id="constitution" name="constitution" class="input-field" style="margin-top: 2rem" accept=".pdf,.doc,.docx">
+              </div>
+        <button type="button" class="submit-button" id="submit-btn">Create Club</button>
+         <!-- Captcha -->
+           <div class="g-recaptcha" data-sitekey="your-recaptcha-site-key"></div>
+        </div>
+    </form>
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const submitForm = async (event) => {
+    event.preventDefault();
+
+    const nameInput = document.querySelector('#name');
+    const categoryInput = document.querySelector('#category');
+    const nameError = document.querySelector('#name-error');
+    const categoryError = document.querySelector('#category-error');
+
+    const recaptchaResponse = document.querySelector('#g-recaptcha-response');
+        if (!recaptchaResponse.value) {
+            alert('Please verify the captcha before submitting the form.');
+            return;
+        }
+
+
+    function validateName() {
+      if (!nameInput.value.trim()) {
+        nameError.textContent = 'Name is required.';
+        return false;
+      } else {
+        nameError.textContent = '';
+        return true;
+      }
+    }
+
+    function validateCategory() {
+      if (!categoryInput.value) {
+        categoryError.textContent = 'Category is required.';
+        return false;
+      } else {
+        categoryError.textContent = '';
+        return true;
+      }
+    }
+
+    const form = document.querySelector('#create-club-form');
+    const submitEvent = new Event('submit', { cancelable: true });
+
+    form.dispatchEvent(submitEvent);
+
+    if (submitEvent.defaultPrevented) {
+      return;
+    }
+
+    const isNameValid = validateName();
+    const isCategoryValid = validateCategory();
+
+    if (!isNameValid || !isCategoryValid) {
+      return;
+    }
+
+    const formData = new FormData(form);
+
+      let userToken = '{{ request.session.token }}';
+          const response = await fetch('/api/clubs/', {
+            method: 'POST',
+            headers: {
+              'X-CSRFToken': '{{ csrf_token }}',
+              'Authorization': 'Token ' + userToken,
+            },
+            body: formData,
+          });
+
+    if (response.ok) {
+      alert('Club created successfully!')
+    } else {
+      const errorData = await response.json();
+      console.log('Error data:', errorData);
+      alert('Failed to create club. Please check your input and try again.');
+    }
+
+  };
+
+  document.querySelector('#submit-btn').addEventListener('click', submitForm);
+});
+
+</script>
+{% endblock %}
+
+
+
+
+

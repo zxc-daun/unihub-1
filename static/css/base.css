@@ -40,12 +40,14 @@
 }
 
 .hero__img {
+    height: 130vh;
     width: 100%;
-    height: 120vh;
     position: relative;
     filter: brightness(80%);
     object-fit: cover;
     margin-bottom: 5rem;
+    background-repeat: no-repeat;
+    z-index: 0;
 }
 
 .hero__text-box {
@@ -136,11 +138,10 @@
 }
 
 .how {
-    background: rgb(239, 238, 231);
+    background: #000000;
 }
 
 .how__content {
-    padding: 5rem 0;
     max-width: 1200px;
     margin: 0 auto;
     text-align: center;
@@ -223,7 +224,6 @@
 }
 
 .our-clubs {
-    background: grey;
     padding: 5rem 0;
     display: flex;
     align-items: center;
@@ -237,9 +237,10 @@
     justify-content: center;
     flex-direction: row;
     flex-wrap: wrap;
-    max-width: 1200px;
+    width: 100%;
     margin: 0 auto;
 }
+
 .our-clubs__carousel {
   display: flex;
   scroll-behavior: smooth;
@@ -263,6 +264,13 @@
   overflow: hidden;
     display: flex;
     flex-direction: column;
+}
+
+.our-clubs__card:hover {
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+    transform: scale(1.05);
+    transition: all 0.3s ease-in-out;
+    color: black;
 }
 
 .our-clubs__card-img {
@@ -312,21 +320,6 @@
     }
 }
 
-
-@media (max-width: 992px) {
-    .hero__content {
-        flex-direction: column;
-    }
-
-    .hero__img {
-        width: 100%;
-        margin-bottom: 2rem;
-    }
-
-    .hero__text-box {
-        width: 100%;
-    }
-}
 
 @media (max-width: 768px) {
     .hero__title {

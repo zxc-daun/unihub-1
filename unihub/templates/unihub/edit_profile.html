@@ -1,0 +1,112 @@
+{% extends './base.html' %}
+
+{% block content %}
+<style>
+    .form-container {
+        max-width: 500px;
+        margin: 0 auto;
+        min-height: 75vh;
+    }
+
+    .form-container h1 {
+        text-align: center;
+        margin-bottom: 30px;
+    }
+
+    .form-container label {
+        display: block;
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    .form-container input {
+        width: 100%;
+        padding: 10px;
+        font-size: 14px;
+        border: none;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.2);
+        margin-bottom: 20px;
+        background-color: transparent;
+    }
+
+    .form-container input:focus {
+        outline: none;
+        border-bottom: 2px solid #6200ee;
+    }
+
+    .form-container button {
+        width: 100%;
+        background-color: #6200ee;
+        border: none;
+        padding: 10px;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 6px;
+    }
+
+    .form-container button:hover {
+        background-color: #3700b3;
+    }
+</style>
+<div class="form-container">
+    <div class="edit-form-title">
+        <h1>Edit Profile</h1>
+        <hr>
+    </div>
+    <form id="edit-profile-form" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="user_image">User Image:</label>
+        <input type="file" id="user_image" name="user_image" accept="image/*">
+
+        <label for="first_name">First Name:</label>
+        <input type="text" id="first_name" name="first_name" value="{{ request.user.first_name }}" required>
+
+        <label for="last_name">Last Name:</label>
+        <input type="text" id="last_name" name="last_name" value="{{ request.user.last_name }}" required>
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email" value="{{ request.user.email }}" required>
+
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" value="{{ request.user.username }}" required>
+
+        <button type="submit">Save Changes</button>
+    </form>
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const form = document.getElementById('edit-profile-form');
+
+    form.addEventListener('submit', async (event) => {
+        event.preventDefault();
+
+        const formData = new FormData(form);
+        const csrfToken = document.querySelector('[name=csrfmiddlewaretoken]').value;
+
+        try {
+            // Update user info
+            const response = await fetch("{% url 'edit_profile' %}", {
+                method: 'POST',
+                headers: {
+                    'X-CSRFToken': csrfToken,
+                },
+                body: formData,
+            });
+
+            if (!response.ok) {
+                throw new Error('Failed to update profile');
+            }
+
+            alert('Profile updated successfully');
+
+        } catch (error) {
+            console.error('Error:', error);
+            alert('Failed to update profile')
+        }
+    });
+});
+</script>
+{% endblock %}

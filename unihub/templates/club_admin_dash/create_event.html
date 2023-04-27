@@ -1,0 +1,200 @@
+{% extends "unihub/base.html" %}
+
+{% block content %}
+<style>
+  .create-club-container {
+    margin: 0 auto;
+    width: 500px;
+      height: 75vh;
+  }
+
+  .material-input {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    margin-bottom: 20px;
+  }
+
+  .input-field {
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+  }
+
+  .input-field:focus {
+    border-color: #3f51b5;
+  }
+
+  .material-input label {
+    position: absolute;
+    top: 0;
+    left: 8px;
+    font-size: 16px;
+    color: #999;
+    transition: all 0.2s ease-in-out;
+  }
+
+  .input-field:focus + label,
+  .input-field:not(:placeholder-shown) + label {
+    top: -20px;
+    left: 0;
+    font-size: 12px;
+    color: #3f51b5;
+  }
+
+  .submit-button {
+    background-color: #3f51b5;
+    color: #fff;
+      border-radius: 5px;
+    border: none;
+    padding: 8px 16px;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out;
+  }
+
+  .submit-button:hover {
+    background-color: #283593;
+  }
+
+  .input-field-select {
+    padding: 8px;
+    font-size: 16px;
+    border: none;
+    border-bottom: 1px solid #ccc;
+    background: transparent;
+    outline: none;
+    transition: border-color 0.2s ease-in-out;
+    width: 100%;
+      margin-bottom: 2rem;
+  }
+</style>
+<div class="create-club-container">
+<div class="create-club-container-title" style="margin-bottom: 4rem">
+    <h1>Create Club Event</h1>
+    <hr>
+</div>
+<form method="POST" action="{% url 'create-event' %}" id="create-event-form" enctype="multipart/form-data">
+    {% csrf_token %}
+    {% if club %}
+    <h3>Create event for {{ club.name }}</h3>
+    <input type="hidden" name="club" value="{{ club.id }}">
+    {% else %}
+    <h3>Please select a club</h3>
+        <label>
+            <select name="club" class="input-field-select" required>
+                {% for club in clubs %}
+                    <option value="{{ club.id }}">{{ club.name }}</option>
+                {% empty %}
+                    <option disabled>No clubs available</option>
+                {% endfor %}
+            </select>
+        </label>
+    {% endif %}
+    <div class="material-input">
+      <input type="text" id="title" name="title" class="input-field" required>
+      <label for="title">Title</label>
+    </div>
+
+    <div class="material-input">
+      <textarea id="description" name="description" class="input-field" required></textarea>
+      <label for="description">Description</label>
+    </div>
+
+    <div class="material-input">
+      <input type="datetime-local" id="start_date" name="start_date" class="input-field" required>
+      <label for="start_date">Start Date</label>
+    </div>
+
+    <div class="material-input">
+      <input type="datetime-local" id="end_date" name="end_date" class="input-field" required>
+      <label for="end_date">End Date</label>
+    </div>
+
+    <div class="material-input">
+      <input type="text" id="location" name="location" class="input-field" required>
+      <label for="location">Location</label>
+    </div>
+
+    <button type="submit" class="submit-button">Create Event</button>
+  </form>
+</div>
+
+<script>
+  function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+      const cookies = document.cookie.split(';');
+      for (let i = 0; i < cookies.length; i++) {
+        const cookie = cookies[i].trim();
+        if (cookie.substring(0, name.length + 1) === (name + '=')) {
+          cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+          break;
+        }
+      }
+    }
+    return cookieValue;
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+  const submitForm = async (event) => {
+    event.preventDefault();
+
+    const titleInput = document.querySelector('#title');
+    const descriptionInput = document.querySelector('#description');
+    const startDateInput = document.querySelector('#start_date');
+    const endDateInput = document.querySelector('#end_date');
+    const locationInput = document.querySelector('#location');
+
+    const eventData = {
+      title: titleInput.value,
+      description: descriptionInput.value,
+      start_time: startDateInput.value,
+      end_time: endDateInput.value,
+        location: locationInput.value,
+      club: "{{ club.id }}",
+    };
+
+
+    const response = await fetch('{% url 'create-event' %}', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken'),
+      },
+      body: JSON.stringify(eventData),
+    });
+
+      console.log(eventData)
+
+    if (response.ok) {
+      const clubEvent = await response.json();
+      alert('Club event created successfully');
+        console.log(clubEvent)
+    } else {
+      const errorData = await response.json();
+      console.log('Error data:', errorData);
+      alert('Failed to create event. Please check your input and try again.');
+    }
+  };
+
+  const form = document.querySelector('form');
+        form.addEventListener('submit', function(event) {
+            const clubSelection = document.getElementById('club-selection');
+            const selectedClub = clubSelection.value;
+
+            if (selectedClub === "") {
+                event.preventDefault();
+                alert("Please select a club.");
+            }
+        });
+    });
+
+  document.querySelector('#create-event-form').addEventListener('submit', submitForm);
+
+</script>
+{% endblock %}

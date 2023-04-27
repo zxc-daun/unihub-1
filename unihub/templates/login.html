@@ -1,0 +1,27 @@
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+{% block content %}
+<main class="login-main">
+    <div class="login-form-wrapper">
+        <h2 class="login-title">Login</h2>
+        <form method="post" class="login-form"  id="login-form">
+            {% csrf_token %}
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+            </div>
+            <div class="form-group">
+                {{ form.password.label_tag }}
+                {{ form.password }}
+            </div>
+            {% for message in messages %}
+                <p{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+            {% endfor %}
+            <button type="submit" class="login-btn">Login</button>
+        </form>
+        <p>Don't have an account? <a href="{% url 'register' %}" class="register-link">Register</a></p>
+    </div>
+</main>
+
+{% endblock %}

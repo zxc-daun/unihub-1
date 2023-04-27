@@ -1,0 +1,122 @@
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Club Admin{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+{% endblock %}
+{% block js %}
+    <script>
+   function handleLinkClick(event) {
+      event.preventDefault();
+      let target = event.target;
+      if (event.target.tagName !== "A") {
+        target = event.target.closest("a");
+      }
+      const contentId = target.getAttribute("data-content");
+      if (contentId) {
+        showContent(contentId);
+      }
+   }
+
+   function showContent(contentId) {
+      const mainContent = document.getElementById("main-content");
+      const contentContainers = mainContent.querySelectorAll(".form-container");
+
+      contentContainers.forEach((container) => {
+         if (container.id === `${contentId}-form-container`) {
+            container.style.display = "block";
+         } else {
+            container.style.display = "none";
+         }
+      });
+   }
+
+   function toggleCollapse(event) {
+      event.preventDefault();
+      const target = event.target.closest(".dropdown-toggle");
+      const collapseId = target.getAttribute("href");
+      const collapseElement = document.querySelector(collapseId);
+      collapseElement.classList.toggle("collapse");
+   }
+
+   document.addEventListener("DOMContentLoaded", function () {
+      showContent("club-management");
+      const links = document.querySelectorAll("#sidebar a[data-content]");
+      links.forEach((link) => {
+         link.addEventListener("click", handleLinkClick);
+      });
+
+      const collapseToggles = document.querySelectorAll(".dropdown-toggle");
+      collapseToggles.forEach((toggle) => {
+         toggle.addEventListener("click", toggleCollapse);
+      });
+   });
+</script>
+
+
+{% endblock %}
+{% block content %}
+<main>
+   <div class="wrapper">
+           {% block sidebar %}
+      <nav id="sidebar">
+         <div class="sidebar-header">
+            <h3>Club Admin</h3>
+         </div>
+         <ul class="list-unstyled components">
+            <li>
+               <a href="#clubSubMenu" class="dropdown-toggle">
+               <i class="material-icons">group</i>
+               Club Management
+               </a>
+               <ul class="list-unstyled collapse" id="clubSubMenu">
+                  <li>
+                      <a href="{% url 'create-club' %}">
+                        <i class="material-icons">add_circle_outline</i>
+                        Create Club
+                     </a>
+                  </li>
+               </ul>
+            </li>
+         </ul>
+        <ul class="list-unstyled components">
+            <li>
+            <a href="#followerSubMenu" class="dropdown-toggle">
+            <i class="material-icons">group_add</i>
+            Follower Management
+            </a>
+            <ul class="list-unstyled collapse" id="followerSubMenu">
+                {% for club in clubs %}
+                    <li>
+                        <a href="{% url 'show-followers' club.slug %}"><i class="material-icons">visibility</i>Show Followers</a>
+                    </li>
+                {% endfor %}
+            </ul>
+            </li>
+        </ul>
+        <ul class="list-unstyled components">
+            <li>
+            <a href="#eventSubMenu" class="dropdown-toggle">
+            <i class="material-icons">event</i>
+            Event Management
+            </a>
+            <ul class="list-unstyled collapse" id="eventSubMenu">
+                <li>
+                    <a href="{% url 'create-event'%}"><i class="material-icons">add_circle_outline</i>Create Event</a>
+                </li>
+                <li>
+                    <a href="{% url 'club_events' club_slug %}"><i class="material-icons">visibility</i>Show Events</a>
+                </li>
+            </ul>
+            </li>
+        </ul>
+      </nav>
+        {% endblock %}
+      <section id="main-content" style="margin: 0 auto">
+           <div id="club-management-form-container" class="form-container">
+               {% include './club_management.html' %}
+           </div>
+      </section>
+   </div>
+</main>
+{% endblock %}

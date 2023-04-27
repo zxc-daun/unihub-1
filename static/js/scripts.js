@@ -13,9 +13,6 @@ left: scrollPos,
 behavior: 'auto'
 });
 });
-const currentYear = new Date().getFullYear();
-const copyright = document.querySelector('footer p');
-copyright.textContent = `Copyright © ${currentYear}`;
 
 const carousel = document.querySelector('#our-clubs__carousel');
 const prevBtn = document.querySelector('.our-clubs__prev-btn');

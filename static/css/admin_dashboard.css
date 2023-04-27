@@ -1,0 +1,155 @@
+
+
+.card {
+    position: relative;
+    width: 350px;
+    height: 250px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    color: white;
+    padding: 20px;
+    overflow: hidden;
+    z-index: 0;
+}
+
+.card h2 {
+    font-size: 34px;
+    margin: 0;
+    z-index: 2;
+    opacity: 0.5;
+}
+
+.flex-content p {
+    font-size: 18px;
+    margin: 0;
+    z-index: 2;
+}
+
+.flex-content {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.card .material-icons {
+    font-size: 90px;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    opacity: 0.5;
+}
+
+.card .big-number {
+    font-size: 130px;
+    opacity: 0.1;
+    z-index: 1;
+}
+
+.clubs {
+    background-color: #ff7f7f;
+    border: 1px solid #910303;
+}
+
+.followers {
+    background-color: #7e91f8;
+    border: 1px solid #1a237e;
+}
+
+.events {
+    background-color: #65c2ba;
+    border: 1px solid #004d40;
+}
+
+.club-info {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+.club-info-title-heading {
+    font-size: 36px;
+    margin-bottom: 10px;
+}
+
+.club-info-title-line {
+    border: 1px solid #ccc;
+}
+
+.club-item {
+    margin-bottom: 40px;
+}
+
+.club-title {
+    text-align: center;
+    font-size: 24px;
+    margin-bottom: 20px;
+}
+
+.club-item-image {
+    position: relative;
+    overflow: hidden;
+    height: 400px;
+    margin-bottom: 20px;
+}
+
+.club-info-image {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    display: block;
+}
+
+.club-info-details {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.club-description-box,
+.club-category-box,
+.club-contact-box,
+.club-location-box,
+.club-files-box,
+.club-followers-box {
+    flex: 1;
+    background-color: #f8f8f8;
+    margin: 5px;
+    padding: 20px;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
+    border-radius: 4px;
+    min-width: 150px;
+}
+
+.club-description-title,
+.club-category-title,
+.club-contact-title,
+.club-location-title,
+.club-files-title,
+.club-followers-title {
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+.club-description,
+.club-category,
+.club-contact,
+.club-location,
+.club-files,
+.club-followers {
+    font-size: 14px;
+}
+
+a {
+    color: #0066cc;
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+}

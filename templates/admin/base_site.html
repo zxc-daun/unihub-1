@@ -1,0 +1,21 @@
+{% extends "admin/base.html" %}
+{% block title %}
+    {% if subtitle %}{{ subtitle }} | {% endif %}{{ title }} | {{ site_title|default:_('uniHub Admin Panel') }}
+{% endblock %}
+{% block branding %}
+    <style>
+        body {
+            background-color: rgb(2, 24, 56);
+        }
+        #header {
+            background-color: rgb(17, 17, 17);
+        }
+        table {
+        border-radius: 6px   ;
+        }
+    </style>
+{{ site_header|default:_('uniHub Admin Panel') }}
+{% endblock %}
+{% block nav-global %}
+    
+{% endblock %}

@@ -1,22 +1,274 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>User Dashboard</title>
-</head>
-<body>
-    <nav>
-        <ul>
-            <li><a href="#">Dashboard</a></li>
-            <li><a href="#">Profile</a></li>
-            <li><a href="#">Settings</a></li>
-            <li><a href="#">Logout</a></li>
-        </ul>
-    </nav>
-    <main>
-        <h1>Welcome to your Dashboard</h1>
-        <p>Here you can manage your profile, view notifications, and more.</p>
-        <!-- Add more content here as needed -->
+<!-- user-dashboard.html -->
+
+{% extends 'unihub/base.html' %}
+{% load static %}
+{% block title %}Dashboard{% endblock %}
+{% block styles %}
+    <link rel="stylesheet" href="{% static 'css/user-dash.css' %}">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+
+
+{% endblock %}
+
+{% block hero %}{% endblock %}
+
+
+{% block main_content %}
+    <style>
+        .main-dashboard {
+            flex:1;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .main-dashboard > aside {
+            width: 20%;
+            padding: 10px;
+            box-sizing: border-box;
+            margin: 1rem;
+            background: #f5f5f5;
+        }
+
+        .left-dashboard,
+        .right-dashboard {
+            width: 20%;
+            padding: 10px;
+            box-sizing: border-box;
+            border-radius: 5px;
+        }
+
+        .center-dashboard {
+            width: 60%;
+            padding: 10px;
+            box-sizing: border-box;
+            background: #f5f5f5;;
+        }
+
+        .user-info-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .right-dashboard {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+        }
+
+        .center-dashboard {
+            margin: 1rem;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+    .user-clubs-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        justify-content: center;
+        margin: 1rem 0;
+    }
+
+    .user-club-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        width: 300px;
+    }
+
+    .user-club-card:hover {
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        transform: scale(1.01);
+        transition: all 0.2s ease-in-out;
+        cursor: pointer;
+    }
+
+    .user-club-image {
+        border-top-left-radius: 8px;
+        border-top-right-radius: 8px;
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+    }
+
+    .user-club-name {
+        font-size: 1.25rem;
+        margin: 0.5rem 0;
+    }
+
+    .user-club-info {
+        display: flex;
+        flex-direction: column;
+        padding: 1rem;
+    }
+
+    .user-follow-btn {
+        background-color: #03f162;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+    }
+
+    .user-follow-btn:hover {
+        background-color: #03f1a2;
+    }
+
+    .followed-club-card {
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 5px;
+        color: darkgray;
+    }
+
+    .followed-club-card > img {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+
+    .edit-profile-btn {
+        background-color: #03f162;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        font-size: 1rem;
+        margin-top: 0.5rem;
+        padding: 0.5rem 1rem;
+        text-transform: uppercase;
+    }
+
+    .edit-profile-btn:hover {
+        background-color: #03f1a2;
+    }
+
+    .user-profile-image {
+        width: 100px;
+        height: 100px;
+        border-radius: 50%;
+        object-fit: cover;
+    }
+    </style>
+
+    <main class="main-dashboard">
+       <aside class="left-dashboard">
+            {% if current_user.is_authenticated %}
+                <div class="user-info-container">
+                    <div class="user-info-img">
+                    {% with current_user.userprofile as profile %}
+                        <img src="{{ profile.user_image.url }}" alt="{{ current_user.username }}'s Profile Image" class="user-profile-image">
+                    {% endwith %}
+                    </div>
+                    <div class="user-info">
+                        <h2>{{ current_user.first_name }} {{ current_user.last_name }}</h2>
+                        <p>Email: {{ current_user.email }}</p>
+                        <p>Username: {{ current_user.username }}</p>
+                        <p>Date joined: {{ current_user.date_joined }}</p>
+                        <a href="{% url 'edit_profile' %}">
+                            <button class="edit-profile-btn">edit</button>
+                        </a>
+                    </div>
+                </div>
+            {% else %}
+                <p>You are not logged in</p>
+            {% endif %}
+        </aside>
+
+
+        <section class="center-dashboard">
+            <div class="user-club-title">
+                <h2>All Clubs</h2>
+                <hr>
+            </div>
+            <div class="user-clubs-container">
+                {% for club in clubs %}
+                    <div class="user-club-card">
+                        <img src="{{ club.image.url }}" alt="{{ club.name }} Image" class="user-club-image">
+                        <div class="user-club-info">
+                            <a href="{% url 'club-info' club.slug %}" class="club-card-link" target="_blank" style="text-decoration: none; color: black">
+                            <h3 class="user-club-name">{{ club.name }}</h3>
+                            <p class="user-club-description">{{ club.description|truncatechars:100 }}</p>
+                            </a>
+                            {% if club.id in followed_club_ids %}
+                                <button class="user-follow-btn" data-club-id="{{ club.id }}" onclick="toggleFollow(event)">Unfollow</button>
+                            {% else %}
+                                <button class="user-follow-btn" data-club-id="{{ club.id }}" onclick="toggleFollow(event)">Follow</button>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </section>
+
+        <aside class="right-dashboard">
+            <div class="followed-club-title">
+                <h2>Followed Clubs</h2>
+                <hr>
+            </div>
+            <div class="followed-clubs-container">
+                <div style="display: flex; gap: 12px; flex-direction: column">
+                    {% for club_member in followed_clubs %}
+                    <div class="followed-club-card">
+                        <img src="{{ club_member.club.image.url }}" alt="{{ club_member.club.name }} Image" class="followed-club-image">
+                        <h2 class="followed-club-name">{{ club_member.club.name }}</h2>
+                    </div>
+                    {% empty %}
+                    <p>No followed clubs yet.</p>
+                    {% endfor %}
+                </div>
+            </div>
+        </aside>
     </main>
-</body>
-</html>
+    <form id="csrf-token-form" style="display: none;">
+    {% csrf_token %}
+</form>
+
+<script>
+    function toggleFollow(event) {
+        const btn = event.target;
+        const clubId = btn.dataset.clubId;
+
+        const csrfToken = document.querySelector("#csrf-token-form input[name='csrfmiddlewaretoken']").value;
+        const formData = new FormData();
+        formData.append("csrfmiddlewaretoken", csrfToken);
+        formData.append("club_id", clubId);
+
+        fetch("{% url 'club_follow' %}", {
+            method: "POST",
+            body: formData,
+            credentials: "same-origin",
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.status === "followed") {
+                btn.textContent = "Unfollow";
+            } else if (data.status === "unfollowed") {
+                btn.textContent = "Follow";
+            } else {
+                console.error("Error:", data.message);
+            }
+        })
+        .catch(error => {
+            console.error("Error:", error);
+        });
+    }
+</script>
+
+{% endblock %}
